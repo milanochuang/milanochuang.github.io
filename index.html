@@ -236,7 +236,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新於</span>
-      <time title="修改時間：2022-09-14 16:06:43" itemprop="dateModified" datetime="2022-09-14T16:06:43+08:00">2022-09-14</time>
+      <time title="修改時間：2022-09-14 22:35:28" itemprop="dateModified" datetime="2022-09-14T22:35:28+08:00">2022-09-14</time>
     </span>
 
   
@@ -253,7 +253,7 @@
 <p>萬事開頭難，難就難在初始階段。在此期間，必須窮盡心力，使諸方面保持均衡，以利於今後的發展。<br>法蘭克・赫伯特《沙丘》</p>
 </blockquote>
 <p>在一起踏上偉大的航道前，由於在這三十天會運用Python作為主要的程式語言，所謂工欲善其事，必先利其器，畢竟就連魯夫一開始出海前，也是需要一艘船嘛！所以免不了總是要稍微解釋一下在之後的文章會用到的簡單語法以及概念。</p>
-<p>但因為在我之前已經有許多大神以及前輩寫了許多Python的教學文章，Python開發者社群也有翻譯官方文件，而且翻譯得非常清楚，所以今天這篇文章只會解釋Python中最常用的語法，也就是基本的資料型態、for迴圈以及if條件敘述式，還有function，也會解釋一份Python的程式，大致上會有什麼架構，畢竟大學的計算機概論教授有云：「你只要會寫for迴圈以及會寫if，你會寫程式啦！」有點誇張了，但相信你可以的。</p>
+<p>但因為在我之前已經有許多大神以及前輩寫了許多Python的教學文章，Python開發者社群也有<a target="_blank" rel="noopener" href="https://docs.python.org/zh-tw/3/tutorial/index.html">翻譯官方文件</a>，而且翻譯得非常清楚，所以今天這篇文章只會解釋Python中最常用的語法，也就是基本的資料型態、for迴圈以及if條件敘述式，還有function，也會解釋一份Python的程式，大致上會有什麼架構，畢竟大學的計算機概論教授有云：「你只要會寫for迴圈以及會寫if，你會寫程式啦！」有點誇張了，但相信你可以的。</p>
 <p>不過如果之後的文章用到其他在這裡沒有解釋到的語法，也會在那篇文章特別介紹。</p>
 <h2 id="資料型態以及資料結構"><a href="#資料型態以及資料結構" class="headerlink" title="資料型態以及資料結構"></a>資料型態以及資料結構</h2><p>Python共有種的資料型態以及種的資料結構，不同的型態與結構，在不同的使用情境下有不同的用途，以下幫助你簡單理解：</p>
 <h3 id="字串-string"><a href="#字串-string" class="headerlink" title="字串 string"></a>字串 <code>string</code></h3><p>字串顧名思義就是單純字串，一般來說會以雙引號來表示，例如<code>&quot;偉大航道&quot;</code>就是一種字串，但單引號也可以，像是<code>&#39;偉大航道&#39;</code>，只是大部分都會用雙引號，而且字串也不能進行數學上的四則運算，在程式編寫上要特別留意。性質如下：</p>
@@ -298,7 +298,10 @@
 <p>跳出迴圈可以用<code>break</code>，繼續執行迴圈可以用<code>continue</code>。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">example = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">123</span>, <span class="string">&quot;海賊王&quot;</span>]</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(example)):</span><br><span class="line">    <span class="keyword">if</span> i == <span class="string">&quot;海賊王&quot;</span>:</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">    <span class="keyword">if</span> i == <span class="number">1</span>:</span><br><span class="line">        <span class="keyword">continue</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;我是else&quot;</span>)</span><br></pre></td></tr></table></figure>
 
-<p>好的！大致上會用到的基本語法就是這樣，明天就要進入偉大航道了，我們明天見。</p>
+<h3 id="def-函式"><a href="#def-函式" class="headerlink" title="def 函式"></a><code>def</code> 函式</h3><p>不知道大家還記不記得國高中的函數，給定一個x值，函數會計算出y值；同理，一樣是function，程式中也會有所謂的函式，括號中給定參數，函式則會回傳值，或是不回傳值只執行特定動作也可以。當你發現一直在重複相同動作又要寫很多次的時候，就是函式派上用場的時候了。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">example_func</span>(<span class="params">parameter_1</span>):</span><br><span class="line">	result = <span class="number">1</span> + parater_1</span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在這裡你可以回傳值，也可以將回傳值指配給變數，如：</span></span><br><span class="line"></span><br><span class="line">result_var = example_func(<span class="number">2</span>)</span><br><span class="line"><span class="built_in">print</span>(result_var)</span><br><span class="line"><span class="comment"># output: 3</span></span><br></pre></td></tr></table></figure>
+
+<p>好的！大致上會用到的基本語法就是這樣，若想知道更多可以去看<a target="_blank" rel="noopener" href="https://docs.python.org/zh-tw/3/tutorial/index.html">官方說明文件</a>，網路上也有很多的教學，明天就要進入偉大航道了，我們明天見。</p>
 
       
     </div>
