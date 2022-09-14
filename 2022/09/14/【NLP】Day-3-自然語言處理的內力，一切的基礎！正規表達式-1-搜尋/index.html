@@ -21,15 +21,15 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"milanochuang.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.12.3","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="在進行自然語言處理的同時，常常會需要將資料變得乾淨，或是也有些特定的資料格式要從大量語料中抽取出來，比如說像是地址、電話等等，才有辦法取出我們想要的理想資料，而在這過程中常常會用到的就是正規表達式（regular expression），正規表達式也會被簡稱為re。re可以針對符合的字串大致上分成三種功能：搜尋、替換，以及抽取。 正規表達式讓我們先以手機號碼舉例，假如我們要從大量語料中抽取手機號碼">
+    <meta name="description" content="自來修習內功，不論是為了強身治病，還是為了作為上乘武功的根基，必當水火互濟，陰陽相配，練了「足少陰腎經」之後，便當練「足少陽膽經」，少陰少陽融會調合，體力便逐步增強。金庸《俠客行》  在進行自然語言處理的同時，常常會需要將資料變得乾淨，或是也有些特定的資料格式要從大量語料中抽取出來，比如說像是地址、電話等等，才有辦法取出我們想要的理想資料，而在這過程中常常會用到的就是正規表達式（regular">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【NLP】Day 3: 自然語言處理的內力，一切的基礎！正規表達式 (1) 搜尋">
 <meta property="og:url" content="https://milanochuang.github.io/2022/09/14/%E3%80%90NLP%E3%80%91Day-3-%E8%87%AA%E7%84%B6%E8%AA%9E%E8%A8%80%E8%99%95%E7%90%86%E7%9A%84%E5%85%A7%E5%8A%9B%EF%BC%8C%E4%B8%80%E5%88%87%E7%9A%84%E5%9F%BA%E7%A4%8E%EF%BC%81%E6%AD%A3%E8%A6%8F%E8%A1%A8%E9%81%94%E5%BC%8F-1-%E6%90%9C%E5%B0%8B/index.html">
 <meta property="og:site_name" content="米蘭牛角尖">
-<meta property="og:description" content="在進行自然語言處理的同時，常常會需要將資料變得乾淨，或是也有些特定的資料格式要從大量語料中抽取出來，比如說像是地址、電話等等，才有辦法取出我們想要的理想資料，而在這過程中常常會用到的就是正規表達式（regular expression），正規表達式也會被簡稱為re。re可以針對符合的字串大致上分成三種功能：搜尋、替換，以及抽取。 正規表達式讓我們先以手機號碼舉例，假如我們要從大量語料中抽取手機號碼">
+<meta property="og:description" content="自來修習內功，不論是為了強身治病，還是為了作為上乘武功的根基，必當水火互濟，陰陽相配，練了「足少陰腎經」之後，便當練「足少陽膽經」，少陰少陽融會調合，體力便逐步增強。金庸《俠客行》  在進行自然語言處理的同時，常常會需要將資料變得乾淨，或是也有些特定的資料格式要從大量語料中抽取出來，比如說像是地址、電話等等，才有辦法取出我們想要的理想資料，而在這過程中常常會用到的就是正規表達式（regular">
 <meta property="og:locale" content="zh_TW">
 <meta property="article:published_time" content="2022-09-14T15:13:48.000Z">
-<meta property="article:modified_time" content="2022-09-14T15:14:05.731Z">
+<meta property="article:modified_time" content="2022-09-14T17:49:30.724Z">
 <meta property="article:author" content="Hao Yun Chuang (Milan)">
 <meta property="article:tag" content="自然語言處理, 計算語言學, 機器學習, 人工智慧, 電影">
 <meta name="twitter:card" content="summary">
@@ -232,9 +232,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">發表於</span>
-      
 
-      <time title="創建時間：2022-09-14 23:13:48 / 修改時間：23:14:05" itemprop="dateCreated datePublished" datetime="2022-09-14T23:13:48+08:00">2022-09-14</time>
+      <time title="創建時間：2022-09-14 23:13:48" itemprop="dateCreated datePublished" datetime="2022-09-14T23:13:48+08:00">2022-09-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2022-09-15 01:49:30" itemprop="dateModified" datetime="2022-09-15T01:49:30+08:00">2022-09-15</time>
     </span>
 
   
@@ -247,7 +253,10 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <p>在進行自然語言處理的同時，常常會需要將資料變得乾淨，或是也有些特定的資料格式要從大量語料中抽取出來，比如說像是地址、電話等等，才有辦法取出我們想要的理想資料，而在這過程中常常會用到的就是正規表達式（regular expression），正規表達式也會被簡稱為re。re可以針對符合的字串大致上分成三種功能：搜尋、替換，以及抽取。</p>
+        <blockquote>
+<p><em>自來修習內功，不論是為了強身治病，還是為了作為上乘武功的根基，必當水火互濟，陰陽相配，練了「足少陰腎經」之後，便當練「足少陽膽經」，少陰少陽融會調合，體力便逐步增強。</em><br><strong>金庸《俠客行》</strong></p>
+</blockquote>
+<p>在進行自然語言處理的同時，常常會需要將資料變得乾淨，或是也有些特定的資料格式要從大量語料中抽取出來，比如說像是地址、電話等等，才有辦法取出我們想要的理想資料，而在這過程中常常會用到的就是正規表達式（regular expression），正規表達式也會被簡稱為re。re可以針對符合的字串大致上分成三種功能：搜尋、替換，以及抽取。</p>
 <h2 id="正規表達式"><a href="#正規表達式" class="headerlink" title="正規表達式"></a>正規表達式</h2><p>讓我們先以手機號碼舉例，假如我們要從大量語料中抽取手機號碼，例如：0912-345-678，該怎麼做呢？首先，編寫regular expression一個很重要的觀念是要一個字一個字看，並輸入對應的正規表達式。回到手機號碼，我們觀察手機號碼0912-345-678，可以發現全部都是用數字組成，數字的正規表達式為<code>\d</code>，我們首先可以將手機號碼以這種方法表示：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">\d\d\d\d-\d\d\d-\d\d\d</span><br></pre></td></tr></table></figure>
 <p>但是這樣並不是一個足夠有效率的寫法，若在如<code>\d</code>後面加上大括號，則可以指定其出現次數。我們可以發現以橫槓分隔，第一組是由四個數字，後面則是由兩組三個數字所組成。逗號的分隔方式代表其次數，<code>&#123;1,&#125;</code>為一次以上，<code>&#123;,2&#125;</code>為兩次以下，<code>&#123;1,3&#125;</code>則為一到三次。</p>
