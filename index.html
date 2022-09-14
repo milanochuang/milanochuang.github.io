@@ -131,7 +131,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-count">5</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -200,6 +200,90 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://milanochuang.github.io/2022/09/14/%E3%80%90NLP%E3%80%91Day-3-%E8%87%AA%E7%84%B6%E8%AA%9E%E8%A8%80%E8%99%95%E7%90%86%E7%9A%84%E5%85%A7%E5%8A%9B%EF%BC%8C%E4%B8%80%E5%88%87%E7%9A%84%E5%9F%BA%E7%A4%8E%EF%BC%81%E6%AD%A3%E8%A6%8F%E8%A1%A8%E9%81%94%E5%BC%8F-1-%E6%90%9C%E5%B0%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Hao Yun Chuang (Milan)">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="米蘭牛角尖">
+      <meta itemprop="description" content="目前就讀於政大語言所，研究興趣為計算語言學<br/>">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 米蘭牛角尖">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/09/14/%E3%80%90NLP%E3%80%91Day-3-%E8%87%AA%E7%84%B6%E8%AA%9E%E8%A8%80%E8%99%95%E7%90%86%E7%9A%84%E5%85%A7%E5%8A%9B%EF%BC%8C%E4%B8%80%E5%88%87%E7%9A%84%E5%9F%BA%E7%A4%8E%EF%BC%81%E6%AD%A3%E8%A6%8F%E8%A1%A8%E9%81%94%E5%BC%8F-1-%E6%90%9C%E5%B0%8B/" class="post-title-link" itemprop="url">【NLP】Day 3: 自然語言處理的內力，一切的基礎！正規表達式 (1) 搜尋</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2022-09-14 23:13:48 / 修改時間：23:14:05" itemprop="dateCreated datePublished" datetime="2022-09-14T23:13:48+08:00">2022-09-14</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>在進行自然語言處理的同時，常常會需要將資料變得乾淨，或是也有些特定的資料格式要從大量語料中抽取出來，比如說像是地址、電話等等，才有辦法取出我們想要的理想資料，而在這過程中常常會用到的就是正規表達式（regular expression），正規表達式也會被簡稱為re。re可以針對符合的字串大致上分成三種功能：搜尋、替換，以及抽取。</p>
+<h2 id="正規表達式"><a href="#正規表達式" class="headerlink" title="正規表達式"></a>正規表達式</h2><p>讓我們先以手機號碼舉例，假如我們要從大量語料中抽取手機號碼，例如：0912-345-678，該怎麼做呢？首先，編寫regular expression一個很重要的觀念是要一個字一個字看，並輸入對應的正規表達式。回到手機號碼，我們觀察手機號碼0912-345-678，可以發現全部都是用數字組成，數字的正規表達式為<code>\d</code>，我們首先可以將手機號碼以這種方法表示：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">\d\d\d\d-\d\d\d-\d\d\d</span><br></pre></td></tr></table></figure>
+<p>但是這樣並不是一個足夠有效率的寫法，若在如<code>\d</code>後面加上大括號，則可以指定其出現次數。我們可以發現以橫槓分隔，第一組是由四個數字，後面則是由兩組三個數字所組成。逗號的分隔方式代表其次數，<code>&#123;1,&#125;</code>為一次以上，<code>&#123;,2&#125;</code>為兩次以下，<code>&#123;1,3&#125;</code>則為一到三次。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">\d&#123;4&#125;-\d&#123;3&#125;-\d&#123;3&#125;</span><br></pre></td></tr></table></figure>
+<p>但若要取出符合這個樣式的第一組數字的話，則可以透過小括號，將這些數字分組，並在撰寫程式時指定回傳特定組的字串，整串符合的字串為group 0，第一組，四個數字的，也就是group 1，以此類推。寫法如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(\d&#123;4&#125;)-(\d&#123;3&#125;)-(\d&#123;3&#125;)</span><br></pre></td></tr></table></figure>
+<p>那假如今天要找的是電話號碼，像是(01)234-5678時，裡面有小括號，該怎麼辦才能讓程式知道這裡得括號並不是前述分組的意思？這時我們可以利用逃脫符號<code>\</code>告訴編譯器，這裡的括號是指真的括號，任何會跟正規表達式衝突的符號，都可以透過這種方法進行編寫，寫法如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">\(\d&#123;2&#125;\)\d&#123;3&#125;-\d&#123;4&#125;</span><br></pre></td></tr></table></figure>
+<p>這邊只有介紹到數字的寫法，欲得知其他寫法，如英文字母等等的，可以參考以下這個 <a target="_blank" rel="noopener" href="https://www.dataquest.io/wp-content/uploads/2019/03/python-regular-expressions-cheat-sheet.pdf">cheatsheet</a>，另外若要確認自己寫的正規表達式是否符合的話，也可以運用這個網站 <a target="_blank" rel="noopener" href="https://regex101.com/">regex101</a> 來進行比對。</p>
+<h2 id="搜尋"><a href="#搜尋" class="headerlink" title="搜尋"></a>搜尋</h2><p>前面有提到說，regular expression有進行搜尋的功能，我們可以將正規表達式的字串放入函式中，確認資料中是否有我們想要的字段。這時，可以運用<code>re</code>函式庫中的<code>search()</code>來達到我們的目的。第一個參數放正規表達式，第二個參數放欲檢驗的字串。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re <span class="comment"># 記得加入re函式庫</span></span><br><span class="line"><span class="built_in">print</span>(re.search(<span class="string">&quot;(\d&#123;4&#125;)-(\d&#123;3&#125;)-(\d&#123;3&#125;)&quot;</span>, <span class="string">&quot;0987-654-321&quot;</span>))</span><br><span class="line"><span class="comment"># output: &lt;re.Match object; span=(0, 12), match=&#x27;0987-654-321&#x27;&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 輸出的意思是說，若有符合的字串，就會回傳正規表達式的物件</span></span><br><span class="line"><span class="comment"># span則為符合物件的字串在語料中的位置為何，像這邊是整串符合</span></span><br><span class="line"><span class="comment"># 那就是從index = 0 的地方開始到12都是符合的字串。 </span></span><br><span class="line"><span class="comment"># match則是符合的字串。</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(re.search(<span class="string">&quot;(\d&#123;4&#125;)-(\d&#123;3&#125;)-(\d&#123;3&#125;)&quot;</span>, <span class="string">&quot;0987654321&quot;</span>))</span><br><span class="line"><span class="comment"># output: None</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 若沒有符合字串，就會回傳None</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 小應用是，也可以把這個當作條件判斷式的條件之一，例如：</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> re.search(<span class="string">&quot;(\d&#123;4&#125;)-(\d&#123;3&#125;)-(\d&#123;3&#125;)&quot;</span>, <span class="string">&quot;0987-654-321&quot;</span>):</span><br><span class="line">    <span class="built_in">print</span>(<span class="number">123</span>)</span><br><span class="line"><span class="comment"># output: 1234</span></span><br><span class="line"><span class="comment"># 這邊因為re.search()有符合字串，判斷為True，執行指定動作</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> re.search(<span class="string">&quot;(\d&#123;4&#125;)-(\d&#123;3&#125;)-(\d&#123;3&#125;)&quot;</span>, <span class="string">&quot;0987654321&quot;</span>):</span><br><span class="line">    <span class="built_in">print</span>(<span class="number">456</span>)</span><br><span class="line"><span class="comment"># 判斷為False，不進行任何動作</span></span><br></pre></td></tr></table></figure>
+<h4 id="記得前面說的分組概念嗎？在這裡就可以派上用場了。"><a href="#記得前面說的分組概念嗎？在這裡就可以派上用場了。" class="headerlink" title="記得前面說的分組概念嗎？在這裡就可以派上用場了。"></a>記得前面說的分組概念嗎？在這裡就可以派上用場了。</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span>(example_re_obj.group(<span class="number">0</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 你也可以指派一個變數給他，如：</span></span><br><span class="line">example_re_obj = re.search(<span class="string">&quot;(\d&#123;4&#125;)-(\d&#123;3&#125;)-(\d&#123;3&#125;)&quot;</span>, <span class="string">&quot;0987-654-321&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 記得前面說的分組概念嗎？在這裡就可以派上用場了。</span></span><br><span class="line"><span class="built_in">print</span>(example_re_obj.group(<span class="number">0</span>))</span><br><span class="line"><span class="comment"># output: 0987-654-321</span></span><br><span class="line"><span class="built_in">print</span>(example_re_obj.group(<span class="number">1</span>))</span><br><span class="line"><span class="comment"># output: 0987</span></span><br><span class="line"><span class="built_in">print</span>(example_re_obj.group(<span class="number">2</span>))</span><br><span class="line"><span class="comment"># output: 654</span></span><br><span class="line"><span class="built_in">print</span>(example_re_obj.group(<span class="number">3</span>))</span><br><span class="line"><span class="comment"># output: 321</span></span><br></pre></td></tr></table></figure>
+
+<p>好的，大概就是這樣，完成了這步驟，接下來就可以往「替換」以及「抽取」的目的地前進了！我們明天見！</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
     <link itemprop="mainEntityOfPage" href="https://milanochuang.github.io/2022/09/03/%E3%80%90NLP%E3%80%91Day-2-%E5%B7%A5%E6%AC%B2%E5%96%84%E5%85%B6%E4%BA%8B%EF%BC%8C%E5%BF%85%E5%85%88%E5%88%A9%E5%85%B6%E5%99%A8%EF%BC%81Python%E5%9F%BA%E7%A4%8E%E4%BB%8B%E7%B4%B9%EF%BC%81/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -236,7 +320,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新於</span>
-      <time title="修改時間：2022-09-14 22:35:28" itemprop="dateModified" datetime="2022-09-14T22:35:28+08:00">2022-09-14</time>
+      <time title="修改時間：2022-09-14 23:15:49" itemprop="dateModified" datetime="2022-09-14T23:15:49+08:00">2022-09-14</time>
     </span>
 
   
@@ -280,7 +364,7 @@
 <h3 id="for迴圈"><a href="#for迴圈" class="headerlink" title="for迴圈"></a><code>for</code>迴圈</h3><p><code>for</code>迴圈，顧名思義，如果你需要重複做某件相同的事時，就可以透過<code>for</code>迴圈讓程式來幫你做，你可以指定迴圈運行的次數，或是讓迴圈「遍歷」串列或是字典的key或是value，但方式有點不一樣。常用的寫法如下：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">example = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">123</span>, <span class="string">&quot;海賊王&quot;</span>]</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> example:</span><br><span class="line">    <span class="built_in">print</span>(i)</span><br><span class="line"></span><br><span class="line"><span class="comment"># output: </span></span><br><span class="line"><span class="comment"># 1</span></span><br><span class="line"><span class="comment"># 2</span></span><br><span class="line"><span class="comment"># 3</span></span><br><span class="line"><span class="comment"># 123</span></span><br><span class="line"><span class="comment"># 海賊王</span></span><br></pre></td></tr></table></figure>
 
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 字典本身不能遍歷，但可以遍歷key或是value</span></span><br><span class="line">example = &#123;</span><br><span class="line">    <span class="string">&quot;魯夫&quot;</span>: <span class="string">&quot;船長&quot;</span>,</span><br><span class="line">    <span class="string">&quot;索隆&quot;</span>: <span class="string">&quot;戰鬥員&quot;</span>,</span><br><span class="line">    <span class="string">&quot;娜美&quot;</span>: <span class="string">&quot;航海士&quot;</span>,</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> example.key():</span><br><span class="line">    <span class="built_in">print</span>(i)</span><br><span class="line"><span class="comment"># output: </span></span><br><span class="line"><span class="comment"># 魯夫</span></span><br><span class="line"><span class="comment"># 索隆</span></span><br><span class="line"><span class="comment"># 娜美</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> example.values(): <span class="comment"># 要加s</span></span><br><span class="line">    <span class="built_in">print</span>(i)</span><br><span class="line"><span class="comment"># output: </span></span><br><span class="line"><span class="comment"># 船長</span></span><br><span class="line"><span class="comment"># 戰鬥員</span></span><br><span class="line"><span class="comment"># 航海士</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 字典本身不能遍歷，但可以遍歷key或是value</span></span><br><span class="line">example = &#123;</span><br><span class="line">    <span class="string">&quot;魯夫&quot;</span>: <span class="string">&quot;船長&quot;</span>,</span><br><span class="line">    <span class="string">&quot;索隆&quot;</span>: <span class="string">&quot;戰鬥員&quot;</span>,</span><br><span class="line">    <span class="string">&quot;娜美&quot;</span>: <span class="string">&quot;航海士&quot;</span>,</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> example.keys():</span><br><span class="line">    <span class="built_in">print</span>(i)</span><br><span class="line"><span class="comment"># output: </span></span><br><span class="line"><span class="comment"># 魯夫</span></span><br><span class="line"><span class="comment"># 索隆</span></span><br><span class="line"><span class="comment"># 娜美</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> example.values(): <span class="comment"># 要加s</span></span><br><span class="line">    <span class="built_in">print</span>(i)</span><br><span class="line"><span class="comment"># output: </span></span><br><span class="line"><span class="comment"># 船長</span></span><br><span class="line"><span class="comment"># 戰鬥員</span></span><br><span class="line"><span class="comment"># 航海士</span></span><br></pre></td></tr></table></figure>
 
 <p><code>for</code>迴圈也有另外一種常見的寫法，我們來看看：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">example = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">123</span>, <span class="string">&quot;海賊王&quot;</span>]</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(example)):</span><br><span class="line">    <span class="built_in">print</span>(i)</span><br><span class="line"><span class="comment"># output: </span></span><br><span class="line"><span class="comment"># 1</span></span><br><span class="line"><span class="comment"># 2</span></span><br><span class="line"><span class="comment"># 3</span></span><br><span class="line"><span class="comment"># 123</span></span><br><span class="line"><span class="comment"># 海賊王</span></span><br></pre></td></tr></table></figure>
