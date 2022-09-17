@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/icon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/icon.png">
+  <link rel="mask-icon" href="/images/icon.png" color="#222">
+  <meta name="google-site-verification" content="DMyRve2tDXDJqmJpSS4BaBWT1R0ZCH9n_EsCnROTiM0">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha256-xejo6yLi6vGtAjcMIsY8BHdKsLg7QynVlFMzdQgUuy8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"milanochuang.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.12.3","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="你低著頭，他們就會知道你在說謊；即便你抬起頭，他們也會知道其實你根本不知道真相。如果只用四個字就能說明清楚，就別用七個字。身體不要搖來搖去，要用堅定的眼神看著對方的眼睛，但別一直盯著看。說話清楚，但別太讓人印象深刻，可以偶爾幽默一下，但是過頭到讓他大笑。這麼一來，他當場就會對你有好感，而且你一旦離開那個場合，他也會立刻忘了你這個人。而且看在老天的份上，無論你想做什麼，都別做，在任何情況下…Rus">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【NLP】Day 4: 什麼！文本也可以偷天換日？正規表達式 (2) 替換">
+<meta property="og:url" content="https://milanochuang.github.io/2022/09/18/%E3%80%90NLP%E3%80%91Day-4-%E4%BB%80%E9%BA%BC%EF%BC%81%E6%96%87%E6%9C%AC%E4%B9%9F%E5%8F%AF%E4%BB%A5%E5%81%B7%E5%A4%A9%E6%8F%9B%E6%97%A5%EF%BC%9F%E6%AD%A3%E8%A6%8F%E8%A1%A8%E9%81%94%E5%BC%8F-2-%E6%9B%BF%E6%8F%9B/index.html">
+<meta property="og:site_name" content="米蘭牛角尖">
+<meta property="og:description" content="你低著頭，他們就會知道你在說謊；即便你抬起頭，他們也會知道其實你根本不知道真相。如果只用四個字就能說明清楚，就別用七個字。身體不要搖來搖去，要用堅定的眼神看著對方的眼睛，但別一直盯著看。說話清楚，但別太讓人印象深刻，可以偶爾幽默一下，但是過頭到讓他大笑。這麼一來，他當場就會對你有好感，而且你一旦離開那個場合，他也會立刻忘了你這個人。而且看在老天的份上，無論你想做什麼，都別做，在任何情況下…Rus">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2022-09-17T17:47:00.000Z">
+<meta property="article:modified_time" content="2022-09-17T17:49:40.362Z">
+<meta property="article:author" content="Hao Yun Chuang (Milan)">
+<meta property="article:tag" content="自然語言處理, 計算語言學, 機器學習, 人工智慧, 電影">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://milanochuang.github.io/2022/09/18/%E3%80%90NLP%E3%80%91Day-4-%E4%BB%80%E9%BA%BC%EF%BC%81%E6%96%87%E6%9C%AC%E4%B9%9F%E5%8F%AF%E4%BB%A5%E5%81%B7%E5%A4%A9%E6%8F%9B%E6%97%A5%EF%BC%9F%E6%AD%A3%E8%A6%8F%E8%A1%A8%E9%81%94%E5%BC%8F-2-%E6%9B%BF%E6%8F%9B/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://milanochuang.github.io/2022/09/18/%E3%80%90NLP%E3%80%91Day-4-%E4%BB%80%E9%BA%BC%EF%BC%81%E6%96%87%E6%9C%AC%E4%B9%9F%E5%8F%AF%E4%BB%A5%E5%81%B7%E5%A4%A9%E6%8F%9B%E6%97%A5%EF%BC%9F%E6%AD%A3%E8%A6%8F%E8%A1%A8%E9%81%94%E5%BC%8F-2-%E6%9B%BF%E6%8F%9B/","path":"2022/09/18/【NLP】Day-4-什麼！文本也可以偷天換日？正規表達式-2-替換/","title":"【NLP】Day 4: 什麼！文本也可以偷天換日？正規表達式 (2) 替換"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>【NLP】Day 4: 什麼！文本也可以偷天換日？正規表達式 (2) 替換 | 米蘭牛角尖</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">米蘭牛角尖</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">計算語言學的學習紀錄，偶爾可能會出現野生的電影評論？</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>關於</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分類</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>所有文章</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%95%8A%E6%89%80%E4%BB%A5%E5%88%B0%E5%BA%95%E4%BB%80%E9%BA%BC%E6%89%8D%E6%98%AF%E6%9B%BF%E6%8F%9B%E5%8A%9F%E8%83%BD%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">啊所以到底什麼才是替換功能？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%B2%E9%9A%8E%E7%9A%84%E6%9B%BF%E6%8F%9B%E5%8A%9F%E8%83%BD"><span class="nav-number">2.</span> <span class="nav-text">進階的替換功能</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Hao Yun Chuang (Milan)"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Hao Yun Chuang (Milan)</p>
+  <div class="site-description" itemprop="description">目前就讀於政大語言所，研究興趣為計算語言學<br/></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/milanochuang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;milanochuang" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:milanochuang@gmail.com" title="E-Mail → mailto:milanochuang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/milanochuang" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;milanochuang" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/milanochuang" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;milanochuang" rel="noopener" target="_blank"><i class="fab fa-facebook fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://instagram.com/milanochuang" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;milanochuang" rel="noopener" target="_blank"><i class="fab fa-instagram fa-fw"></i></a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/milanochuang" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://milanochuang.github.io/2022/09/18/%E3%80%90NLP%E3%80%91Day-4-%E4%BB%80%E9%BA%BC%EF%BC%81%E6%96%87%E6%9C%AC%E4%B9%9F%E5%8F%AF%E4%BB%A5%E5%81%B7%E5%A4%A9%E6%8F%9B%E6%97%A5%EF%BC%9F%E6%AD%A3%E8%A6%8F%E8%A1%A8%E9%81%94%E5%BC%8F-2-%E6%9B%BF%E6%8F%9B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Hao Yun Chuang (Milan)">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="米蘭牛角尖">
+      <meta itemprop="description" content="目前就讀於政大語言所，研究興趣為計算語言學<br/>">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="【NLP】Day 4: 什麼！文本也可以偷天換日？正規表達式 (2) 替換 | 米蘭牛角尖">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【NLP】Day 4: 什麼！文本也可以偷天換日？正規表達式 (2) 替換
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2022-09-18 01:47:00 / 修改時間：01:49:40" itemprop="dateCreated datePublished" datetime="2022-09-18T01:47:00+08:00">2022-09-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/natural-language-processing/" itemprop="url" rel="index"><span itemprop="name">自然語言處理</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <blockquote>
+<p>你低著頭，他們就會知道你在說謊；即便你抬起頭，他們也會知道其實你根本不知道真相。如果只用四個字就能說明清楚，就別用七個字。身體不要搖來搖去，要用堅定的眼神看著對方的眼睛，但別一直盯著看。說話清楚，但別太讓人印象深刻，可以偶爾幽默一下，但是過頭到讓他大笑。這麼一來，他當場就會對你有好感，而且你一旦離開那個場合，他也會立刻忘了你這個人。而且看在老天的份上，無論你想做什麼，都別做，在任何情況下…<br><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=VTKgyZZP5KQ">Rusty Ryan《瞞天過海》</a></p>
+</blockquote>
+<p>昨天我們已經簡單地認識了什麼是正規表達式（Regular Expression），也瞭解了正規表達式的性質，更認識了正規表達式在Python的函式庫中最常見的功能之一，也就是搜尋功能。讓我們在這裡簡單複習一下，正規表達式可以運用單一個字串，藉以匹配所有符合某個句法規則的字串；而這些字串藉由各種不同函式，可以幫助我們針對文本進行驗證、萃取，以及今天所要介紹的替換功能。正規表達式的運用，加上Python各種不同函式的靈活搭配，是踏入自然語言處理的第一張門票，是一切資料處理的根基，因此掌握正規表達式的運用其實比你我想的還要再更重要一點點。</p>
+<h2 id="啊所以到底什麼才是替換功能？"><a href="#啊所以到底什麼才是替換功能？" class="headerlink" title="啊所以到底什麼才是替換功能？"></a>啊所以到底什麼才是替換功能？</h2><p>讓我們把話題拉回正規表達式的替換功能。大家看到這裡可能還不清楚，所謂正規表達式的「替換」功能，實際上到底指的是什麼事情。就讓我們直接來看一個例子：</p>
+<p>最近有所上同學問我説，她在搭建聊天機器人的時候，發現若是在iPhone按下系統推薦的字詞，會自動產生出一個空白字元<code>&quot; &quot;</code>，而這會導致機器人在判讀字串時產生錯誤。因為同學做的是查詢英漢字典機器人，機器人需要完整正確的字串，才有辦法依照字串找出正確的中文翻譯，但這時卻多了一個空白字元，該怎麼處理才好呢？比如說今天輸入的是<code>ocean</code>，但程式端所接收到的字串卻是<code>ocean </code>。同學很苦惱。</p>
+<p>其實對Python稍微有一點點研究的同學，第一個想到的函式大概是 <code>.replace()</code> ，程式如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">message = <span class="string">&quot;ocean &quot;</span></span><br><span class="line">inputSTR = message.replace(<span class="string">&quot; &quot;</span>, <span class="string">&quot;&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(inputSTR)</span><br><span class="line"><span class="comment"># output: ocean</span></span><br></pre></td></tr></table></figure>
+
+<p>但以上這段程式碼好像也不能有效解決這位同學的問題，因為仔細想想，假如說我們今天想要知道 <em>One Piece</em> 是什麼意思？若套用以上的程式碼，反而會變成 <em>OnePiece</em>，像這種中間有空格的名詞，在計算語言學中，我們稱為<strong>proper noun（專有名詞）</strong>，另外，儘管其實是有些差別，但有些人也會一併稱其為 <strong>entity（實體）</strong>。在這時，我們發現<code>.replace()</code>已經不管用了，這時該怎麼辦？這時我們就必須要想辦法「將字串尾的空白字元取代掉」。</p>
+<p>在軟體工程中有個很重要的觀念，叫做Divide and Conquer，也就是將一個看似難以解決的問題分成很多個小問題，並且逐一擊破，最後即便是大問題也可以解決，大至軟體工程，小至正規表達式，都是一樣的道理。讓我們重新回來看這個問題，「將字串尾的空白字元取代掉」，其中第一個問題則是要找出「字串尾」。</p>
+<p>在正規表達式中，若要表達指定字串的第一個字元，會用<code>^</code>來表示，也就是說，你要告訴電腦你想要的字串格式，其中的第一個字是什麼的時候，就可以透過<code>^</code>來表達；另外，同樣的，若要表達指定字串的最後一個字元，在正規表達式中則會以<code>$</code> 來表示。再來會碰到的第二個問題則是「空白字元」。昨天，我們學到了數字的表達方式，也就是透過<code>\d</code>來代表數字。而空白字元在正規表示法中，則是以<code>\s</code>。這麼一來，我們就可以匹配所有字串尾有空白字元的字了。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">\s$</span><br></pre></td></tr></table></figure>
+
+<p>欸？沒錯，就是這麼簡單。那麼接著就可以將這串正規表達式加入Python當中進行替換了。在正規表達式的函式庫中，將字串進行替換的函式為<code>re.sub()</code>，其中第一個參數放正規表達式，第二個參數則是放你想替換成的字符，在我們的例子裡就是「無」，第三個參數則是放要進行替換的字串。這麼一來，程式就可以寫成：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re <span class="comment">#記得要加入正規表達式函式庫</span></span><br><span class="line">example_1 = <span class="string">&quot;Ocean&quot;</span></span><br><span class="line">example_1_with_space = <span class="string">&quot;Ocean &quot;</span></span><br><span class="line">example_2 = <span class="string">&quot;One Piece&quot;</span></span><br><span class="line">example_2_with_space = <span class="string">&quot;One Piece &quot;</span></span><br><span class="line"><span class="comment"># 這邊我們都印出字串的最後一個字看看空白字元是否都已成功替換</span></span><br><span class="line"><span class="built_in">print</span>(re.sub(<span class="string">r&quot;\s$&quot;</span>, <span class="string">&quot;&quot;</span>, example_1)[-<span class="number">1</span>])</span><br><span class="line"><span class="built_in">print</span>(re.sub(<span class="string">r&quot;\s$&quot;</span>, <span class="string">&quot;&quot;</span>, example_1_with_space)[-<span class="number">1</span>])</span><br><span class="line"><span class="built_in">print</span>(re.sub(<span class="string">r&quot;\s$&quot;</span>, <span class="string">&quot;&quot;</span>, example_2)[-<span class="number">1</span>])</span><br><span class="line"><span class="built_in">print</span>(re.sub(<span class="string">r&quot;\s$&quot;</span>, <span class="string">&quot;&quot;</span>, example_2_with_space)[-<span class="number">1</span>])</span><br><span class="line"><span class="built_in">print</span>(re.sub(<span class="string">r&quot;\s$&quot;</span>, <span class="string">&quot;&quot;</span>, example_2_with_space))</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">n</span><br><span class="line">n</span><br><span class="line">e</span><br><span class="line">e</span><br><span class="line">One Piece</span><br></pre></td></tr></table></figure>
+<p>從結果我們可以發現幾件事：<br>一、最後一個字都不是空白字元，這代表空白字元已經成功地被我們的正規表達式進行替換了！<br>二、就算最後一個字不是空白字元，正規表達式沒有匹配，函式仍會回傳原本的字串！<br>三、<em>One Piece</em>中間的空白字元仍留著，這代表所有proper noun最後一個字都不會是空白字元！</p>
+<h2 id="進階的替換功能"><a href="#進階的替換功能" class="headerlink" title="進階的替換功能"></a>進階的替換功能</h2><p>前面我們提到了如何運用正規表達式將字串整理成我們理想中的形式，現在要來介紹一些正規表達式中比較進階的替換用法。先讓我們進入實例：</p>
+<p>美國佬很喜歡跟全世界不一樣，無論是重量單位、長度單位，以及日期都跟其他國家的寫法不一樣，那今天我們的任務是要將美國日期寫法改成大家都習慣的形式。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 美國日期寫法為 mm/dd/yyyy</span></span><br><span class="line"><span class="comment"># 其他國家的日期格式則為 dd/mm/yyyy</span></span><br></pre></td></tr></table></figure>
+<p>一樣，我們先來想想該如何以正規表達式將美國日期格式進行匹配。這邊可以回去看第三篇文章，其中提到的逃脫字元<code>\</code>，由於<code>/</code>也是屬於正規表達式的一員，所以這時就要透過逃脫字元<code>\</code>告訴電腦在這裡的<code>/</code>不是正規表達式，而是真正的 &#x2F;。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">\d&#123;2&#125;\/\d&#123;2&#125;\/\d&#123;4&#125;</span><br></pre></td></tr></table></figure>
+<p>這時問題就來了，該如何透過替換功能，將一串日期字串轉換成其他國家較常用的日期格式呢？不知你是否還記得，昨天我們提到可以將括號<code>()</code>作為群組（group），並透過<code>re.search()</code>將想要的群組輸出，這次我們就要透過先前學過的群組概念來進行替換。首先，先將想要替換的字串加入群組：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(\d&#123;2&#125;)\/(\d&#123;2&#125;)\/(\d&#123;4&#125;)</span><br></pre></td></tr></table></figure>
+<p>圈好群組後，就可以透過<code>re.match()</code>來進行替換：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">usa_date = <span class="string">&quot;09/19/2022&quot;</span></span><br><span class="line">other_date = re.sub(<span class="string">&quot;(\d&#123;2&#125;)\/(\d&#123;2&#125;)\/(\d&#123;4&#125;)&quot;</span>, <span class="string">&quot;\\2/\\1/\\3&quot;</span>, usa_date)</span><br><span class="line"><span class="built_in">print</span>(other_date)</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">19/09/22</span><br></pre></td></tr></table></figure>
+<p>其中<code>\\</code>後面的數字就是群組的數字，就是這麼簡單！</p>
+<p>好啦！那我們今天的旅程就到這邊先結束了，明天就要邁入正規表達式的最終章，也就是萃取！</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/09/14/%E3%80%90NLP%E3%80%91Day-3-%E8%87%AA%E7%84%B6%E8%AA%9E%E8%A8%80%E8%99%95%E7%90%86%E7%9A%84%E5%85%A7%E5%8A%9B%EF%BC%8C%E4%B8%80%E5%88%87%E7%9A%84%E5%9F%BA%E7%A4%8E%EF%BC%81%E6%AD%A3%E8%A6%8F%E8%A1%A8%E9%81%94%E5%BC%8F-1-%E6%90%9C%E5%B0%8B/" rel="prev" title="【NLP】Day 3: 自然語言處理的內力，一切的基礎！正規表達式 (1) 搜尋">
+                  <i class="fa fa-chevron-left"></i> 【NLP】Day 3: 自然語言處理的內力，一切的基礎！正規表達式 (1) 搜尋
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa-solid fa-code"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hao Yun Chuang (Milan)</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/assets/hijiki.model.json"},"display":{"superSample":2,"width":250,"height":500,"position":"right","hOffset":-30,"vOffset":-130},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"log":false});</script></body>
+</html>

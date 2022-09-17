@@ -131,7 +131,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-count">6</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -200,6 +200,114 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://milanochuang.github.io/2022/09/18/%E3%80%90NLP%E3%80%91Day-4-%E4%BB%80%E9%BA%BC%EF%BC%81%E6%96%87%E6%9C%AC%E4%B9%9F%E5%8F%AF%E4%BB%A5%E5%81%B7%E5%A4%A9%E6%8F%9B%E6%97%A5%EF%BC%9F%E6%AD%A3%E8%A6%8F%E8%A1%A8%E9%81%94%E5%BC%8F-2-%E6%9B%BF%E6%8F%9B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Hao Yun Chuang (Milan)">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="米蘭牛角尖">
+      <meta itemprop="description" content="目前就讀於政大語言所，研究興趣為計算語言學<br/>">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 米蘭牛角尖">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/09/18/%E3%80%90NLP%E3%80%91Day-4-%E4%BB%80%E9%BA%BC%EF%BC%81%E6%96%87%E6%9C%AC%E4%B9%9F%E5%8F%AF%E4%BB%A5%E5%81%B7%E5%A4%A9%E6%8F%9B%E6%97%A5%EF%BC%9F%E6%AD%A3%E8%A6%8F%E8%A1%A8%E9%81%94%E5%BC%8F-2-%E6%9B%BF%E6%8F%9B/" class="post-title-link" itemprop="url">【NLP】Day 4: 什麼！文本也可以偷天換日？正規表達式 (2) 替換</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2022-09-18 01:47:00 / 修改時間：01:49:40" itemprop="dateCreated datePublished" datetime="2022-09-18T01:47:00+08:00">2022-09-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/natural-language-processing/" itemprop="url" rel="index"><span itemprop="name">自然語言處理</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <blockquote>
+<p>你低著頭，他們就會知道你在說謊；即便你抬起頭，他們也會知道其實你根本不知道真相。如果只用四個字就能說明清楚，就別用七個字。身體不要搖來搖去，要用堅定的眼神看著對方的眼睛，但別一直盯著看。說話清楚，但別太讓人印象深刻，可以偶爾幽默一下，但是過頭到讓他大笑。這麼一來，他當場就會對你有好感，而且你一旦離開那個場合，他也會立刻忘了你這個人。而且看在老天的份上，無論你想做什麼，都別做，在任何情況下…<br><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=VTKgyZZP5KQ">Rusty Ryan《瞞天過海》</a></p>
+</blockquote>
+<p>昨天我們已經簡單地認識了什麼是正規表達式（Regular Expression），也瞭解了正規表達式的性質，更認識了正規表達式在Python的函式庫中最常見的功能之一，也就是搜尋功能。讓我們在這裡簡單複習一下，正規表達式可以運用單一個字串，藉以匹配所有符合某個句法規則的字串；而這些字串藉由各種不同函式，可以幫助我們針對文本進行驗證、萃取，以及今天所要介紹的替換功能。正規表達式的運用，加上Python各種不同函式的靈活搭配，是踏入自然語言處理的第一張門票，是一切資料處理的根基，因此掌握正規表達式的運用其實比你我想的還要再更重要一點點。</p>
+<h2 id="啊所以到底什麼才是替換功能？"><a href="#啊所以到底什麼才是替換功能？" class="headerlink" title="啊所以到底什麼才是替換功能？"></a>啊所以到底什麼才是替換功能？</h2><p>讓我們把話題拉回正規表達式的替換功能。大家看到這裡可能還不清楚，所謂正規表達式的「替換」功能，實際上到底指的是什麼事情。就讓我們直接來看一個例子：</p>
+<p>最近有所上同學問我説，她在搭建聊天機器人的時候，發現若是在iPhone按下系統推薦的字詞，會自動產生出一個空白字元<code>&quot; &quot;</code>，而這會導致機器人在判讀字串時產生錯誤。因為同學做的是查詢英漢字典機器人，機器人需要完整正確的字串，才有辦法依照字串找出正確的中文翻譯，但這時卻多了一個空白字元，該怎麼處理才好呢？比如說今天輸入的是<code>ocean</code>，但程式端所接收到的字串卻是<code>ocean </code>。同學很苦惱。</p>
+<p>其實對Python稍微有一點點研究的同學，第一個想到的函式大概是 <code>.replace()</code> ，程式如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">message = <span class="string">&quot;ocean &quot;</span></span><br><span class="line">inputSTR = message.replace(<span class="string">&quot; &quot;</span>, <span class="string">&quot;&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(inputSTR)</span><br><span class="line"><span class="comment"># output: ocean</span></span><br></pre></td></tr></table></figure>
+
+<p>但以上這段程式碼好像也不能有效解決這位同學的問題，因為仔細想想，假如說我們今天想要知道 <em>One Piece</em> 是什麼意思？若套用以上的程式碼，反而會變成 <em>OnePiece</em>，像這種中間有空格的名詞，在計算語言學中，我們稱為<strong>proper noun（專有名詞）</strong>，另外，儘管其實是有些差別，但有些人也會一併稱其為 <strong>entity（實體）</strong>。在這時，我們發現<code>.replace()</code>已經不管用了，這時該怎麼辦？這時我們就必須要想辦法「將字串尾的空白字元取代掉」。</p>
+<p>在軟體工程中有個很重要的觀念，叫做Divide and Conquer，也就是將一個看似難以解決的問題分成很多個小問題，並且逐一擊破，最後即便是大問題也可以解決，大至軟體工程，小至正規表達式，都是一樣的道理。讓我們重新回來看這個問題，「將字串尾的空白字元取代掉」，其中第一個問題則是要找出「字串尾」。</p>
+<p>在正規表達式中，若要表達指定字串的第一個字元，會用<code>^</code>來表示，也就是說，你要告訴電腦你想要的字串格式，其中的第一個字是什麼的時候，就可以透過<code>^</code>來表達；另外，同樣的，若要表達指定字串的最後一個字元，在正規表達式中則會以<code>$</code> 來表示。再來會碰到的第二個問題則是「空白字元」。昨天，我們學到了數字的表達方式，也就是透過<code>\d</code>來代表數字。而空白字元在正規表示法中，則是以<code>\s</code>。這麼一來，我們就可以匹配所有字串尾有空白字元的字了。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">\s$</span><br></pre></td></tr></table></figure>
+
+<p>欸？沒錯，就是這麼簡單。那麼接著就可以將這串正規表達式加入Python當中進行替換了。在正規表達式的函式庫中，將字串進行替換的函式為<code>re.sub()</code>，其中第一個參數放正規表達式，第二個參數則是放你想替換成的字符，在我們的例子裡就是「無」，第三個參數則是放要進行替換的字串。這麼一來，程式就可以寫成：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re <span class="comment">#記得要加入正規表達式函式庫</span></span><br><span class="line">example_1 = <span class="string">&quot;Ocean&quot;</span></span><br><span class="line">example_1_with_space = <span class="string">&quot;Ocean &quot;</span></span><br><span class="line">example_2 = <span class="string">&quot;One Piece&quot;</span></span><br><span class="line">example_2_with_space = <span class="string">&quot;One Piece &quot;</span></span><br><span class="line"><span class="comment"># 這邊我們都印出字串的最後一個字看看空白字元是否都已成功替換</span></span><br><span class="line"><span class="built_in">print</span>(re.sub(<span class="string">r&quot;\s$&quot;</span>, <span class="string">&quot;&quot;</span>, example_1)[-<span class="number">1</span>])</span><br><span class="line"><span class="built_in">print</span>(re.sub(<span class="string">r&quot;\s$&quot;</span>, <span class="string">&quot;&quot;</span>, example_1_with_space)[-<span class="number">1</span>])</span><br><span class="line"><span class="built_in">print</span>(re.sub(<span class="string">r&quot;\s$&quot;</span>, <span class="string">&quot;&quot;</span>, example_2)[-<span class="number">1</span>])</span><br><span class="line"><span class="built_in">print</span>(re.sub(<span class="string">r&quot;\s$&quot;</span>, <span class="string">&quot;&quot;</span>, example_2_with_space)[-<span class="number">1</span>])</span><br><span class="line"><span class="built_in">print</span>(re.sub(<span class="string">r&quot;\s$&quot;</span>, <span class="string">&quot;&quot;</span>, example_2_with_space))</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">n</span><br><span class="line">n</span><br><span class="line">e</span><br><span class="line">e</span><br><span class="line">One Piece</span><br></pre></td></tr></table></figure>
+<p>從結果我們可以發現幾件事：<br>一、最後一個字都不是空白字元，這代表空白字元已經成功地被我們的正規表達式進行替換了！<br>二、就算最後一個字不是空白字元，正規表達式沒有匹配，函式仍會回傳原本的字串！<br>三、<em>One Piece</em>中間的空白字元仍留著，這代表所有proper noun最後一個字都不會是空白字元！</p>
+<h2 id="進階的替換功能"><a href="#進階的替換功能" class="headerlink" title="進階的替換功能"></a>進階的替換功能</h2><p>前面我們提到了如何運用正規表達式將字串整理成我們理想中的形式，現在要來介紹一些正規表達式中比較進階的替換用法。先讓我們進入實例：</p>
+<p>美國佬很喜歡跟全世界不一樣，無論是重量單位、長度單位，以及日期都跟其他國家的寫法不一樣，那今天我們的任務是要將美國日期寫法改成大家都習慣的形式。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 美國日期寫法為 mm/dd/yyyy</span></span><br><span class="line"><span class="comment"># 其他國家的日期格式則為 dd/mm/yyyy</span></span><br></pre></td></tr></table></figure>
+<p>一樣，我們先來想想該如何以正規表達式將美國日期格式進行匹配。這邊可以回去看第三篇文章，其中提到的逃脫字元<code>\</code>，由於<code>/</code>也是屬於正規表達式的一員，所以這時就要透過逃脫字元<code>\</code>告訴電腦在這裡的<code>/</code>不是正規表達式，而是真正的 &#x2F;。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">\d&#123;2&#125;\/\d&#123;2&#125;\/\d&#123;4&#125;</span><br></pre></td></tr></table></figure>
+<p>這時問題就來了，該如何透過替換功能，將一串日期字串轉換成其他國家較常用的日期格式呢？不知你是否還記得，昨天我們提到可以將括號<code>()</code>作為群組（group），並透過<code>re.search()</code>將想要的群組輸出，這次我們就要透過先前學過的群組概念來進行替換。首先，先將想要替換的字串加入群組：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(\d&#123;2&#125;)\/(\d&#123;2&#125;)\/(\d&#123;4&#125;)</span><br></pre></td></tr></table></figure>
+<p>圈好群組後，就可以透過<code>re.match()</code>來進行替換：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">usa_date = <span class="string">&quot;09/19/2022&quot;</span></span><br><span class="line">other_date = re.sub(<span class="string">&quot;(\d&#123;2&#125;)\/(\d&#123;2&#125;)\/(\d&#123;4&#125;)&quot;</span>, <span class="string">&quot;\\2/\\1/\\3&quot;</span>, usa_date)</span><br><span class="line"><span class="built_in">print</span>(other_date)</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">19/09/22</span><br></pre></td></tr></table></figure>
+<p>其中<code>\\</code>後面的數字就是群組的數字，就是這麼簡單！</p>
+<p>好啦！那我們今天的旅程就到這邊先結束了，明天就要邁入正規表達式的最終章，也就是萃取！</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
     <link itemprop="mainEntityOfPage" href="https://milanochuang.github.io/2022/09/14/%E3%80%90NLP%E3%80%91Day-3-%E8%87%AA%E7%84%B6%E8%AA%9E%E8%A8%80%E8%99%95%E7%90%86%E7%9A%84%E5%85%A7%E5%8A%9B%EF%BC%8C%E4%B8%80%E5%88%87%E7%9A%84%E5%9F%BA%E7%A4%8E%EF%BC%81%E6%AD%A3%E8%A6%8F%E8%A1%A8%E9%81%94%E5%BC%8F-1-%E6%90%9C%E5%B0%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -229,14 +337,23 @@
       </span>
       <span class="post-meta-item-text">發表於</span>
 
-      <time title="創建時間：2022-09-14 23:13:48" itemprop="dateCreated datePublished" datetime="2022-09-14T23:13:48+08:00">2022-09-14</time>
+      <time title="創建時間：2022-09-14 23:13:00" itemprop="dateCreated datePublished" datetime="2022-09-14T23:13:00+08:00">2022-09-14</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新於</span>
-      <time title="修改時間：2022-09-15 01:49:30" itemprop="dateModified" datetime="2022-09-15T01:49:30+08:00">2022-09-15</time>
+      <time title="修改時間：2022-09-18 01:49:32" itemprop="dateModified" datetime="2022-09-18T01:49:32+08:00">2022-09-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/natural-language-processing/" itemprop="url" rel="index"><span itemprop="name">自然語言處理</span></a>
+        </span>
     </span>
 
   
@@ -322,14 +439,23 @@
       </span>
       <span class="post-meta-item-text">發表於</span>
 
-      <time title="創建時間：2022-09-03 09:45:44" itemprop="dateCreated datePublished" datetime="2022-09-03T09:45:44+08:00">2022-09-03</time>
+      <time title="創建時間：2022-09-03 09:45:00" itemprop="dateCreated datePublished" datetime="2022-09-03T09:45:00+08:00">2022-09-03</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新於</span>
-      <time title="修改時間：2022-09-15 01:49:56" itemprop="dateModified" datetime="2022-09-15T01:49:56+08:00">2022-09-15</time>
+      <time title="修改時間：2022-09-18 01:49:11" itemprop="dateModified" datetime="2022-09-18T01:49:11+08:00">2022-09-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/natural-language-processing/" itemprop="url" rel="index"><span itemprop="name">自然語言處理</span></a>
+        </span>
     </span>
 
   
@@ -457,7 +583,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新於</span>
-      <time title="修改時間：2022-09-06 00:44:34" itemprop="dateModified" datetime="2022-09-06T00:44:34+08:00">2022-09-06</time>
+      <time title="修改時間：2022-09-18 01:49:22" itemprop="dateModified" datetime="2022-09-18T01:49:22+08:00">2022-09-18</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
