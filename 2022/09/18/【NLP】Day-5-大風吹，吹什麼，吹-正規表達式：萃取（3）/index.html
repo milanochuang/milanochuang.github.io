@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/icon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/icon.png">
+  <link rel="mask-icon" href="/images/icon.png" color="#222">
+  <meta name="google-site-verification" content="DMyRve2tDXDJqmJpSS4BaBWT1R0ZCH9n_EsCnROTiM0">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha256-xejo6yLi6vGtAjcMIsY8BHdKsLg7QynVlFMzdQgUuy8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"milanochuang.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.12.3","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="我們確實曾經擁有一切，對吧？我是說，如果你仔細回想的話，就會發現確實是這麼一回事。《華爾街之狼》  轉眼間，我們也來到了正規表達式的最終章，也就是萃取啦！有些反應比較快的朋友可能會想說，萃取不就跟第一週的re.search()一樣嗎？如果一樣要輸出匹配的字串的話，那就直接用re.search()不就好了？幹嘛還要再多學這個？ 這是一個很好的問題，我們話不多說，就直接來看實例。這次我從維基百科的獵">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【NLP】Day 5: 大風吹，吹什麼，吹...正規表達式：萃取（3）">
+<meta property="og:url" content="https://milanochuang.github.io/2022/09/18/%E3%80%90NLP%E3%80%91Day-5-%E5%A4%A7%E9%A2%A8%E5%90%B9%EF%BC%8C%E5%90%B9%E4%BB%80%E9%BA%BC%EF%BC%8C%E5%90%B9-%E6%AD%A3%E8%A6%8F%E8%A1%A8%E9%81%94%E5%BC%8F%EF%BC%9A%E8%90%83%E5%8F%96%EF%BC%883%EF%BC%89/index.html">
+<meta property="og:site_name" content="米蘭牛角尖">
+<meta property="og:description" content="我們確實曾經擁有一切，對吧？我是說，如果你仔細回想的話，就會發現確實是這麼一回事。《華爾街之狼》  轉眼間，我們也來到了正規表達式的最終章，也就是萃取啦！有些反應比較快的朋友可能會想說，萃取不就跟第一週的re.search()一樣嗎？如果一樣要輸出匹配的字串的話，那就直接用re.search()不就好了？幹嘛還要再多學這個？ 這是一個很好的問題，我們話不多說，就直接來看實例。這次我從維基百科的獵">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2022-09-18T11:35:00.000Z">
+<meta property="article:modified_time" content="2022-09-18T11:36:10.716Z">
+<meta property="article:author" content="Hao Yun Chuang (Milan)">
+<meta property="article:tag" content="自然語言處理, 計算語言學, 機器學習, 人工智慧, 電影">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://milanochuang.github.io/2022/09/18/%E3%80%90NLP%E3%80%91Day-5-%E5%A4%A7%E9%A2%A8%E5%90%B9%EF%BC%8C%E5%90%B9%E4%BB%80%E9%BA%BC%EF%BC%8C%E5%90%B9-%E6%AD%A3%E8%A6%8F%E8%A1%A8%E9%81%94%E5%BC%8F%EF%BC%9A%E8%90%83%E5%8F%96%EF%BC%883%EF%BC%89/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://milanochuang.github.io/2022/09/18/%E3%80%90NLP%E3%80%91Day-5-%E5%A4%A7%E9%A2%A8%E5%90%B9%EF%BC%8C%E5%90%B9%E4%BB%80%E9%BA%BC%EF%BC%8C%E5%90%B9-%E6%AD%A3%E8%A6%8F%E8%A1%A8%E9%81%94%E5%BC%8F%EF%BC%9A%E8%90%83%E5%8F%96%EF%BC%883%EF%BC%89/","path":"2022/09/18/【NLP】Day-5-大風吹，吹什麼，吹-正規表達式：萃取（3）/","title":"【NLP】Day 5: 大風吹，吹什麼，吹...正規表達式：萃取（3）"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>【NLP】Day 5: 大風吹，吹什麼，吹...正規表達式：萃取（3） | 米蘭牛角尖</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">米蘭牛角尖</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">計算語言學的學習紀錄，偶爾可能會出現野生的電影評論？</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>關於</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分類</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>所有文章</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Hao Yun Chuang (Milan)"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Hao Yun Chuang (Milan)</p>
+  <div class="site-description" itemprop="description">目前就讀於政大語言所，研究興趣為計算語言學<br/></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/milanochuang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;milanochuang" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:milanochuang@gmail.com" title="E-Mail → mailto:milanochuang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/milanochuang" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;milanochuang" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/milanochuang" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;milanochuang" rel="noopener" target="_blank"><i class="fab fa-facebook fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://instagram.com/milanochuang" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;milanochuang" rel="noopener" target="_blank"><i class="fab fa-instagram fa-fw"></i></a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/milanochuang" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://milanochuang.github.io/2022/09/18/%E3%80%90NLP%E3%80%91Day-5-%E5%A4%A7%E9%A2%A8%E5%90%B9%EF%BC%8C%E5%90%B9%E4%BB%80%E9%BA%BC%EF%BC%8C%E5%90%B9-%E6%AD%A3%E8%A6%8F%E8%A1%A8%E9%81%94%E5%BC%8F%EF%BC%9A%E8%90%83%E5%8F%96%EF%BC%883%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Hao Yun Chuang (Milan)">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="米蘭牛角尖">
+      <meta itemprop="description" content="目前就讀於政大語言所，研究興趣為計算語言學<br/>">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="【NLP】Day 5: 大風吹，吹什麼，吹...正規表達式：萃取（3） | 米蘭牛角尖">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【NLP】Day 5: 大風吹，吹什麼，吹...正規表達式：萃取（3）
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2022-09-18 19:35:00 / 修改時間：19:36:10" itemprop="dateCreated datePublished" datetime="2022-09-18T19:35:00+08:00">2022-09-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/natural-language-processing/" itemprop="url" rel="index"><span itemprop="name">自然語言處理</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <blockquote>
+<p>我們確實曾經擁有一切，對吧？我是說，如果你仔細回想的話，就會發現確實是這麼一回事。<br><strong>《華爾街之狼》</strong></p>
+</blockquote>
+<p>轉眼間，我們也來到了正規表達式的最終章，也就是萃取啦！有些反應比較快的朋友可能會想說，萃取不就跟第一週的<code>re.search()</code>一樣嗎？如果一樣要輸出匹配的字串的話，那就直接用<code>re.search()</code>不就好了？幹嘛還要再多學這個？</p>
+<p>這是一個很好的問題，我們話不多說，就直接來看實例。這次我從維基百科的<a target="_blank" rel="noopener" href="https://zh.m.wikipedia.org/wiki/HUNTER%C3%97HUNTER">獵人 Hunter x Hunter</a>條目中擷取了一小段文字，然後這次的任務是需要將這段文字中，每一篇獵人的篇章所在的漫畫話數全部都取出來，<del>這樣才方便之後連載再開的時候直接找到需要複習的篇章。</del></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">蟻王篇 No.186－318（單行本18卷 - 30卷） # 我們要抓的地方</span><br><span class="line">小傑與奇犽使用貪婪之島破關獎品打算去找金。但是在那裏等著的並不是金，而是凱特。凱特他們在未確認生物的探索和調查中，發現巨型嵌合蟻的殘骸，一行人前往NGL。小傑和奇犽瞭解嵌合蟻的強大，在凱特的犧牲下逃出NGL。在討伐隊還尚未準備完全之際，嵌合蟻王誕生了。王率領直屬護衛隊和一部份士兵，在背後統治東果陀共和國，打算進行『選別』（挑選）。為了防止更多的人死亡以及為凱特報仇，小傑一行人再次向嵌合蟻挑戰。</span><br><span class="line">十二支會長篇 No.319－339（單行本30卷 - 32卷）# 我們要抓的地方</span><br><span class="line">十二支登場，尼特羅會長於嵌合蟻之役死後，從獵人協會會長退位，開始選拔新的獵人協會會長。全世界的獵人為了新的獵人會長選舉一事紛紛開始活動；另一方面，奇犽為了拯救傷重的小傑而再度回到揍敵客家族。</span><br><span class="line">暗黑大陸篇 No.340－ （單行本32卷 - ）# 我們要抓的地方</span><br><span class="line">有天自稱尼特羅之子的比洋德·尼特羅在卡丁帝國支持下向全世界發表招募同伴前往暗黑大陸的影片，在十二支們接獲V5所發出的「追捕比洋德」命令的同一時間，比洋德主動前來被逮捕並要求交換條件──十二支需陪同他一起至暗黑大陸。同時雷歐力和酷拉皮卡加入十二支並接替十二支的子、亥之位置。</span><br><span class="line">金以No.2身分加入比洋德雇用前往暗黑大陸的專家團隊，後來當卡丁帝國的船發出後，和其他包括12支的獵人也登上船，酷拉皮卡成為第八王妃奧伊特和第十四王子的保鑣，其目的為第四王子手上收藏的族人眼睛。船的目的地為鄰近暗黑大陸邊界的假想「新大陸」，航行過程中，王位爭奪戰正式展開。</span><br></pre></td></tr></table></figure>
+
+<p>先來看看符合字串的正規表達式怎麼寫，在本篇不會仔細說明正規表達式是如何運作的，但如果你需要詳細介紹的話，可以去看我第三天的<a target="_blank" rel="noopener" href="https://ithelp.ithome.com.tw/articles/10293287">文章</a>。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">No\.\d&#123;3&#125;－\d&#123;0,3&#125;</span><br></pre></td></tr></table></figure>
+
+<p>稍微講解一下這段正規表達式：在<code>No</code>後面有一個小點點，要記得在前面加上逃脫字元<code>\</code>，不然<code>.</code>是正規表達式中的黑暗大法師，他會代表所有的字元，也會把所有的字元通通都吸進去，要小心使用。後面最後之所以是<code>\d&#123;0,3&#125;</code>是因為注意到暗黑大陸篇由於尚在連載中，所以還沒有結尾話數（我先哭）</p>
+<p>先來看看，如果這時候用前天我們所學的<code>re.search()</code>會發生什麼事。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re <span class="comment"># 要記得引入函式庫</span></span><br><span class="line">test_string = <span class="string">&quot;蟻王篇 No.186－318（單行本18卷 - 30卷）小傑與奇犽使用貪婪之島破關獎品打算去找金。但是在那裏等著的並不是金，而是凱特。凱特他們在未確認生物的探索和調查中，發現巨型嵌合蟻的殘骸，一行人前往NGL。小傑和奇犽瞭解嵌合蟻的強大，在凱特的犧牲下逃出NGL。在討伐隊還尚未準備完全之際，嵌合蟻王誕生了。王率領直屬護衛隊和一部份士兵，在背後統治東果陀共和國，打算進行『選別』（挑選）。為了防止更多的人死亡以及為凱特報仇，小傑一行人再次向嵌合蟻挑戰。十二支會長篇 No.319－339（單行本30卷 - 32卷）十二支登場，尼特羅會長於嵌合蟻之役死後，從獵人協會會長退位，開始選拔新的獵人協會會長。全世界的獵人為了新的獵人會長選舉一事紛紛開始活動；另一方面，奇犽為了拯救傷重的小傑而再度回到揍敵客家族。暗黑大陸篇 No.340－ （單行本32卷 - ）有天自稱尼特羅之子的比洋德·尼特羅在卡丁帝國支持下向全世界發表招募同伴前往暗黑大陸的影片，在十二支們接獲V5所發出的「追捕比洋德」命令的同一時間，比洋德主動前來被逮捕並要求交換條件──十二支需陪同他一起至暗黑大陸。同時雷歐力和酷拉皮卡加入十二支並接替十二支的子、亥之位置。金以No.2身分加入比洋德雇用前往暗黑大陸的專家團隊，後來當卡丁帝國的船發出後，和其他包括12支的獵人也登上船，酷拉皮卡成為第八王妃奧伊特和第十四王子的保鑣，其目的為第四王子手上收藏的族人眼睛。船的目的地為鄰近暗黑大陸邊界的假想「新大陸」，航行過程中，王位爭奪戰正式展開。&quot;</span></span><br><span class="line"><span class="built_in">print</span>(re.search(<span class="string">&quot;No\.\d&#123;3&#125;－\d&#123;0,3&#125;&quot;</span>, test_string))</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;re.Match object; span=(4, 14), match=&#x27;No.186－318&#x27;&gt;</span><br></pre></td></tr></table></figure>
+
+<p>我們會發現，如果只有使用<code>re.search()</code>，函式只會回傳符合的第一個字串，這時該怎麼辦？因為我們想要的是<strong>所有符合的字串</strong>，只回傳符合的第一個字串，就不符合我們的需求了。這時候就要好好地利用新的函式<code>re.findall()</code>了。<code>re.findall()</code>會找出所有符合的字串，並以串列的形式回傳。話不多說，就讓我們來試試看吧！</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re <span class="comment"># 要記得引入函式庫</span></span><br><span class="line">test_string = <span class="string">&quot;蟻王篇 No.186－318（單行本18卷 - 30卷）小傑與奇犽使用貪婪之島破關獎品打算去找金。但是在那裏等著的並不是金，而是凱特。凱特他們在未確認生物的探索和調查中，發現巨型嵌合蟻的殘骸，一行人前往NGL。小傑和奇犽瞭解嵌合蟻的強大，在凱特的犧牲下逃出NGL。在討伐隊還尚未準備完全之際，嵌合蟻王誕生了。王率領直屬護衛隊和一部份士兵，在背後統治東果陀共和國，打算進行『選別』（挑選）。為了防止更多的人死亡以及為凱特報仇，小傑一行人再次向嵌合蟻挑戰。十二支會長篇 No.319－339（單行本30卷 - 32卷）十二支登場，尼特羅會長於嵌合蟻之役死後，從獵人協會會長退位，開始選拔新的獵人協會會長。全世界的獵人為了新的獵人會長選舉一事紛紛開始活動；另一方面，奇犽為了拯救傷重的小傑而再度回到揍敵客家族。暗黑大陸篇 No.340－ （單行本32卷 - ）有天自稱尼特羅之子的比洋德·尼特羅在卡丁帝國支持下向全世界發表招募同伴前往暗黑大陸的影片，在十二支們接獲V5所發出的「追捕比洋德」命令的同一時間，比洋德主動前來被逮捕並要求交換條件──十二支需陪同他一起至暗黑大陸。同時雷歐力和酷拉皮卡加入十二支並接替十二支的子、亥之位置。金以No.2身分加入比洋德雇用前往暗黑大陸的專家團隊，後來當卡丁帝國的船發出後，和其他包括12支的獵人也登上船，酷拉皮卡成為第八王妃奧伊特和第十四王子的保鑣，其目的為第四王子手上收藏的族人眼睛。船的目的地為鄰近暗黑大陸邊界的假想「新大陸」，航行過程中，王位爭奪戰正式展開。&quot;</span></span><br><span class="line"><span class="built_in">print</span>(re.findall(<span class="string">&quot;No\.\d&#123;3&#125;－\d&#123;0,3&#125;&quot;</span>, test_string))</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[&#x27;No.186－318&#x27;, &#x27;No.319－339&#x27;, &#x27;No.340－&#x27;]</span><br></pre></td></tr></table></figure>
+<p>我們可以發現，如果使用<code>re.findall()</code>就能把所有的話數範圍找出來了！</p>
+<p>好！那有關正規表達式的介紹就到這篇結束啦！明天開始就要進入斷詞方法了，大家抓緊好要出發了嗎？我們明天見囉！</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/09/18/%E3%80%90NLP%E3%80%91Day-4-%E4%BB%80%E9%BA%BC%EF%BC%81%E6%96%87%E6%9C%AC%E4%B9%9F%E5%8F%AF%E4%BB%A5%E5%81%B7%E5%A4%A9%E6%8F%9B%E6%97%A5%EF%BC%9F%E6%AD%A3%E8%A6%8F%E8%A1%A8%E9%81%94%E5%BC%8F-2-%E6%9B%BF%E6%8F%9B/" rel="prev" title="【NLP】Day 4: 什麼！文本也可以偷天換日？正規表達式 (2) 替換">
+                  <i class="fa fa-chevron-left"></i> 【NLP】Day 4: 什麼！文本也可以偷天換日？正規表達式 (2) 替換
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa-solid fa-code"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hao Yun Chuang (Milan)</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/assets/hijiki.model.json"},"display":{"superSample":2,"width":250,"height":500,"position":"right","hOffset":-30,"vOffset":-130},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"log":false});</script></body>
+</html>

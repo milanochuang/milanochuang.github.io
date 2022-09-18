@@ -131,7 +131,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-count">7</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -191,6 +191,104 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://milanochuang.github.io/2022/09/18/%E3%80%90NLP%E3%80%91Day-5-%E5%A4%A7%E9%A2%A8%E5%90%B9%EF%BC%8C%E5%90%B9%E4%BB%80%E9%BA%BC%EF%BC%8C%E5%90%B9-%E6%AD%A3%E8%A6%8F%E8%A1%A8%E9%81%94%E5%BC%8F%EF%BC%9A%E8%90%83%E5%8F%96%EF%BC%883%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Hao Yun Chuang (Milan)">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="米蘭牛角尖">
+      <meta itemprop="description" content="目前就讀於政大語言所，研究興趣為計算語言學<br/>">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 米蘭牛角尖">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/09/18/%E3%80%90NLP%E3%80%91Day-5-%E5%A4%A7%E9%A2%A8%E5%90%B9%EF%BC%8C%E5%90%B9%E4%BB%80%E9%BA%BC%EF%BC%8C%E5%90%B9-%E6%AD%A3%E8%A6%8F%E8%A1%A8%E9%81%94%E5%BC%8F%EF%BC%9A%E8%90%83%E5%8F%96%EF%BC%883%EF%BC%89/" class="post-title-link" itemprop="url">【NLP】Day 5: 大風吹，吹什麼，吹...正規表達式：萃取（3）</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2022-09-18 19:35:00 / 修改時間：19:36:10" itemprop="dateCreated datePublished" datetime="2022-09-18T19:35:00+08:00">2022-09-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/natural-language-processing/" itemprop="url" rel="index"><span itemprop="name">自然語言處理</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <blockquote>
+<p>我們確實曾經擁有一切，對吧？我是說，如果你仔細回想的話，就會發現確實是這麼一回事。<br><strong>《華爾街之狼》</strong></p>
+</blockquote>
+<p>轉眼間，我們也來到了正規表達式的最終章，也就是萃取啦！有些反應比較快的朋友可能會想說，萃取不就跟第一週的<code>re.search()</code>一樣嗎？如果一樣要輸出匹配的字串的話，那就直接用<code>re.search()</code>不就好了？幹嘛還要再多學這個？</p>
+<p>這是一個很好的問題，我們話不多說，就直接來看實例。這次我從維基百科的<a target="_blank" rel="noopener" href="https://zh.m.wikipedia.org/wiki/HUNTER%C3%97HUNTER">獵人 Hunter x Hunter</a>條目中擷取了一小段文字，然後這次的任務是需要將這段文字中，每一篇獵人的篇章所在的漫畫話數全部都取出來，<del>這樣才方便之後連載再開的時候直接找到需要複習的篇章。</del></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">蟻王篇 No.186－318（單行本18卷 - 30卷） # 我們要抓的地方</span><br><span class="line">小傑與奇犽使用貪婪之島破關獎品打算去找金。但是在那裏等著的並不是金，而是凱特。凱特他們在未確認生物的探索和調查中，發現巨型嵌合蟻的殘骸，一行人前往NGL。小傑和奇犽瞭解嵌合蟻的強大，在凱特的犧牲下逃出NGL。在討伐隊還尚未準備完全之際，嵌合蟻王誕生了。王率領直屬護衛隊和一部份士兵，在背後統治東果陀共和國，打算進行『選別』（挑選）。為了防止更多的人死亡以及為凱特報仇，小傑一行人再次向嵌合蟻挑戰。</span><br><span class="line">十二支會長篇 No.319－339（單行本30卷 - 32卷）# 我們要抓的地方</span><br><span class="line">十二支登場，尼特羅會長於嵌合蟻之役死後，從獵人協會會長退位，開始選拔新的獵人協會會長。全世界的獵人為了新的獵人會長選舉一事紛紛開始活動；另一方面，奇犽為了拯救傷重的小傑而再度回到揍敵客家族。</span><br><span class="line">暗黑大陸篇 No.340－ （單行本32卷 - ）# 我們要抓的地方</span><br><span class="line">有天自稱尼特羅之子的比洋德·尼特羅在卡丁帝國支持下向全世界發表招募同伴前往暗黑大陸的影片，在十二支們接獲V5所發出的「追捕比洋德」命令的同一時間，比洋德主動前來被逮捕並要求交換條件──十二支需陪同他一起至暗黑大陸。同時雷歐力和酷拉皮卡加入十二支並接替十二支的子、亥之位置。</span><br><span class="line">金以No.2身分加入比洋德雇用前往暗黑大陸的專家團隊，後來當卡丁帝國的船發出後，和其他包括12支的獵人也登上船，酷拉皮卡成為第八王妃奧伊特和第十四王子的保鑣，其目的為第四王子手上收藏的族人眼睛。船的目的地為鄰近暗黑大陸邊界的假想「新大陸」，航行過程中，王位爭奪戰正式展開。</span><br></pre></td></tr></table></figure>
+
+<p>先來看看符合字串的正規表達式怎麼寫，在本篇不會仔細說明正規表達式是如何運作的，但如果你需要詳細介紹的話，可以去看我第三天的<a target="_blank" rel="noopener" href="https://ithelp.ithome.com.tw/articles/10293287">文章</a>。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">No\.\d&#123;3&#125;－\d&#123;0,3&#125;</span><br></pre></td></tr></table></figure>
+
+<p>稍微講解一下這段正規表達式：在<code>No</code>後面有一個小點點，要記得在前面加上逃脫字元<code>\</code>，不然<code>.</code>是正規表達式中的黑暗大法師，他會代表所有的字元，也會把所有的字元通通都吸進去，要小心使用。後面最後之所以是<code>\d&#123;0,3&#125;</code>是因為注意到暗黑大陸篇由於尚在連載中，所以還沒有結尾話數（我先哭）</p>
+<p>先來看看，如果這時候用前天我們所學的<code>re.search()</code>會發生什麼事。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re <span class="comment"># 要記得引入函式庫</span></span><br><span class="line">test_string = <span class="string">&quot;蟻王篇 No.186－318（單行本18卷 - 30卷）小傑與奇犽使用貪婪之島破關獎品打算去找金。但是在那裏等著的並不是金，而是凱特。凱特他們在未確認生物的探索和調查中，發現巨型嵌合蟻的殘骸，一行人前往NGL。小傑和奇犽瞭解嵌合蟻的強大，在凱特的犧牲下逃出NGL。在討伐隊還尚未準備完全之際，嵌合蟻王誕生了。王率領直屬護衛隊和一部份士兵，在背後統治東果陀共和國，打算進行『選別』（挑選）。為了防止更多的人死亡以及為凱特報仇，小傑一行人再次向嵌合蟻挑戰。十二支會長篇 No.319－339（單行本30卷 - 32卷）十二支登場，尼特羅會長於嵌合蟻之役死後，從獵人協會會長退位，開始選拔新的獵人協會會長。全世界的獵人為了新的獵人會長選舉一事紛紛開始活動；另一方面，奇犽為了拯救傷重的小傑而再度回到揍敵客家族。暗黑大陸篇 No.340－ （單行本32卷 - ）有天自稱尼特羅之子的比洋德·尼特羅在卡丁帝國支持下向全世界發表招募同伴前往暗黑大陸的影片，在十二支們接獲V5所發出的「追捕比洋德」命令的同一時間，比洋德主動前來被逮捕並要求交換條件──十二支需陪同他一起至暗黑大陸。同時雷歐力和酷拉皮卡加入十二支並接替十二支的子、亥之位置。金以No.2身分加入比洋德雇用前往暗黑大陸的專家團隊，後來當卡丁帝國的船發出後，和其他包括12支的獵人也登上船，酷拉皮卡成為第八王妃奧伊特和第十四王子的保鑣，其目的為第四王子手上收藏的族人眼睛。船的目的地為鄰近暗黑大陸邊界的假想「新大陸」，航行過程中，王位爭奪戰正式展開。&quot;</span></span><br><span class="line"><span class="built_in">print</span>(re.search(<span class="string">&quot;No\.\d&#123;3&#125;－\d&#123;0,3&#125;&quot;</span>, test_string))</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;re.Match object; span=(4, 14), match=&#x27;No.186－318&#x27;&gt;</span><br></pre></td></tr></table></figure>
+
+<p>我們會發現，如果只有使用<code>re.search()</code>，函式只會回傳符合的第一個字串，這時該怎麼辦？因為我們想要的是<strong>所有符合的字串</strong>，只回傳符合的第一個字串，就不符合我們的需求了。這時候就要好好地利用新的函式<code>re.findall()</code>了。<code>re.findall()</code>會找出所有符合的字串，並以串列的形式回傳。話不多說，就讓我們來試試看吧！</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re <span class="comment"># 要記得引入函式庫</span></span><br><span class="line">test_string = <span class="string">&quot;蟻王篇 No.186－318（單行本18卷 - 30卷）小傑與奇犽使用貪婪之島破關獎品打算去找金。但是在那裏等著的並不是金，而是凱特。凱特他們在未確認生物的探索和調查中，發現巨型嵌合蟻的殘骸，一行人前往NGL。小傑和奇犽瞭解嵌合蟻的強大，在凱特的犧牲下逃出NGL。在討伐隊還尚未準備完全之際，嵌合蟻王誕生了。王率領直屬護衛隊和一部份士兵，在背後統治東果陀共和國，打算進行『選別』（挑選）。為了防止更多的人死亡以及為凱特報仇，小傑一行人再次向嵌合蟻挑戰。十二支會長篇 No.319－339（單行本30卷 - 32卷）十二支登場，尼特羅會長於嵌合蟻之役死後，從獵人協會會長退位，開始選拔新的獵人協會會長。全世界的獵人為了新的獵人會長選舉一事紛紛開始活動；另一方面，奇犽為了拯救傷重的小傑而再度回到揍敵客家族。暗黑大陸篇 No.340－ （單行本32卷 - ）有天自稱尼特羅之子的比洋德·尼特羅在卡丁帝國支持下向全世界發表招募同伴前往暗黑大陸的影片，在十二支們接獲V5所發出的「追捕比洋德」命令的同一時間，比洋德主動前來被逮捕並要求交換條件──十二支需陪同他一起至暗黑大陸。同時雷歐力和酷拉皮卡加入十二支並接替十二支的子、亥之位置。金以No.2身分加入比洋德雇用前往暗黑大陸的專家團隊，後來當卡丁帝國的船發出後，和其他包括12支的獵人也登上船，酷拉皮卡成為第八王妃奧伊特和第十四王子的保鑣，其目的為第四王子手上收藏的族人眼睛。船的目的地為鄰近暗黑大陸邊界的假想「新大陸」，航行過程中，王位爭奪戰正式展開。&quot;</span></span><br><span class="line"><span class="built_in">print</span>(re.findall(<span class="string">&quot;No\.\d&#123;3&#125;－\d&#123;0,3&#125;&quot;</span>, test_string))</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[&#x27;No.186－318&#x27;, &#x27;No.319－339&#x27;, &#x27;No.340－&#x27;]</span><br></pre></td></tr></table></figure>
+<p>我們可以發現，如果使用<code>re.findall()</code>就能把所有的話數範圍找出來了！</p>
+<p>好！那有關正規表達式的介紹就到這篇結束啦！明天開始就要進入斷詞方法了，大家抓緊好要出發了嗎？我們明天見囉！</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
