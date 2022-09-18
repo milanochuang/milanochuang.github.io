@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/icon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/icon.png">
+  <link rel="mask-icon" href="/images/icon.png" color="#222">
+  <meta name="google-site-verification" content="DMyRve2tDXDJqmJpSS4BaBWT1R0ZCH9n_EsCnROTiM0">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha256-xejo6yLi6vGtAjcMIsY8BHdKsLg7QynVlFMzdQgUuy8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"milanochuang.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.12.3","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="如果沒有了這套裝備，你就什麼都不是的話，那你就更不該擁有它。東尼·史塔克《蜘蛛人：返家日》  在處理自然語言的時候，斷詞往往是首要的工作。其實這也很好理解，為什麼？我們可以從自然語言處理的目的開始來思考這個問題，也就是說，進行自然語言處理的目的是什麼？是要知道一篇正面或是負面評價的電影評論會用哪些詞彙嗎？還是要知道在一句話中，哪個是名詞？動詞？形容詞？或者是要知道這篇文章與其他篇文章比起來，有哪">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【NLP】Day 6: 斷開一切的牽連！一同探訪「斷詞」與他們的產地">
+<meta property="og:url" content="https://milanochuang.github.io/2022/09/19/%E3%80%90NLP%E3%80%91Day-6-%E6%96%B7%E9%96%8B%E4%B8%80%E5%88%87%E7%9A%84%E7%89%BD%E9%80%A3%EF%BC%81%E4%B8%80%E5%90%8C%E6%8E%A2%E8%A8%AA%E3%80%8C%E6%96%B7%E8%A9%9E%E3%80%8D%E8%88%87%E4%BB%96%E5%80%91%E7%9A%84%E7%94%A2%E5%9C%B0/index.html">
+<meta property="og:site_name" content="米蘭牛角尖">
+<meta property="og:description" content="如果沒有了這套裝備，你就什麼都不是的話，那你就更不該擁有它。東尼·史塔克《蜘蛛人：返家日》  在處理自然語言的時候，斷詞往往是首要的工作。其實這也很好理解，為什麼？我們可以從自然語言處理的目的開始來思考這個問題，也就是說，進行自然語言處理的目的是什麼？是要知道一篇正面或是負面評價的電影評論會用哪些詞彙嗎？還是要知道在一句話中，哪個是名詞？動詞？形容詞？或者是要知道這篇文章與其他篇文章比起來，有哪">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2022-09-18T17:11:26.000Z">
+<meta property="article:modified_time" content="2022-09-18T17:16:43.623Z">
+<meta property="article:author" content="Hao Yun Chuang (Milan)">
+<meta property="article:tag" content="自然語言處理, 計算語言學, 機器學習, 人工智慧, 電影">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://milanochuang.github.io/2022/09/19/%E3%80%90NLP%E3%80%91Day-6-%E6%96%B7%E9%96%8B%E4%B8%80%E5%88%87%E7%9A%84%E7%89%BD%E9%80%A3%EF%BC%81%E4%B8%80%E5%90%8C%E6%8E%A2%E8%A8%AA%E3%80%8C%E6%96%B7%E8%A9%9E%E3%80%8D%E8%88%87%E4%BB%96%E5%80%91%E7%9A%84%E7%94%A2%E5%9C%B0/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://milanochuang.github.io/2022/09/19/%E3%80%90NLP%E3%80%91Day-6-%E6%96%B7%E9%96%8B%E4%B8%80%E5%88%87%E7%9A%84%E7%89%BD%E9%80%A3%EF%BC%81%E4%B8%80%E5%90%8C%E6%8E%A2%E8%A8%AA%E3%80%8C%E6%96%B7%E8%A9%9E%E3%80%8D%E8%88%87%E4%BB%96%E5%80%91%E7%9A%84%E7%94%A2%E5%9C%B0/","path":"2022/09/19/【NLP】Day-6-斷開一切的牽連！一同探訪「斷詞」與他們的產地/","title":"【NLP】Day 6: 斷開一切的牽連！一同探訪「斷詞」與他們的產地"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>【NLP】Day 6: 斷開一切的牽連！一同探訪「斷詞」與他們的產地 | 米蘭牛角尖</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">米蘭牛角尖</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">計算語言學的學習紀錄，偶爾可能會出現野生的電影評論？</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>關於</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分類</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>所有文章</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B7%E8%A9%9E%E5%B7%A5%E5%85%B7"><span class="nav-number">1.</span> <span class="nav-text">斷詞工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B7%E8%A9%9E%E7%9C%9F%E7%9A%84%E9%82%A3%E9%BA%BC%E9%87%8D%E8%A6%81%E5%97%8E%EF%BC%9F"><span class="nav-number">2.</span> <span class="nav-text">斷詞真的那麼重要嗎？</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Hao Yun Chuang (Milan)"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Hao Yun Chuang (Milan)</p>
+  <div class="site-description" itemprop="description">目前就讀於政大語言所，研究興趣為計算語言學<br/></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/milanochuang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;milanochuang" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:milanochuang@gmail.com" title="E-Mail → mailto:milanochuang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/milanochuang" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;milanochuang" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/milanochuang" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;milanochuang" rel="noopener" target="_blank"><i class="fab fa-facebook fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://instagram.com/milanochuang" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;milanochuang" rel="noopener" target="_blank"><i class="fab fa-instagram fa-fw"></i></a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/milanochuang" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://milanochuang.github.io/2022/09/19/%E3%80%90NLP%E3%80%91Day-6-%E6%96%B7%E9%96%8B%E4%B8%80%E5%88%87%E7%9A%84%E7%89%BD%E9%80%A3%EF%BC%81%E4%B8%80%E5%90%8C%E6%8E%A2%E8%A8%AA%E3%80%8C%E6%96%B7%E8%A9%9E%E3%80%8D%E8%88%87%E4%BB%96%E5%80%91%E7%9A%84%E7%94%A2%E5%9C%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Hao Yun Chuang (Milan)">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="米蘭牛角尖">
+      <meta itemprop="description" content="目前就讀於政大語言所，研究興趣為計算語言學<br/>">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="【NLP】Day 6: 斷開一切的牽連！一同探訪「斷詞」與他們的產地 | 米蘭牛角尖">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【NLP】Day 6: 斷開一切的牽連！一同探訪「斷詞」與他們的產地
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2022-09-19 01:11:26 / 修改時間：01:16:43" itemprop="dateCreated datePublished" datetime="2022-09-19T01:11:26+08:00">2022-09-19</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <blockquote>
+<p>如果沒有了這套裝備，你就什麼都不是的話，那你就更不該擁有它。<br>東尼·史塔克《蜘蛛人：返家日》</p>
+</blockquote>
+<p>在處理自然語言的時候，斷詞往往是首要的工作。其實這也很好理解，為什麼？我們可以從自然語言處理的目的開始來思考這個問題，也就是說，進行自然語言處理的目的是什麼？是要知道一篇正面或是負面評價的電影評論會用哪些詞彙嗎？還是要知道在一句話中，哪個是名詞？動詞？形容詞？或者是要知道這篇文章與其他篇文章比起來，有哪些關鍵詞？還是你今天要做一個文字雲，來搞清楚現在網路上最熱門的話題是什麼？</p>
+<p>不知道你是否有發現，以上這些自然語言處理的目的，都有一個共通的特性：<strong>詞</strong>。也就是說，大部分自然語言處理的應用上，都需要將一句完整的句子，斷成一個一個的詞，或是斷成那個語言的最小單位，端看你的目的性是什麼。處理的語言更是另一個需要考量的點。以英文為例吧！在英文中，由於詞與詞之間都已經有空格了，所以相較於中文而言，英文考量的點比中文還要再稍微少一點點；至於中文，因為每個字都是黏在一起的，有時候單一個字就可以代表一個完整的意義，但有時候卻又需要兩個字才有意義。所以中文的斷詞在技術上還有許多的難處。<del>想到我們所上的語意學教授有云：「中文就是一個很混亂的語言」。</del></p>
+<p>話說回來，通常在計算語言學中，我們會稱這一個一個的詞為<strong>token</strong>。接著再藉由著一個一個的token來完成目的。</p>
+<p>你可能已經想到了，既然這一個一個的token會被作為之後處理自然語言的主要材料，那斷詞的正確性，這時就顯得特別重要。另外，斷詞的Level還要語境也同樣不能被忽視。就拿當初來語言所面試時，現任老闆當時問我的問題為例。</p>
+<blockquote>
+<p><strong>今天我在國立政治大學語言所面試</strong>，</p>
+</blockquote>
+<p>想想看，如果是你，該如何斷詞才比較正確？今天如果斷詞工具將這句話斷成：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">今天/我/在/國立/政治/大學/語言/所/面試</span><br></pre></td></tr></table></figure>
+<p>這是正確的斷詞結果嗎？我們等等再回來回答這個問題。先讓我們稍微了解一下有哪些斷詞工具吧！</p>
+<h2 id="斷詞工具"><a href="#斷詞工具" class="headerlink" title="斷詞工具"></a>斷詞工具</h2><p>目前有三種大家比較常用的自然語言處理工具，分別是Jieba、CKIP，還有卓騰語言科技的Articut，以下來跟各位簡單介紹一下各個常用套件以及基本用法。</p>
+<ol>
+<li><p><strong>Jieba</strong> </br><br>Jieba（結巴）是海峽左岸的朋友所開發的斷詞套件，是現今華語界中最廣為人知的常見斷詞套件，不只是開源在GitHub上，更有在積極維護。由於是左岸朋友發明的斷詞套件，所以可想而知背後的訓練資料幾乎都是簡體中文的語料，像是人民日報等等的媒體文本，因此簡體中文的斷詞正確率較為出色。不過Jieba也有釋出專給繁體中文的斷詞工具，只是相較於簡體中文的表現下就真的稍微遜色了點，一些台灣用語或是在華語世界中只有台灣有的一些相關詞彙，Jieba的繁體中文斷詞相較簡體中文之下的表現，就相對比較沒有那麼地好。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install jieba</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> jieba</span><br><span class="line">inputSTR = <span class="string">&quot;我要成為海賊王&quot;</span></span><br><span class="line">segment_list = jieba.cut(inputSTR)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot; &quot;</span>.join(segment_list)) <span class="comment"># 這邊將斷詞過後的結巴物件用join拆開來，並用空白字元分隔</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x27;我要 成為 海賊 王&#x27;</span><br></pre></td></tr></table></figure></li>
+<li><p><strong>CKIP</strong> （Chinese Knowledge And Information Processing）</br><br>前面有提到說，左岸朋友所開發的開源斷詞工具在繁體中文的表現上叫不如簡體中文，於是我國的中央研究院資訊所在1986年也開發了繁體中文專屬的斷詞工具：CKIP。既然是我國專為繁體中文開發，斷詞系統想必也是享負盛名，準確率也達到了97.49%（<a target="_blank" rel="noopener" href="https://www.ithome.com.tw/news/132838">來源</a>），但是因為模型偏大，所以運算時間相對來說也比較長。馬上一起來看看要怎麼用吧！</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pip install ckiptagger</span><br><span class="line">pip install tensorflow</span><br><span class="line">pip install gdown</span><br></pre></td></tr></table></figure>
+
+ <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> ckiptagger <span class="keyword">import</span> data_utils</span><br><span class="line">data_utils.download_data_gdown(<span class="string">&quot;./&quot;</span>)</span><br><span class="line"><span class="keyword">from</span> ckiptagger <span class="keyword">import</span> WS</span><br><span class="line"></span><br><span class="line">inputSTR = <span class="string">&#x27;我要成為海賊王&#x27;</span></span><br><span class="line">ws = WS(<span class="string">&quot;./data&quot;</span>)</span><br><span class="line">segment_list = ws([inputSTR])</span><br><span class="line"><span class="built_in">print</span>(segment_list)</span><br></pre></td></tr></table></figure>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[[&#x27;我&#x27;, &#x27;要&#x27;, &#x27;成為&#x27;, &#x27;海賊王&#x27;]]</span><br></pre></td></tr></table></figure></li>
+<li><p><strong>Articut</strong></br><br>這是我前實習老闆的公司所開發的斷詞工具。個人認為，這是個以任何觀點來說都非常厲害的繁體中文專用斷詞工具。這是因為前面所提到的兩種工具，前者是由簡體中文所訓練而成，在繁體中文斷詞正確率上就有待加強，另外也是藉由機器學習模型打造的，後者也是透過統計方法或是機器學習模型（CRF、HMM等）佐以大量的訓練資料所打造而成的，而Articut正好可以克服前面所提到的兩個缺點，這全部都是因為同時有著語言學以及資訊工程背景的卓騰所開發的Articut，是以過去語言學家所研究的中文句法學作為理論基礎下去打造的斷詞工具，因此只要是中文的斷詞，皆有相當優秀的正確率，更因為這並非以任何統計模型訓練而成，所以運算速度也相當快。更厲害的是，也可以透過句法樹斷詞後所提供的資訊，推斷不同詞的詞性。</p>
+<p> 不過由於是透過句法樹所推斷的資訊進行的斷詞，所以有些含有專有名詞的斷詞結果需要針對不同語境透過手動的調整，以加入自定義字典的方式來進行優化，雖然麻煩了一點點，但其實這點倒也提供了處理自然語言上不少的彈性空間。</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install AritcutAPI</span><br></pre></td></tr></table></figure>
+ <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> ArticutAPI <span class="keyword">import</span> Articut</span><br><span class="line">articut = Articut()</span><br><span class="line">inputSTR = <span class="string">&quot;我要成為海賊王&quot;</span></span><br><span class="line">articut.parse(inputSTR = inputSTR, level=<span class="string">&quot;lv2&quot;</span>)</span><br></pre></td></tr></table></figure>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#x27;exec_time&#x27;: 0.10455012321472168,</span><br><span class="line">&#x27;result_pos&#x27;: [&#x27;&lt;ENTITY_pronoun&gt;我&lt;/ENTITY_pronoun&gt;&lt;ACTION_verb&gt;要&lt;/ACTION_verb&gt;&lt;ACTION_verb&gt;成為&lt;/ACTION_verb&gt;&lt;ENTITY_nouny&gt;海&lt;/ENTITY_nouny&gt;&lt;ENTITY_nouny&gt;賊王&lt;/ENTITY_nouny&gt;&#x27;],</span><br><span class="line">&#x27;result_segmentation&#x27;: &#x27;我/要/成為/海/賊王&#x27;,</span><br><span class="line">&#x27;result_obj&#x27;: [[&#123;&#x27;text&#x27;: &#x27;我&#x27;, &#x27;pos&#x27;: &#x27;ENTITY_pronoun&#x27;&#125;,</span><br><span class="line">&#123;&#x27;text&#x27;: &#x27;要&#x27;, &#x27;pos&#x27;: &#x27;ACTION_verb&#x27;&#125;,</span><br><span class="line">&#123;&#x27;text&#x27;: &#x27;成為&#x27;, &#x27;pos&#x27;: &#x27;ACTION_verb&#x27;&#125;,</span><br><span class="line">&#123;&#x27;text&#x27;: &#x27;海&#x27;, &#x27;pos&#x27;: &#x27;ENTITY_nouny&#x27;&#125;,</span><br><span class="line">&#123;&#x27;text&#x27;: &#x27;賊王&#x27;, &#x27;pos&#x27;: &#x27;ENTITY_nouny&#x27;&#125;]],</span><br><span class="line">&#x27;level&#x27;: &#x27;lv2&#x27;,</span><br><span class="line">&#x27;version&#x27;: &#x27;v256&#x27;,</span><br><span class="line">&#x27;status&#x27;: True,</span><br><span class="line">&#x27;msg&#x27;: &#x27;Success!&#x27;,</span><br><span class="line">&#x27;word_count_balance&#x27;: 1986,</span><br><span class="line">&#x27;product&#x27;: &#x27;https://api.droidtown.co/product/&#x27;,</span><br><span class="line">&#x27;document&#x27;: &#x27;https://api.droidtown.co/document/&#x27;&#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>說完了，讓我們回到前面的問題，不知道你想到答案了沒有？</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">今天/我/在/國立/政治/大學/語言/所/面試</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>答案是：沒有正確答案。</p>
+</blockquote>
+<p>其實從前面就有提示了，自然語言處理的方式很吃你所要達成的目的是什麼。假如說今天對你的任務來說，台灣不同大學之間的區別很重要的話，那麼就應該在自定義字典中加入「政治大學」，但如果相反而言，大學之間的區別對你的下游任務來說並不是特別重要，只是想要知道「大學」這個高等教育在文本中所扮演的角色的話，那其實將政治大學斷開也沒有關係。</p>
+<h2 id="斷詞真的那麼重要嗎？"><a href="#斷詞真的那麼重要嗎？" class="headerlink" title="斷詞真的那麼重要嗎？"></a>斷詞真的那麼重要嗎？</h2><p>前面有說到，斷詞是一個在自然語言處理中常用的技巧，但是你要說一看到文本就必須得立刻給他斷詞嗎？倒也是粗暴言論大可不必。我們強調了目的性的重要，那麼在做自然語言處理時，更重要的應該是對於<strong>要處理的語言有充分的了解</strong>，並<strong>審慎思考最適當的斷詞方式</strong>，而不是不考慮就通通給他直接斷下去，卻連文本大概長什麼樣子都不曉得。斷詞不是萬靈丹，更不應該是唯一的自然語言處理的第一步驟。也有些人主張，除了斷詞之外，也更應該強調詞語在文本中的位置，因為位置確實也會導致意義的不同，更會引領至不一樣的結果。</p>
+<p>就像前言所提到的沒有裝備的蜘蛛人一樣，如果把斷詞當作自然語言處理中至高無上的存在，其他什麼都不管的話，那麼斷詞本身就會變得一點意義都沒有。反倒是有目的性、有理由地決定要斷詞，並且對文本有一定的熟悉程度後，靈活運用並適配最妥當的斷詞方法，才是一個真正的自然語言處理專家要克服的第一步。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/09/18/%E3%80%90NLP%E3%80%91Day-5-%E5%A4%A7%E9%A2%A8%E5%90%B9%EF%BC%8C%E5%90%B9%E4%BB%80%E9%BA%BC%EF%BC%8C%E5%90%B9-%E6%AD%A3%E8%A6%8F%E8%A1%A8%E9%81%94%E5%BC%8F%EF%BC%9A%E8%90%83%E5%8F%96%EF%BC%883%EF%BC%89/" rel="prev" title="【NLP】Day 5: 大風吹，吹什麼，吹...正規表達式：萃取（3）">
+                  <i class="fa fa-chevron-left"></i> 【NLP】Day 5: 大風吹，吹什麼，吹...正規表達式：萃取（3）
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa-solid fa-code"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hao Yun Chuang (Milan)</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/assets/hijiki.model.json"},"display":{"superSample":2,"width":250,"height":500,"position":"right","hOffset":-30,"vOffset":-130},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"log":false});</script></body>
+</html>

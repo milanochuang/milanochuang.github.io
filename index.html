@@ -131,7 +131,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-count">8</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -191,6 +191,113 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://milanochuang.github.io/2022/09/19/%E3%80%90NLP%E3%80%91Day-6-%E6%96%B7%E9%96%8B%E4%B8%80%E5%88%87%E7%9A%84%E7%89%BD%E9%80%A3%EF%BC%81%E4%B8%80%E5%90%8C%E6%8E%A2%E8%A8%AA%E3%80%8C%E6%96%B7%E8%A9%9E%E3%80%8D%E8%88%87%E4%BB%96%E5%80%91%E7%9A%84%E7%94%A2%E5%9C%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Hao Yun Chuang (Milan)">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="米蘭牛角尖">
+      <meta itemprop="description" content="目前就讀於政大語言所，研究興趣為計算語言學<br/>">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 米蘭牛角尖">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/09/19/%E3%80%90NLP%E3%80%91Day-6-%E6%96%B7%E9%96%8B%E4%B8%80%E5%88%87%E7%9A%84%E7%89%BD%E9%80%A3%EF%BC%81%E4%B8%80%E5%90%8C%E6%8E%A2%E8%A8%AA%E3%80%8C%E6%96%B7%E8%A9%9E%E3%80%8D%E8%88%87%E4%BB%96%E5%80%91%E7%9A%84%E7%94%A2%E5%9C%B0/" class="post-title-link" itemprop="url">【NLP】Day 6: 斷開一切的牽連！一同探訪「斷詞」與他們的產地</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2022-09-19 01:11:26 / 修改時間：01:16:43" itemprop="dateCreated datePublished" datetime="2022-09-19T01:11:26+08:00">2022-09-19</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <blockquote>
+<p>如果沒有了這套裝備，你就什麼都不是的話，那你就更不該擁有它。<br>東尼·史塔克《蜘蛛人：返家日》</p>
+</blockquote>
+<p>在處理自然語言的時候，斷詞往往是首要的工作。其實這也很好理解，為什麼？我們可以從自然語言處理的目的開始來思考這個問題，也就是說，進行自然語言處理的目的是什麼？是要知道一篇正面或是負面評價的電影評論會用哪些詞彙嗎？還是要知道在一句話中，哪個是名詞？動詞？形容詞？或者是要知道這篇文章與其他篇文章比起來，有哪些關鍵詞？還是你今天要做一個文字雲，來搞清楚現在網路上最熱門的話題是什麼？</p>
+<p>不知道你是否有發現，以上這些自然語言處理的目的，都有一個共通的特性：<strong>詞</strong>。也就是說，大部分自然語言處理的應用上，都需要將一句完整的句子，斷成一個一個的詞，或是斷成那個語言的最小單位，端看你的目的性是什麼。處理的語言更是另一個需要考量的點。以英文為例吧！在英文中，由於詞與詞之間都已經有空格了，所以相較於中文而言，英文考量的點比中文還要再稍微少一點點；至於中文，因為每個字都是黏在一起的，有時候單一個字就可以代表一個完整的意義，但有時候卻又需要兩個字才有意義。所以中文的斷詞在技術上還有許多的難處。<del>想到我們所上的語意學教授有云：「中文就是一個很混亂的語言」。</del></p>
+<p>話說回來，通常在計算語言學中，我們會稱這一個一個的詞為<strong>token</strong>。接著再藉由著一個一個的token來完成目的。</p>
+<p>你可能已經想到了，既然這一個一個的token會被作為之後處理自然語言的主要材料，那斷詞的正確性，這時就顯得特別重要。另外，斷詞的Level還要語境也同樣不能被忽視。就拿當初來語言所面試時，現任老闆當時問我的問題為例。</p>
+<blockquote>
+<p><strong>今天我在國立政治大學語言所面試</strong>，</p>
+</blockquote>
+<p>想想看，如果是你，該如何斷詞才比較正確？今天如果斷詞工具將這句話斷成：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">今天/我/在/國立/政治/大學/語言/所/面試</span><br></pre></td></tr></table></figure>
+<p>這是正確的斷詞結果嗎？我們等等再回來回答這個問題。先讓我們稍微了解一下有哪些斷詞工具吧！</p>
+<h2 id="斷詞工具"><a href="#斷詞工具" class="headerlink" title="斷詞工具"></a>斷詞工具</h2><p>目前有三種大家比較常用的自然語言處理工具，分別是Jieba、CKIP，還有卓騰語言科技的Articut，以下來跟各位簡單介紹一下各個常用套件以及基本用法。</p>
+<ol>
+<li><p><strong>Jieba</strong> </br><br>Jieba（結巴）是海峽左岸的朋友所開發的斷詞套件，是現今華語界中最廣為人知的常見斷詞套件，不只是開源在GitHub上，更有在積極維護。由於是左岸朋友發明的斷詞套件，所以可想而知背後的訓練資料幾乎都是簡體中文的語料，像是人民日報等等的媒體文本，因此簡體中文的斷詞正確率較為出色。不過Jieba也有釋出專給繁體中文的斷詞工具，只是相較於簡體中文的表現下就真的稍微遜色了點，一些台灣用語或是在華語世界中只有台灣有的一些相關詞彙，Jieba的繁體中文斷詞相較簡體中文之下的表現，就相對比較沒有那麼地好。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install jieba</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> jieba</span><br><span class="line">inputSTR = <span class="string">&quot;我要成為海賊王&quot;</span></span><br><span class="line">segment_list = jieba.cut(inputSTR)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot; &quot;</span>.join(segment_list)) <span class="comment"># 這邊將斷詞過後的結巴物件用join拆開來，並用空白字元分隔</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x27;我要 成為 海賊 王&#x27;</span><br></pre></td></tr></table></figure></li>
+<li><p><strong>CKIP</strong> （Chinese Knowledge And Information Processing）</br><br>前面有提到說，左岸朋友所開發的開源斷詞工具在繁體中文的表現上叫不如簡體中文，於是我國的中央研究院資訊所在1986年也開發了繁體中文專屬的斷詞工具：CKIP。既然是我國專為繁體中文開發，斷詞系統想必也是享負盛名，準確率也達到了97.49%（<a target="_blank" rel="noopener" href="https://www.ithome.com.tw/news/132838">來源</a>），但是因為模型偏大，所以運算時間相對來說也比較長。馬上一起來看看要怎麼用吧！</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pip install ckiptagger</span><br><span class="line">pip install tensorflow</span><br><span class="line">pip install gdown</span><br></pre></td></tr></table></figure>
+
+ <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> ckiptagger <span class="keyword">import</span> data_utils</span><br><span class="line">data_utils.download_data_gdown(<span class="string">&quot;./&quot;</span>)</span><br><span class="line"><span class="keyword">from</span> ckiptagger <span class="keyword">import</span> WS</span><br><span class="line"></span><br><span class="line">inputSTR = <span class="string">&#x27;我要成為海賊王&#x27;</span></span><br><span class="line">ws = WS(<span class="string">&quot;./data&quot;</span>)</span><br><span class="line">segment_list = ws([inputSTR])</span><br><span class="line"><span class="built_in">print</span>(segment_list)</span><br></pre></td></tr></table></figure>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[[&#x27;我&#x27;, &#x27;要&#x27;, &#x27;成為&#x27;, &#x27;海賊王&#x27;]]</span><br></pre></td></tr></table></figure></li>
+<li><p><strong>Articut</strong></br><br>這是我前實習老闆的公司所開發的斷詞工具。個人認為，這是個以任何觀點來說都非常厲害的繁體中文專用斷詞工具。這是因為前面所提到的兩種工具，前者是由簡體中文所訓練而成，在繁體中文斷詞正確率上就有待加強，另外也是藉由機器學習模型打造的，後者也是透過統計方法或是機器學習模型（CRF、HMM等）佐以大量的訓練資料所打造而成的，而Articut正好可以克服前面所提到的兩個缺點，這全部都是因為同時有著語言學以及資訊工程背景的卓騰所開發的Articut，是以過去語言學家所研究的中文句法學作為理論基礎下去打造的斷詞工具，因此只要是中文的斷詞，皆有相當優秀的正確率，更因為這並非以任何統計模型訓練而成，所以運算速度也相當快。更厲害的是，也可以透過句法樹斷詞後所提供的資訊，推斷不同詞的詞性。</p>
+<p> 不過由於是透過句法樹所推斷的資訊進行的斷詞，所以有些含有專有名詞的斷詞結果需要針對不同語境透過手動的調整，以加入自定義字典的方式來進行優化，雖然麻煩了一點點，但其實這點倒也提供了處理自然語言上不少的彈性空間。</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install AritcutAPI</span><br></pre></td></tr></table></figure>
+ <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> ArticutAPI <span class="keyword">import</span> Articut</span><br><span class="line">articut = Articut()</span><br><span class="line">inputSTR = <span class="string">&quot;我要成為海賊王&quot;</span></span><br><span class="line">articut.parse(inputSTR = inputSTR, level=<span class="string">&quot;lv2&quot;</span>)</span><br></pre></td></tr></table></figure>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#x27;exec_time&#x27;: 0.10455012321472168,</span><br><span class="line">&#x27;result_pos&#x27;: [&#x27;&lt;ENTITY_pronoun&gt;我&lt;/ENTITY_pronoun&gt;&lt;ACTION_verb&gt;要&lt;/ACTION_verb&gt;&lt;ACTION_verb&gt;成為&lt;/ACTION_verb&gt;&lt;ENTITY_nouny&gt;海&lt;/ENTITY_nouny&gt;&lt;ENTITY_nouny&gt;賊王&lt;/ENTITY_nouny&gt;&#x27;],</span><br><span class="line">&#x27;result_segmentation&#x27;: &#x27;我/要/成為/海/賊王&#x27;,</span><br><span class="line">&#x27;result_obj&#x27;: [[&#123;&#x27;text&#x27;: &#x27;我&#x27;, &#x27;pos&#x27;: &#x27;ENTITY_pronoun&#x27;&#125;,</span><br><span class="line">&#123;&#x27;text&#x27;: &#x27;要&#x27;, &#x27;pos&#x27;: &#x27;ACTION_verb&#x27;&#125;,</span><br><span class="line">&#123;&#x27;text&#x27;: &#x27;成為&#x27;, &#x27;pos&#x27;: &#x27;ACTION_verb&#x27;&#125;,</span><br><span class="line">&#123;&#x27;text&#x27;: &#x27;海&#x27;, &#x27;pos&#x27;: &#x27;ENTITY_nouny&#x27;&#125;,</span><br><span class="line">&#123;&#x27;text&#x27;: &#x27;賊王&#x27;, &#x27;pos&#x27;: &#x27;ENTITY_nouny&#x27;&#125;]],</span><br><span class="line">&#x27;level&#x27;: &#x27;lv2&#x27;,</span><br><span class="line">&#x27;version&#x27;: &#x27;v256&#x27;,</span><br><span class="line">&#x27;status&#x27;: True,</span><br><span class="line">&#x27;msg&#x27;: &#x27;Success!&#x27;,</span><br><span class="line">&#x27;word_count_balance&#x27;: 1986,</span><br><span class="line">&#x27;product&#x27;: &#x27;https://api.droidtown.co/product/&#x27;,</span><br><span class="line">&#x27;document&#x27;: &#x27;https://api.droidtown.co/document/&#x27;&#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>說完了，讓我們回到前面的問題，不知道你想到答案了沒有？</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">今天/我/在/國立/政治/大學/語言/所/面試</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>答案是：沒有正確答案。</p>
+</blockquote>
+<p>其實從前面就有提示了，自然語言處理的方式很吃你所要達成的目的是什麼。假如說今天對你的任務來說，台灣不同大學之間的區別很重要的話，那麼就應該在自定義字典中加入「政治大學」，但如果相反而言，大學之間的區別對你的下游任務來說並不是特別重要，只是想要知道「大學」這個高等教育在文本中所扮演的角色的話，那其實將政治大學斷開也沒有關係。</p>
+<h2 id="斷詞真的那麼重要嗎？"><a href="#斷詞真的那麼重要嗎？" class="headerlink" title="斷詞真的那麼重要嗎？"></a>斷詞真的那麼重要嗎？</h2><p>前面有說到，斷詞是一個在自然語言處理中常用的技巧，但是你要說一看到文本就必須得立刻給他斷詞嗎？倒也是粗暴言論大可不必。我們強調了目的性的重要，那麼在做自然語言處理時，更重要的應該是對於<strong>要處理的語言有充分的了解</strong>，並<strong>審慎思考最適當的斷詞方式</strong>，而不是不考慮就通通給他直接斷下去，卻連文本大概長什麼樣子都不曉得。斷詞不是萬靈丹，更不應該是唯一的自然語言處理的第一步驟。也有些人主張，除了斷詞之外，也更應該強調詞語在文本中的位置，因為位置確實也會導致意義的不同，更會引領至不一樣的結果。</p>
+<p>就像前言所提到的沒有裝備的蜘蛛人一樣，如果把斷詞當作自然語言處理中至高無上的存在，其他什麼都不管的話，那麼斷詞本身就會變得一點意義都沒有。反倒是有目的性、有理由地決定要斷詞，並且對文本有一定的熟悉程度後，靈活運用並適配最妥當的斷詞方法，才是一個真正的自然語言處理專家要克服的第一步。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
