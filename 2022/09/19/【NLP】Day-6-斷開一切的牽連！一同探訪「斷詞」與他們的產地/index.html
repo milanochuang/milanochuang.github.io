@@ -29,7 +29,7 @@
 <meta property="og:description" content="如果沒有了這套裝備，你就什麼都不是的話，那你就更不該擁有它。東尼·史塔克《蜘蛛人：返家日》  在處理自然語言的時候，斷詞往往是首要的工作。其實這也很好理解，為什麼？我們可以從自然語言處理的目的開始來思考這個問題，也就是說，進行自然語言處理的目的是什麼？是要知道一篇正面或是負面評價的電影評論會用哪些詞彙嗎？還是要知道在一句話中，哪個是名詞？動詞？形容詞？或者是要知道這篇文章與其他篇文章比起來，有哪">
 <meta property="og:locale" content="zh_TW">
 <meta property="article:published_time" content="2022-09-18T17:11:26.000Z">
-<meta property="article:modified_time" content="2022-09-18T17:16:43.623Z">
+<meta property="article:modified_time" content="2022-09-24T07:20:49.156Z">
 <meta property="article:author" content="Hao Yun Chuang (Milan)">
 <meta property="article:tag" content="自然語言處理, 計算語言學, 機器學習, 人工智慧, 電影">
 <meta name="twitter:card" content="summary">
@@ -134,13 +134,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-count">7</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-count">2</span>
         <span class="site-state-item-name">分類</span></a>
       </div>
       <div class="site-state-item site-state-tags">
@@ -232,9 +232,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">發表於</span>
-      
 
-      <time title="創建時間：2022-09-19 01:11:26 / 修改時間：01:16:43" itemprop="dateCreated datePublished" datetime="2022-09-19T01:11:26+08:00">2022-09-19</time>
+      <time title="創建時間：2022-09-19 01:11:26" itemprop="dateCreated datePublished" datetime="2022-09-19T01:11:26+08:00">2022-09-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2022-09-24 15:20:49" itemprop="dateModified" datetime="2022-09-24T15:20:49+08:00">2022-09-24</time>
     </span>
 
   
@@ -255,7 +261,7 @@
 <p>話說回來，通常在計算語言學中，我們會稱這一個一個的詞為<strong>token</strong>。接著再藉由著一個一個的token來完成目的。</p>
 <p>你可能已經想到了，既然這一個一個的token會被作為之後處理自然語言的主要材料，那斷詞的正確性，這時就顯得特別重要。另外，斷詞的Level還要語境也同樣不能被忽視。就拿當初來語言所面試時，現任老闆當時問我的問題為例。</p>
 <blockquote>
-<p><strong>今天我在國立政治大學語言所面試</strong>，</p>
+<p><strong>今天我在國立政治大學語言所面試</strong></p>
 </blockquote>
 <p>想想看，如果是你，該如何斷詞才比較正確？今天如果斷詞工具將這句話斷成：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">今天/我/在/國立/政治/大學/語言/所/面試</span><br></pre></td></tr></table></figure>
