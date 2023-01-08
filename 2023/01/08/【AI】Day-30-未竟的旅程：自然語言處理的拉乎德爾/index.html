@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/icon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/icon.png">
+  <link rel="mask-icon" href="/images/icon.png" color="#222">
+  <meta name="google-site-verification" content="DMyRve2tDXDJqmJpSS4BaBWT1R0ZCH9n_EsCnROTiM0">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha256-xejo6yLi6vGtAjcMIsY8BHdKsLg7QynVlFMzdQgUuy8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"milanochuang.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.12.3","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="「終點，是旅程的一部分。」東尼・史塔克《復仇者聯盟4：終局之戰》  最後一天，我想來談談 「人工智慧」。 在過去的旅程中，我們花了將近一半的篇幅在討論機器學習模型。從一開始的 N-Gram、BoW、樸素貝氏分類模型、羅吉斯迴歸，一直到深度學習的神經網路模型，像是循環神經網路、長短期記憶，還有利用自注意力機制的 Transformer，還有踩在巨人肩膀上，使用預訓練模型完成任何任務的 BERT，是">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【AI】Day 30: 未竟的旅程：自然語言處理的拉乎德爾">
+<meta property="og:url" content="https://milanochuang.github.io/2023/01/08/%E3%80%90AI%E3%80%91Day-30-%E6%9C%AA%E7%AB%9F%E7%9A%84%E6%97%85%E7%A8%8B%EF%BC%9A%E8%87%AA%E7%84%B6%E8%AA%9E%E8%A8%80%E8%99%95%E7%90%86%E7%9A%84%E6%8B%89%E4%B9%8E%E5%BE%B7%E7%88%BE/index.html">
+<meta property="og:site_name" content="米蘭牛角尖">
+<meta property="og:description" content="「終點，是旅程的一部分。」東尼・史塔克《復仇者聯盟4：終局之戰》  最後一天，我想來談談 「人工智慧」。 在過去的旅程中，我們花了將近一半的篇幅在討論機器學習模型。從一開始的 N-Gram、BoW、樸素貝氏分類模型、羅吉斯迴歸，一直到深度學習的神經網路模型，像是循環神經網路、長短期記憶，還有利用自注意力機制的 Transformer，還有踩在巨人肩膀上，使用預訓練模型完成任何任務的 BERT，是">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://i.imgur.com/oFjjuoW.jpg">
+<meta property="og:image" content="https://i.imgur.com/QZoGYJv.jpg">
+<meta property="article:published_time" content="2023-01-08T12:07:32.000Z">
+<meta property="article:modified_time" content="2023-01-08T12:07:53.196Z">
+<meta property="article:author" content="Hao Yun Chuang (Milan)">
+<meta property="article:tag" content="自然語言處理, 計算語言學, 機器學習, 人工智慧, 電影">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.imgur.com/oFjjuoW.jpg">
+
+
+<link rel="canonical" href="https://milanochuang.github.io/2023/01/08/%E3%80%90AI%E3%80%91Day-30-%E6%9C%AA%E7%AB%9F%E7%9A%84%E6%97%85%E7%A8%8B%EF%BC%9A%E8%87%AA%E7%84%B6%E8%AA%9E%E8%A8%80%E8%99%95%E7%90%86%E7%9A%84%E6%8B%89%E4%B9%8E%E5%BE%B7%E7%88%BE/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://milanochuang.github.io/2023/01/08/%E3%80%90AI%E3%80%91Day-30-%E6%9C%AA%E7%AB%9F%E7%9A%84%E6%97%85%E7%A8%8B%EF%BC%9A%E8%87%AA%E7%84%B6%E8%AA%9E%E8%A8%80%E8%99%95%E7%90%86%E7%9A%84%E6%8B%89%E4%B9%8E%E5%BE%B7%E7%88%BE/","path":"2023/01/08/【AI】Day-30-未竟的旅程：自然語言處理的拉乎德爾/","title":"【AI】Day 30: 未竟的旅程：自然語言處理的拉乎德爾"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>【AI】Day 30: 未竟的旅程：自然語言處理的拉乎德爾 | 米蘭牛角尖</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">米蘭牛角尖</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">計算語言學的學習紀錄，偶爾可能會出現野生的電影評論？</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>關於</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分類</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>所有文章</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%9C%E6%96%BC%E4%BA%BA%E5%B7%A5%E6%99%BA%E6%85%A7"><span class="nav-number">1.</span> <span class="nav-text">關於人工智慧</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E3%80%8C%E8%81%B0%E6%98%8E%E6%BC%A2%E6%96%AF%E6%95%88%E6%87%89%E3%80%8D%E7%9A%84%E8%BF%B7%E6%80%9D"><span class="nav-number">1.1.</span> <span class="nav-text">「聰明漢斯效應」的迷思</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%BA%E5%B7%A5%E6%99%BA%E6%85%A7%E7%9A%84%E7%9C%9F%E7%9B%B8"><span class="nav-number">1.2.</span> <span class="nav-text">人工智慧的真相</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B3%87%E6%96%99%E7%9A%84%E5%90%88%E7%90%86%E9%81%8B%E7%94%A8"><span class="nav-number">2.</span> <span class="nav-text">資料的合理運用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%BD%9C%E7%88%B2%E4%B8%80%E8%88%AC%E5%85%AC%E6%B0%91%EF%BC%8C%E6%9C%89%E6%84%8F%E8%AD%98%E5%9C%B0%E6%8E%8C%E6%8F%A1%E8%87%AA%E8%BA%AB%E8%B3%87%E6%96%99%E5%A6%82%E4%BD%95%E7%82%BA%E4%BA%BA%E6%89%80%E7%94%A8"><span class="nav-number">2.1.</span> <span class="nav-text">1. 作爲一般公民，有意識地掌握自身資料如何為人所用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E4%BD%9C%E7%82%BA%E8%B3%87%E6%96%99%E8%99%95%E7%90%86%E8%80%85%EF%BC%8C%E6%9C%89%E6%84%8F%E8%AD%98%E5%9C%B0%E4%BB%94%E7%B4%B0%E5%AF%A9%E9%96%B1%E8%B3%87%E6%96%99%E7%9A%84%E5%90%88%E9%81%A9%E6%80%A7"><span class="nav-number">2.2.</span> <span class="nav-text">2. 作為資料處理者，有意識地仔細審閱資料的合適性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E2%9D%97%E8%B3%87%E6%96%99%E7%82%BA%E4%BD%95%E9%87%8D%E8%A6%81%EF%BC%9F"><span class="nav-number">2.2.1.</span> <span class="nav-text">❗資料為何重要？</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E9%87%8B%E6%80%A7%E4%BA%BA%E5%B7%A5%E6%99%BA%E6%85%A7"><span class="nav-number">3.</span> <span class="nav-text">解釋性人工智慧</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E9%A9%97%E8%AD%89%E8%83%BD%E5%8A%9B%EF%BC%88Model-Validation%EF%BC%89"><span class="nav-number">3.1.</span> <span class="nav-text">模型驗證能力（Model Validation）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E5%81%B5%E9%8C%AF%E8%83%BD%E5%8A%9B%EF%BC%88Model-Debugging%EF%BC%89"><span class="nav-number">3.2.</span> <span class="nav-text">模型偵錯能力（Model Debugging）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%86%E8%A7%A3%E9%A0%98%E5%9F%9F%E7%9F%A5%E8%AD%98%EF%BC%88Knowledge-Discovery%EF%BC%89"><span class="nav-number">3.3.</span> <span class="nav-text">了解領域知識（Knowledge Discovery）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B5%90%E8%AA%9E%EF%BC%9A%E7%B5%82%E9%BB%9E%EF%BC%8C%E6%98%AF%E6%97%85%E7%A8%8B%E7%9A%84%E4%B8%80%E9%83%A8%E5%88%86"><span class="nav-number">4.</span> <span class="nav-text">結語：終點，是旅程的一部分</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Hao Yun Chuang (Milan)"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Hao Yun Chuang (Milan)</p>
+  <div class="site-description" itemprop="description">目前就讀於政大語言所，研究興趣為計算語言學<br/></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">32</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/milanochuang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;milanochuang" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:milanochuang@gmail.com" title="E-Mail → mailto:milanochuang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/milanochuang" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;milanochuang" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/milanochuang" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;milanochuang" rel="noopener" target="_blank"><i class="fab fa-facebook fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://instagram.com/milanochuang" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;milanochuang" rel="noopener" target="_blank"><i class="fab fa-instagram fa-fw"></i></a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/milanochuang" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://milanochuang.github.io/2023/01/08/%E3%80%90AI%E3%80%91Day-30-%E6%9C%AA%E7%AB%9F%E7%9A%84%E6%97%85%E7%A8%8B%EF%BC%9A%E8%87%AA%E7%84%B6%E8%AA%9E%E8%A8%80%E8%99%95%E7%90%86%E7%9A%84%E6%8B%89%E4%B9%8E%E5%BE%B7%E7%88%BE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Hao Yun Chuang (Milan)">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="米蘭牛角尖">
+      <meta itemprop="description" content="目前就讀於政大語言所，研究興趣為計算語言學<br/>">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="【AI】Day 30: 未竟的旅程：自然語言處理的拉乎德爾 | 米蘭牛角尖">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【AI】Day 30: 未竟的旅程：自然語言處理的拉乎德爾
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2023-01-08 20:07:32 / 修改時間：20:07:53" itemprop="dateCreated datePublished" datetime="2023-01-08T20:07:32+08:00">2023-01-08</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <blockquote>
+<p>「終點，是旅程的一部分。」<br>東尼・史塔克《復仇者聯盟4：終局之戰》</p>
+</blockquote>
+<p>最後一天，我想來談談 <strong>「人工智慧」</strong>。</p>
+<p>在過去的旅程中，我們花了將近一半的篇幅在討論機器學習模型。從一開始的 N-Gram、BoW、樸素貝氏分類模型、羅吉斯迴歸，一直到深度學習的神經網路模型，像是循環神經網路、長短期記憶，還有利用自注意力機制的 Transformer，還有踩在巨人肩膀上，使用預訓練模型完成任何任務的 BERT，是一段旅程，而且絕對是一段縱覽從過去到現在自然語言處理以及計算語言學的朝聖之旅。</p>
+<p>不知道大家是否還記得，我在第一天的文章，也就是 <a target="_blank" rel="noopener" href="https://ithelp.ithome.com.tw/articles/10291504">前往NLP的偉大航道！一起成為我的夥伴吧！</a>中提到了計算語言學、自然語言處理、人工智慧還有非常大的進步空間，但我們不免還是能從過去的研究中，看出發展的脈絡。</p>
+<p>但今天，我們不再講機器學習，讓我把視角稍微拉大，在鐵人賽的最後，來簡單聊聊「人工智慧」。</p>
+<h2 id="關於人工智慧"><a href="#關於人工智慧" class="headerlink" title="關於人工智慧"></a>關於人工智慧</h2><p>在 Kate Crawford 所撰寫的《人工智慧最後的秘密》一書中，一開始提到了「聰明漢斯」。「聰明漢斯」是一匹能夠計算數學、告知時間、辨識日期以及音符，還可以拼出文法跟句子。訓練者馮・奧斯頓在一開始訓練這匹馬時，透過握住馬匹的腿，讓他學習數字，並引導馬匹用馬蹄敲出正確的答案作為回應。他發現漢斯非常能理解人類智慧才能掌握的概念，於是便聲稱「動物也能推理」。經過教育局組成的委員會，其中的心理學家斯圖姆夫以及芬斯特，再加上其他研究者的檢驗，發現不管奧斯頓是否在場，漢斯都能夠回答出正確答案；但也發現，如果提問者不知道正確答案，或是站得離馬匹很遠，那漢斯就很少給出正確答案。</p>
+<p>後來芬斯特就發現，<strong>提問者的姿勢、呼吸和臉部表情，會在提問者移動到正確答案時，出現細微的變化</strong>；漢斯感知到這些變化後，便能在正確答案時停下動作，最後解答出正確答案。而<strong>提問者通常不知道自己給了馬匹線索</strong>。</p>
+<p>有趣的是，奧斯頓的馬匹後來流入了市場，情感以及經濟上的刺激還有投資，吸引了社會在財務、文化以及科學研究上的關注</p>
+<p>當我們把這個「聰明漢斯效應」，或是「觀察者期望效應」放在機器學習上，其實就代表著今天人類，以及透過資料所訓練的機器學習模型之間的關係。我們很難得知機器學習模型從資料中學習到了什麼，透過模型，我們可以基於需求輸出理想的資料結果，但我們不知道為什麼模型會輸出這樣的結果，因為機器學習模型從資料學到了什麼，基本上無從得知。</p>
+<h3 id="「聰明漢斯效應」的迷思"><a href="#「聰明漢斯效應」的迷思" class="headerlink" title="「聰明漢斯效應」的迷思"></a>「聰明漢斯效應」的迷思</h3><p>Crawford 在書中提到，從「聰明漢斯」的案例，可以發現兩種迷思。首先，我們假設非人系統比擬作人類心智，也就是說，只要給出<strong>夠多的資料，並以足夠的資源經過適當的訓練，就能打造出與人類相似的智慧，但卻忽略了人類是以什麼形式，不管是文化、科學，亦或是歷史、政治形式，與社會互動</strong>。第二個迷思則是，<strong>智慧是獨立存在的，智慧並不會影響社會的運作形式，也不會與歷史、政治、力量，以及文化層面有任何牽扯。</strong></p>
+<h3 id="人工智慧的真相"><a href="#人工智慧的真相" class="headerlink" title="人工智慧的真相"></a>人工智慧的真相</h3><p>但在現代社會中，人工智慧的掌握者，事實上，就代表了權力所在。從 Crawford 的觀點來看，人工智慧既非<strong>人工</strong>，也不是<strong>智慧</strong>。這是因為人工智慧並非自主學習，也不是理性且無所不察的，如同先前介紹的那些語言學習模型，只要有大型的資料集，或是對這些資料集預先定義好的標籤等等，進行廣泛密集運算的訓練。要進行這些模型的訓練，需要極為大量運算資源，這也就仰賴擁有這些資源以及資本的大企業，為了保有這些資源，人工智慧也有很大一部分是基於優勢階層的利益所建置。一旦這些人工智慧大量融入我們日常生活當中，成為我們日常生活的微觀權力，便會像是拉大貧富差距等，在在影響人類社會以及文化。</p>
+<p>那要如何有意識地對人工智慧的機器學習模型進行掌控，我認為可以從以下幾點做起。</p>
+<h2 id="資料的合理運用"><a href="#資料的合理運用" class="headerlink" title="資料的合理運用"></a>資料的合理運用</h2><p>我們就該因為這樣就放棄使用人工智慧嗎？筆者我本人倒也覺得不必要因此而因噎廢食。我們反倒更應該以更多不同面向以及角度去看待人工智慧，並小心處理每一個細節。我認為留意資料的使用就是一點，且可以從兩個角度出發。</p>
+<h3 id="1-作爲一般公民，有意識地掌握自身資料如何為人所用"><a href="#1-作爲一般公民，有意識地掌握自身資料如何為人所用" class="headerlink" title="1. 作爲一般公民，有意識地掌握自身資料如何為人所用"></a>1. 作爲一般公民，有意識地掌握自身資料如何為人所用</h3><p>在這個時代，我們能做到的，就是要有意識掌握自身資料的使用方式。現在在使用各種雲端服務時，公司都會需要你加入會員方可使用。只是在註冊的過程中，資料很容易就會被拿去做別的用途。所以在輸入任何資料的場合，都要知道自己的資料可能會被拿去做什麼事情，並有意識地去保護自己的資料。</p>
+<h3 id="2-作為資料處理者，有意識地仔細審閱資料的合適性"><a href="#2-作為資料處理者，有意識地仔細審閱資料的合適性" class="headerlink" title="2. 作為資料處理者，有意識地仔細審閱資料的合適性"></a>2. 作為資料處理者，有意識地仔細審閱資料的合適性</h3><p>作為進行自然語言處理研究的我們，在處理語言資料時，也要小心資料的運用上，是否符合需求，以及這些資料是否有害，以及是否會造成模型偏誤，導致模型無法達成我們的需求。畢竟資料會影響模型的每一步決策，因此更要小心處理。</p>
+<h4 id="❗資料為何重要？"><a href="#❗資料為何重要？" class="headerlink" title="❗資料為何重要？"></a>❗資料為何重要？</h4><p>資料的選擇不當，很有可能會造成模型偏誤，甚至影響到社會架構，我們來舉以下例子，來說明資料的重要性。訓練模型的過程中，通常都會需要取得大量的資料，而這些來源通常都來自過去的工作人員所收集的，但難保這些資料的運用，都是在一個公平且透明的框架下進行。在《大數據的傲慢與偏見》一書中就舉了一個例子：假如問一名在舒適市郊社區長大的犯人「第一次與警方交手的狀況」，他可能除了導致他入獄的那件事之外，就再也沒有跟警方交手的經驗；但若是年輕男性黑人，可能就並不是這樣。紐約公民自由聯盟的研究發現，雖然 14-24 歲的黑人跟拉美裔男性僅佔紐約 4.7%，但警方臨檢的比例卻有 40% 的盤查對象卻屬於這一群人。而這項問題的結果則會納入美國犯罪的再犯模型當中，導致警察巡邏的範圍區域，就會有極大的偏差，更因為有些未成年，並不如富人區的孩子幸運，可能會喝酒或藏有大麻而因此惹上麻煩，卻也因為這個再犯模型誤了一生，導致惡性循環。所以即使問卷中並沒有加入種族問題（因為畢竟不可能問說你是黑人還是白人），但資料仍然會有隱性的偏見存在。</p>
+<p>為了要解決這項問題，模型的解釋能力，還有解釋性人工智慧（Explainable AI, XAI）就成為一個近年最重要的議題。</p>
+<h2 id="解釋性人工智慧"><a href="#解釋性人工智慧" class="headerlink" title="解釋性人工智慧"></a>解釋性人工智慧</h2><p>所謂的解釋性人工智慧，就是藉由一系列方法，將 <strong>「黑盒子模型」</strong> 打開，了解人工智慧的決策方式，讓人類更容易理解機器學習模型，以及模型進行決策的方式。首先，我們先從黑盒子開始講起：</p>
+<p><img src="https://i.imgur.com/oFjjuoW.jpg"></p>
+<p>在圖中，我們可以看到哆啦A夢拿出了一台機器，並跟大雄說，只要將手塚治虫的漫畫丟進機器中，機器就如哆啦A夢所說：「變成手塚老師了」，最後，機器會產出一本類似於原子小金剛的漫畫（因為畢竟他是手塚治虫老師嘛！）我們從中可以發現一件事：</p>
+<blockquote>
+<p>我們並不知道哆啦A夢的機器是怎麼學習手塚老師的畫風、劇本能力。</p>
+</blockquote>
+<p>哆啦A夢的這個道具，就是一種黑盒子模型。而至今為止我們所學到的那些統計語言模型，循環神經網路、長短期記憶模型、GRU，乃至於 Transformer、BERT，都屬於黑盒子模型，因為我們無從得知模型如何產出當下的結果，只知道模型能夠解決任務，僅僅如此而已。但準確度不該是模型該追求的目標，應該說，人類該如何為模型制定適當的準確度標準，才是應該思考的方向。藉此預防像是在科幻電影《2001太空漫遊》中，人工智慧最後決定殺死船艦上的所有人類，僅僅是因為任務「重要到無法允許這些人類阻礙完成任務」。</p>
+<p>我們可以從三個方向，與預測結果搭配，藉此來提升模型解釋能力。</p>
+<h3 id="模型驗證能力（Model-Validation）"><a href="#模型驗證能力（Model-Validation）" class="headerlink" title="模型驗證能力（Model Validation）"></a>模型驗證能力（Model Validation）</h3><p>我們可以藉由檢查機器學習模型是否存在「偏誤」，也就是如前面所説，模型是否只針對特定族群的資料進行訓練，以及這些「毒性」資料是否影響著模型的決策。另外，敏感私人資訊也必須進行適當的去識別化，以保護個人資訊的外流（例如法律資訊、醫療隱私等）</p>
+<h3 id="模型偵錯能力（Model-Debugging）"><a href="#模型偵錯能力（Model-Debugging）" class="headerlink" title="模型偵錯能力（Model Debugging）"></a>模型偵錯能力（Model Debugging）</h3><p>為了保證模型的可靠度與精實度，模型必須要能夠偵錯。我們必須了解機器模型背後產出結果的原因以及理由。也就是說，輸入資料的細微更動，不會大幅度地改變預測結果，這麼做可以減少混淆模型的風險。因此，更需要賦予模型透明性與詮釋性，以便在模型出現不當現象或是不合理預測時進行偵錯。</p>
+<h3 id="了解領域知識（Knowledge-Discovery）"><a href="#了解領域知識（Knowledge-Discovery）" class="headerlink" title="了解領域知識（Knowledge Discovery）"></a>了解領域知識（Knowledge Discovery）</h3><p>我們必須要確認模型是否真正理解某特定過程以及事件。也就是說，僅僅進行預測是不適當的，仍要必須解釋並了解案例中的因果關係。例如過去預測肺炎致死率的模型顯示，患有氣喘疾病可以降低肺炎死亡的風險。但事實上這是因為氣喘病患可以得到更多醫療上的治療。這其實就顯示了模型解釋能力的重要性。</p>
+<h2 id="結語：終點，是旅程的一部分"><a href="#結語：終點，是旅程的一部分" class="headerlink" title="結語：終點，是旅程的一部分"></a>結語：終點，是旅程的一部分</h2><p>最後，如同引言所說，「終點，是旅程的一部分。」雖然三十天的旅程在這邊要畫下句點了，感謝各位的陪伴，但這不代表是我學習的終點。自然語言處理的旅程，對我來說還有非常長一段路要走，對於這個領域的研究，有著更多需要我去探索的新世界，希望在接下來的旅程中，能夠繼續保有我所重視的，增長我所需要的，並開拓我所感興趣的。魯夫還沒到達拉乎德爾，但曾經說過，在這片大海上，最自由的就是海賊王；我在還沒成為那個令自己滿意的自己之前，只要能夠維持初衷、維持好奇、維持求知，那這一切的辛苦也就值得了。</p>
+<p><img src="https://i.imgur.com/QZoGYJv.jpg"></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/01/08/%E3%80%90Other%E3%80%91Day-29-%E9%99%A4%E4%BA%86%E8%87%AA%E7%84%B6%E8%AA%9E%E8%A8%80%E8%99%95%E7%90%86%EF%BC%8C%E6%88%91%E5%80%91%E9%82%84%E8%A6%81-%EF%BC%9F%E8%99%95%E7%90%86%E8%B3%87%E6%96%99%E6%99%82%EF%BC%8C%E4%BD%A0%E5%8F%AF%E8%83%BD%E9%9C%80%E8%A6%81%E6%9C%83%E7%9A%84%E9%80%99%E4%BA%9B%E9%82%A3%E4%BA%9B/" rel="prev" title="【Other】Day 29: 除了自然語言處理，我們還要...？處理資料時，你可能需要會的這些那些">
+                  <i class="fa fa-chevron-left"></i> 【Other】Day 29: 除了自然語言處理，我們還要...？處理資料時，你可能需要會的這些那些
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/01/08/%E3%80%90%E8%80%81%E5%BD%B1%E8%A9%95%E3%80%91%E3%80%8AA-I-%E4%BA%BA%E5%B7%A5%E6%99%BA%E6%85%A7%E3%80%8B-%E3%80%8A%E6%A8%A1%E4%BB%BF%E9%81%8A%E6%88%B2%E3%80%8B%EF%BC%9A%E4%BD%95%E8%AC%82%E8%87%AA%E6%88%91%EF%BC%9F%E4%BD%95%E8%AC%82%E7%9C%9F%E5%AF%A6%EF%BC%9F/" rel="next" title="【影評】《A.I.人工智慧》&《模仿遊戲》：何謂自我？何謂真實？">
+                  【影評】《A.I.人工智慧》&《模仿遊戲》：何謂自我？何謂真實？ <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa-solid fa-code"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hao Yun Chuang (Milan)</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/assets/hijiki.model.json"},"display":{"superSample":2,"width":250,"height":500,"position":"right","hOffset":-30,"vOffset":-130},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"log":false});</script></body>
+</html>

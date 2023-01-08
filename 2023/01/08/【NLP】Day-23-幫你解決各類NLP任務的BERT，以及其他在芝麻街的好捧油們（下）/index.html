@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/icon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/icon.png">
+  <link rel="mask-icon" href="/images/icon.png" color="#222">
+  <meta name="google-site-verification" content="DMyRve2tDXDJqmJpSS4BaBWT1R0ZCH9n_EsCnROTiM0">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha256-xejo6yLi6vGtAjcMIsY8BHdKsLg7QynVlFMzdQgUuy8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"milanochuang.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.12.3","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="真正掌握權力的人，通常都躲在表面上有權力的人後面，操控著一切。法蘭西斯・安德伍德《紙牌屋》  這幾天在研究 BERT 的時候想著，如果要拿流行文化來比喻的話，可以用什麼。嗯…利用別人達到更好的成就、亦正亦邪，表現上看起來風風光光，但其實細思極恐，突然想到，還能有比紙牌屋的主角法蘭克還要更好的比喻了嗎？法蘭克也是為了要達成自己的目標，不斷踩在別人（屍）身前進，表面上看起來很厲害，但站上高位之後，卻">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【NLP】Day 23: 幫你解決各類NLP任務的BERT，以及其他在芝麻街的好捧油們（下）">
+<meta property="og:url" content="https://milanochuang.github.io/2023/01/08/%E3%80%90NLP%E3%80%91Day-23-%E5%B9%AB%E4%BD%A0%E8%A7%A3%E6%B1%BA%E5%90%84%E9%A1%9ENLP%E4%BB%BB%E5%8B%99%E7%9A%84BERT%EF%BC%8C%E4%BB%A5%E5%8F%8A%E5%85%B6%E4%BB%96%E5%9C%A8%E8%8A%9D%E9%BA%BB%E8%A1%97%E7%9A%84%E5%A5%BD%E6%8D%A7%E6%B2%B9%E5%80%91%EF%BC%88%E4%B8%8B%EF%BC%89/index.html">
+<meta property="og:site_name" content="米蘭牛角尖">
+<meta property="og:description" content="真正掌握權力的人，通常都躲在表面上有權力的人後面，操控著一切。法蘭西斯・安德伍德《紙牌屋》  這幾天在研究 BERT 的時候想著，如果要拿流行文化來比喻的話，可以用什麼。嗯…利用別人達到更好的成就、亦正亦邪，表現上看起來風風光光，但其實細思極恐，突然想到，還能有比紙牌屋的主角法蘭克還要更好的比喻了嗎？法蘭克也是為了要達成自己的目標，不斷踩在別人（屍）身前進，表面上看起來很厲害，但站上高位之後，卻">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://cdn.cnn.com/cnnnext/dam/assets/150226184423-orig-house-of-cards-recap-season-2-00013812.jpg">
+<meta property="og:image" content="https://i.imgur.com/vHHndIP.png">
+<meta property="og:image" content="https://i.imgur.com/Na0QM9K.png">
+<meta property="og:image" content="https://leemeng.tw/images/bert/bert_fine_tuning_tasks.jpg">
+<meta property="og:image" content="https://chart.googleapis.com/chart?cht=tx&chl=q">
+<meta property="og:image" content="https://chart.googleapis.com/chart?cht=tx&chl=k">
+<meta property="og:image" content="https://chart.googleapis.com/chart?cht=tx&chl=v">
+<meta property="og:image" content="https://i.imgur.com/34zLBOC.png">
+<meta property="og:image" content="https://i.imgur.com/sEXgEcB.png">
+<meta property="og:image" content="https://chart.googleapis.com/chart?cht=tx&chl=BERT_%7BBASE%7D">
+<meta property="og:image" content="https://chart.googleapis.com/chart?cht=tx&chl=BERT_%7BLARGE%7D">
+<meta property="og:image" content="https://i.imgur.com/BKOIs9S.png">
+<meta property="article:published_time" content="2023-01-08T11:59:00.000Z">
+<meta property="article:modified_time" content="2023-01-08T11:59:26.440Z">
+<meta property="article:author" content="Hao Yun Chuang (Milan)">
+<meta property="article:tag" content="自然語言處理">
+<meta property="article:tag" content="NLP">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.cnn.com/cnnnext/dam/assets/150226184423-orig-house-of-cards-recap-season-2-00013812.jpg">
+
+
+<link rel="canonical" href="https://milanochuang.github.io/2023/01/08/%E3%80%90NLP%E3%80%91Day-23-%E5%B9%AB%E4%BD%A0%E8%A7%A3%E6%B1%BA%E5%90%84%E9%A1%9ENLP%E4%BB%BB%E5%8B%99%E7%9A%84BERT%EF%BC%8C%E4%BB%A5%E5%8F%8A%E5%85%B6%E4%BB%96%E5%9C%A8%E8%8A%9D%E9%BA%BB%E8%A1%97%E7%9A%84%E5%A5%BD%E6%8D%A7%E6%B2%B9%E5%80%91%EF%BC%88%E4%B8%8B%EF%BC%89/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://milanochuang.github.io/2023/01/08/%E3%80%90NLP%E3%80%91Day-23-%E5%B9%AB%E4%BD%A0%E8%A7%A3%E6%B1%BA%E5%90%84%E9%A1%9ENLP%E4%BB%BB%E5%8B%99%E7%9A%84BERT%EF%BC%8C%E4%BB%A5%E5%8F%8A%E5%85%B6%E4%BB%96%E5%9C%A8%E8%8A%9D%E9%BA%BB%E8%A1%97%E7%9A%84%E5%A5%BD%E6%8D%A7%E6%B2%B9%E5%80%91%EF%BC%88%E4%B8%8B%EF%BC%89/","path":"2023/01/08/【NLP】Day-23-幫你解決各類NLP任務的BERT，以及其他在芝麻街的好捧油們（下）/","title":"【NLP】Day 23: 幫你解決各類NLP任務的BERT，以及其他在芝麻街的好捧油們（下）"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>【NLP】Day 23: 幫你解決各類NLP任務的BERT，以及其他在芝麻街的好捧油們（下） | 米蘭牛角尖</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">米蘭牛角尖</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">計算語言學的學習紀錄，偶爾可能會出現野生的電影評論？</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>關於</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分類</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>所有文章</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A0%90%E8%A8%93%E7%B7%B4%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.</span> <span class="nav-text">預訓練模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%8B%E6%BC%8F%E5%AD%97%E5%A1%AB%E7%A9%BA"><span class="nav-number">1.1.</span> <span class="nav-text">克漏字填空</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9C%A8-BERT-%E4%B8%AD%EF%BC%8C%E5%85%B1%E6%9C%89%E4%BA%94%E7%A8%AE%E7%89%B9%E6%AE%8A%E5%AD%97%E5%85%83%E3%80%82"><span class="nav-number">1.1.1.</span> <span class="nav-text">在 BERT 中，共有五種特殊字元。</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8B%E6%96%87%E9%A0%90%E6%B8%AC"><span class="nav-number">1.2.</span> <span class="nav-text">下文預測</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8B%E6%B8%B8%E4%BB%BB%E5%8B%99"><span class="nav-number">2.</span> <span class="nav-text">下游任務</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%95%8F%E9%A1%8C%E8%88%87%E8%A8%8E%E8%AB%96"><span class="nav-number">3.</span> <span class="nav-text">問題與討論</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Hao Yun Chuang (Milan)"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Hao Yun Chuang (Milan)</p>
+  <div class="site-description" itemprop="description">目前就讀於政大語言所，研究興趣為計算語言學<br/></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">32</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/milanochuang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;milanochuang" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:milanochuang@gmail.com" title="E-Mail → mailto:milanochuang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/milanochuang" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;milanochuang" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/milanochuang" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;milanochuang" rel="noopener" target="_blank"><i class="fab fa-facebook fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://instagram.com/milanochuang" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;milanochuang" rel="noopener" target="_blank"><i class="fab fa-instagram fa-fw"></i></a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/milanochuang" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://milanochuang.github.io/2023/01/08/%E3%80%90NLP%E3%80%91Day-23-%E5%B9%AB%E4%BD%A0%E8%A7%A3%E6%B1%BA%E5%90%84%E9%A1%9ENLP%E4%BB%BB%E5%8B%99%E7%9A%84BERT%EF%BC%8C%E4%BB%A5%E5%8F%8A%E5%85%B6%E4%BB%96%E5%9C%A8%E8%8A%9D%E9%BA%BB%E8%A1%97%E7%9A%84%E5%A5%BD%E6%8D%A7%E6%B2%B9%E5%80%91%EF%BC%88%E4%B8%8B%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Hao Yun Chuang (Milan)">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="米蘭牛角尖">
+      <meta itemprop="description" content="目前就讀於政大語言所，研究興趣為計算語言學<br/>">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="【NLP】Day 23: 幫你解決各類NLP任務的BERT，以及其他在芝麻街的好捧油們（下） | 米蘭牛角尖">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【NLP】Day 23: 幫你解決各類NLP任務的BERT，以及其他在芝麻街的好捧油們（下）
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2023-01-08 19:59:00 / 修改時間：19:59:26" itemprop="dateCreated datePublished" datetime="2023-01-08T19:59:00+08:00">2023-01-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/natural-language-processing/" itemprop="url" rel="index"><span itemprop="name">自然語言處理</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <blockquote>
+<p>真正掌握權力的人，通常都躲在表面上有權力的人後面，操控著一切。<br><strong>法蘭西斯・安德伍德《紙牌屋》</strong></p>
+</blockquote>
+<p>這幾天在研究 BERT 的時候想著，如果要拿流行文化來比喻的話，可以用什麼。嗯…利用別人達到更好的成就、亦正亦邪，表現上看起來風風光光，但其實細思極恐，突然想到，還能有比紙牌屋的主角法蘭克還要更好的比喻了嗎？法蘭克也是為了要達成自己的目標，不斷踩在別人（屍）身前進，表面上看起來很厲害，但站上高位之後，卻也容易被別人陷害，受到影響。</p>
+<p><img src="https://cdn.cnn.com/cnnnext/dam/assets/150226184423-orig-house-of-cards-recap-season-2-00013812.jpg"><br>Source: <a target="_blank" rel="noopener" href="https://edition.cnn.com/videos/tv/2015/02/26/orig-house-of-cards-recap-season-2.cnn">CNN</a>（小知識：現在 NETFLIX 開頭的「咚咚」就是出自於這一幕喔！）（沒人在乎）</p>
+<p>我想我大概是全世界第一個把 BERT 跟紙牌屋拿來放在一起比較的人了吧！</p>
+<p>幹話說完，該進入正題（終於嗎？）昨天我們提到兩階段的遷移式學習（Transfer Learning） 以及 BERT 的訓練方法，還有 BERT 可以完成的那些下游任務。今天來仔細一一了解 BERT 的內部構造吧！</p>
+<h2 id="預訓練模型"><a href="#預訓練模型" class="headerlink" title="預訓練模型"></a>預訓練模型</h2><p>在昨天的文章中有提到，原文獻將遷移學習（Transfer Learning）分成了兩階段，第一階段為Pretraining、第二階段則為模型微調。首先，讓我們來看看預訓練模型在一開始是如何訓練出來的。預訓練時，原文獻的作者將模型訓練分成了兩個任務，一個是克漏字填空（Masked Language Model），另一個則是下文預測（Next Sentence prediction）。</p>
+<h3 id="克漏字填空"><a href="#克漏字填空" class="headerlink" title="克漏字填空"></a>克漏字填空</h3><p><img src="https://i.imgur.com/vHHndIP.png"><br>首先，模型會先把文本中的字分成 character-level。如果你還記得的話，在中文中，character-level就是一個字一個字。接著再利用特殊字元 <code>[MASK]</code> 把其中一個字遮住。</p>
+<h4 id="在-BERT-中，共有五種特殊字元。"><a href="#在-BERT-中，共有五種特殊字元。" class="headerlink" title="在 BERT 中，共有五種特殊字元。"></a>在 BERT 中，共有五種特殊字元。</h4><ul>
+<li><code>[CLS]</code>：分類相關的資訊會放在這個 token 中，讓模型知道我們要進行分類，通常在下游任務才會有用。關於這個標籤是否應該存在，目前也有些爭議，大家如果有興趣看更深一點的文章，可以往<a target="_blank" rel="noopener" href="https://www.yanxishe.com/columnDetail/26335">這裡</a>去。</li>
+<li><code>[SEP]</code>：用於下文預測的預訓練任務中。用於分隔兩個句子的 token。</li>
+<li><code>[UNK]</code>：在 BERT 的字典中沒有的字元，會用此 token 取代。</li>
+<li><code>[PAD]</code>：記得我們在循環神經網路模型中，為了將句子調整至相同長度，會將長度不夠的句子補足到一樣的長度，那用的就是 <code>[PAD]</code> token。</li>
+<li><code>[MASK]</code>：就是克漏字專用的 token。</li>
+</ul>
+<p>所以說，克漏字填空的訓練資料就會如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[&#x27;[CLS]&#x27;, &#x27;等&#x27;, &#x27;到&#x27;, &#x27;潮&#x27;, &#x27;水&#x27;, &#x27;[MASK]&#x27;, &#x27;了&#x27;, &#x27;，&#x27;, &#x27;就&#x27;, &#x27;知&#x27;]...</span><br></pre></td></tr></table></figure>
+
+<p>在進行訓練的時候，會將訓練資料中 15% 的詞彙遮蓋住。接著，這些輸入資料通過 BERT 之後，會得到一個 output embedding（還記得 embedding 嗎？）再透過 Linear Multi-class Classifier ，讓模型猜測（決定）被遮蓋住的字是哪一個字。模型之所以有辦法預測答案，是因為被遮蓋掉的字，其上下文的 embedding，一定會與那個被遮蓋掉的字接近，從這些 embedding 接近的字詞中去挑選最接近的，作為模型預測的正確答案。</p>
+<p>我很喜歡李宏毅老師在課堂中做的比喻：</p>
+<blockquote>
+<p>如果兩個詞彙填在同一個地方沒有違和感，那它們就有類似的 embedding。</p>
+</blockquote>
+<h3 id="下文預測"><a href="#下文預測" class="headerlink" title="下文預測"></a>下文預測</h3><p><img src="https://i.imgur.com/Na0QM9K.png"><br>至於下文預測也跟克漏字填空接近。在這裡，作者給了 BERT 兩個句子，讓 BERT 判斷兩個句子之間是否有相互關聯。<code>[CLS]</code> 標籤會放在句首，這是因為在 BERT 之中使用的是 Transformer 的 encoder，其中的 Self-attention 機制，讓標籤位置並不受位置的影響。所以放在句首，仍然可以獲得所有句子的資訊。</p>
+<p>所以說，上下文預測放入模型的資料如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[&#x27;[CLS]&#x27;, &#x27;等&#x27;, &#x27;到&#x27;, &#x27;潮&#x27;, &#x27;水&#x27;, &#x27;[MASK]&#x27;, &#x27;了&#x27;, &#x27;，&#x27;, &#x27;就&#x27;, &#x27;知&#x27;] </span><br></pre></td></tr></table></figure>
+
+<h2 id="下游任務"><a href="#下游任務" class="headerlink" title="下游任務"></a>下游任務</h2><p><img src="https://leemeng.tw/images/bert/bert_fine_tuning_tasks.jpg"></p>
+<p>當預訓練模型準備完成之後，就可以用這個模型針對我們想要完成的下游任務進行調整。前面的兩個預訓練任務就是為了要幫助以上這四個下游任務所進行的，如同昨天所是，共有四個任務：單一句子分類任務、單一句子標註任務、成對句子分類任務，以及問答任務。</p>
+<p>其中克漏字填空為的就是單一句子分類以及標註。</p>
+<ul>
+<li><strong>單一句子分類任務</strong>：多對一，我們將文本資料放進去經過微調的 BERT 模型之後，模型訓練得到 embedding，再透過訓練所得的線性分類器（Linear Classifier），將句子分類到特定類別去。例如：判斷句子情緒是正向還是負向。</li>
+<li><strong>單一句子標註任務</strong>：多對多，將文本資料放入 BERT，在每一個節點各有一個線性分類器，藉由分類器取得對應類別，例如：POS tagging。</li>
+</ul>
+<p>另外，下文預測的訓練目標就是成對句子分類任務以及問答任務。</p>
+<ul>
+<li><strong>成對句子分類任務</strong>：輸入兩句不同的句子，BERT 會藉由放在<code>[CLS]</code>中的分類資訊，對這些句子進行分類。例如，給出一段前情提要，接著放入一段句子，使模型判斷兩者是否相關，或是可否從前情提要中推斷出這段句子。</li>
+<li><strong>問答任務</strong>：將問題以及包含答案的文檔放入 BERT 之後，BERT 會將訓練所的資訊再透過先前訓練所得的 <img src="https://chart.googleapis.com/chart?cht=tx&chl=q" alt="https://chart.googleapis.com/chart?cht=tx&amp;chl=q">、<img src="https://chart.googleapis.com/chart?cht=tx&chl=k" alt="https://chart.googleapis.com/chart?cht=tx&amp;chl=k">，以及 <img src="https://chart.googleapis.com/chart?cht=tx&chl=v" alt="https://chart.googleapis.com/chart?cht=tx&amp;chl=v"> ，並經過激勵函數 softmax，從文檔中找出合適的答案。</li>
+</ul>
+<h2 id="問題與討論"><a href="#問題與討論" class="headerlink" title="問題與討論"></a>問題與討論</h2><p>每一個章節最後一定都要來討論一下優缺點，BERT即使作為當代最厲害的語言模型，仍然也是有他的壞處，而我們則必須衡量這些優缺點，來決定最適合的解決方案。先讓我們來看看 BERT 有哪些缺點吧，當然這裡就不再提深度學習模型的學習時間較為耗時（是要講幾遍？）。</p>
+<p>在 <a target="_blank" rel="noopener" href="https://linguistics.uchicago.edu/people/allyson-ettinger">Allyson Ettinger</a> 發表的<a target="_blank" rel="noopener" href="https://aclanthology.org/2020.tacl-1.3.pdf">What BERT Is Not: Lessons from a New Suite of Psycholinguistic Diagnostics for Language Models</a> 論文中透過實驗以及以心理語言學的角度，探討了 BERT 的可能缺陷。這裡來一一整理：</p>
+<ol>
+<li><strong>難以基於常識處理複雜的語意推斷</strong></li>
+</ol>
+<p><img src="https://i.imgur.com/34zLBOC.png"></p>
+<p>從圖中，BERT 可以基於第二句的內容推斷空格中該填入的字，但是卻無法基於第一句的內容來對第二句的空格進行推斷。例如：</p>
+<blockquote>
+<p>Pablo 想要砍一些柴來做木櫃。於是他詢問了鄰居是否可以借他______ 。 </p>
+</blockquote>
+<p>人類可以很快地推斷出空格應該填入如斧頭、電鋸等可以砍柴的工具，這是基於我們看過第一句話之後所做的推斷，認為 Pablo 應該要借的是可以砍柴的工具。但模型只能基於第二句的上下文進行推斷，無法像我們一樣基於生活常識進行推斷，於是預測了像是車、房子等詞彙，這就顯示了 BERT 的限制。</p>
+<ol start="2">
+<li><strong>難以預測基於語意角色的事件</strong></li>
+</ol>
+<p><img src="https://i.imgur.com/sEXgEcB.png"></p>
+<p>BERT 同樣也難以判斷基於語意角色的事件。所謂的語意角色是一個語言學專有名詞，簡單來說就是在句中的參與某個事件或是帶有某個狀態的「參與者」。在圖中的範例，作者刻意將主詞對調，發現 <img src="https://chart.googleapis.com/chart?cht=tx&chl=BERT_%7BBASE%7D" alt="https://chart.googleapis.com/chart?cht=tx&amp;chl=BERT_{BASE}"> 還是會預測相同的詞彙（推測大概是因為 Self-attention 的機制），而且雖然 <img src="https://chart.googleapis.com/chart?cht=tx&chl=BERT_%7BLARGE%7D" alt="https://chart.googleapis.com/chart?cht=tx&amp;chl=BERT_LARGE"> 沒有預測跟前句相同的詞彙了，但預測結果仍不理想。兩者仍然都無法預測出適當地符合句意的詞彙。例如：</p>
+<blockquote>
+<p>紮營者回報有小女孩被熊______了！</p>
+</blockquote>
+<p>模型可以正確預測出「攻擊」、「啃咬」，但一旦兩者對調，變成：</p>
+<blockquote>
+<p>紮營者回報有熊被小女孩______了！</p>
+</blockquote>
+<p>模型預測的詞彙仍然是「攻擊」、「啃咬」。可以發現 BERT 同樣難以推斷詞彙之間的關係，並預測出符合常識的語句。</p>
+<ol start="3">
+<li><strong>難以推斷否定句</strong></li>
+</ol>
+<p><img src="https://i.imgur.com/BKOIs9S.png"></p>
+<p>其中提到 BERT 在推斷具有否定含義的語句時，準確度較肯定直述句還要低。從圖中可以看到說，肯定直述句的案例中，BERT 推斷出的詞放在空格中都是合理的，只是一但加上否定詞，BERT卻仍然會判斷相同的詞彙。例如：</p>
+<blockquote>
+<p>Robin 是 ＿＿＿＿＿。</p>
+</blockquote>
+<p>模型可以很好地推斷出 Robin 是隻鳥，或是一個人。一旦變成否定句：</p>
+<blockquote>
+<p>Robin 不是 _____。</p>
+</blockquote>
+<p>BERT 仍然會在空格中填入 Robin。同樣也足見 BERT，或者是說 Attention 機制的缺點。</p>
+<p>好，今天說到這！</p>
+<p>Source:</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://leemeng.tw/attack_on_bert_transfer_learning_in_nlp.html">進擊的 BERT：NLP 界的巨人之力與遷移學習</a></li>
+<li><a target="_blank" rel="noopener" href="https://hackmd.io/@shaoeChen/Bky0Cnx7L#Contextualized-Word-Embedding">李宏毅_ELMO, BERT, GPT</a></li>
+<li><a target="_blank" rel="noopener" href="https://aclanthology.org/2020.tacl-1.3.pdf">What BERT Is Not: Lessons from a New Suite of Psycholinguistic Diagnostics for Language Models</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%87%AA%E7%84%B6%E8%AA%9E%E8%A8%80%E8%99%95%E7%90%86/" rel="tag"># 自然語言處理</a>
+              <a href="/tags/NLP/" rel="tag"># NLP</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/01/08/%E3%80%90NLP%E3%80%91Day-22-%E5%B9%AB%E4%BD%A0%E8%A7%A3%E6%B1%BA%E5%90%84%E9%A1%9ENLP%E4%BB%BB%E5%8B%99%E7%9A%84BERT%EF%BC%8C%E4%BB%A5%E5%8F%8A%E5%85%B6%E4%BB%96%E5%9C%A8%E8%8A%9D%E9%BA%BB%E8%A1%97%E7%9A%84%E5%A5%BD%E6%8D%A7%E6%B2%B9%E5%80%91%EF%BC%88%E4%B8%8A%EF%BC%89/" rel="prev" title="【NLP】Day 22: 幫你解決各類NLP任務的BERT，以及其他在芝麻街的好捧油們（上）">
+                  <i class="fa fa-chevron-left"></i> 【NLP】Day 22: 幫你解決各類NLP任務的BERT，以及其他在芝麻街的好捧油們（上）
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/01/08/%E3%80%90NLP%E3%80%91Day-24-%E6%AC%B8%EF%BC%81BERT%EF%BC%81%E4%BD%A0%E5%9C%A8%E5%B9%B9%E5%98%9B%E5%91%80%EF%BC%9FBERT-%E6%A8%A1%E5%9E%8B%E5%AF%A6%E4%BD%9C%EF%BC%86%E7%A8%8B%E5%BC%8F%E7%A2%BC%E8%A7%A3%E6%9E%90/" rel="next" title="【NLP】Day 24: 欸！BERT！你在幹嘛呀？BERT 模型實作＆程式碼解析">
+                  【NLP】Day 24: 欸！BERT！你在幹嘛呀？BERT 模型實作＆程式碼解析 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa-solid fa-code"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hao Yun Chuang (Milan)</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/assets/hijiki.model.json"},"display":{"superSample":2,"width":250,"height":500,"position":"right","hOffset":-30,"vOffset":-130},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"log":false});</script></body>
+</html>

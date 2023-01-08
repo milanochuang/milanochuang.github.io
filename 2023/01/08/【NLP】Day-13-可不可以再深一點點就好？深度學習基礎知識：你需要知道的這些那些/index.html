@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/icon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/icon.png">
+  <link rel="mask-icon" href="/images/icon.png" color="#222">
+  <meta name="google-site-verification" content="DMyRve2tDXDJqmJpSS4BaBWT1R0ZCH9n_EsCnROTiM0">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha256-xejo6yLi6vGtAjcMIsY8BHdKsLg7QynVlFMzdQgUuy8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"milanochuang.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.12.3","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="人類與動物的學習大都是非監督學習。所以說如果「智慧」是一塊蛋糕，那麼非監督學習才是蛋糕本體，監督學習則是那層糖霜，強化學習不過是上頭的櫻桃。Most of human and animal learning is unsupervised learning. If intelligence was a cake, unsupervised learning would be the cake,">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【NLP】Day 13: 可不可以再深一點點就好？深度學習基礎知識：你需要知道的這些那些">
+<meta property="og:url" content="https://milanochuang.github.io/2023/01/08/%E3%80%90NLP%E3%80%91Day-13-%E5%8F%AF%E4%B8%8D%E5%8F%AF%E4%BB%A5%E5%86%8D%E6%B7%B1%E4%B8%80%E9%BB%9E%E9%BB%9E%E5%B0%B1%E5%A5%BD%EF%BC%9F%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92%E5%9F%BA%E7%A4%8E%E7%9F%A5%E8%AD%98%EF%BC%9A%E4%BD%A0%E9%9C%80%E8%A6%81%E7%9F%A5%E9%81%93%E7%9A%84%E9%80%99%E4%BA%9B%E9%82%A3%E4%BA%9B/index.html">
+<meta property="og:site_name" content="米蘭牛角尖">
+<meta property="og:description" content="人類與動物的學習大都是非監督學習。所以說如果「智慧」是一塊蛋糕，那麼非監督學習才是蛋糕本體，監督學習則是那層糖霜，強化學習不過是上頭的櫻桃。Most of human and animal learning is unsupervised learning. If intelligence was a cake, unsupervised learning would be the cake,">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://media.giphy.com/media/xT9DPpf0zTqRASyzTi/giphy.gif">
+<meta property="og:image" content="https://blogs.nvidia.com/wp-content/uploads/2016/07/Deep_Learning_Icons_R5_PNG.jpg.png.webp">
+<meta property="og:image" content="https://i.imgur.com/jQ2IzW7.png">
+<meta property="og:image" content="https://miro.medium.com/max/1400/0*LFr2lyb_FzhwT8he.png">
+<meta property="og:image" content="https://i.imgur.com/hSJwdHz.png">
+<meta property="article:published_time" content="2023-01-08T11:46:47.000Z">
+<meta property="article:modified_time" content="2023-01-08T11:47:08.244Z">
+<meta property="article:author" content="Hao Yun Chuang (Milan)">
+<meta property="article:tag" content="自然語言處理, 計算語言學, 機器學習, 人工智慧, 電影">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://media.giphy.com/media/xT9DPpf0zTqRASyzTi/giphy.gif">
+
+
+<link rel="canonical" href="https://milanochuang.github.io/2023/01/08/%E3%80%90NLP%E3%80%91Day-13-%E5%8F%AF%E4%B8%8D%E5%8F%AF%E4%BB%A5%E5%86%8D%E6%B7%B1%E4%B8%80%E9%BB%9E%E9%BB%9E%E5%B0%B1%E5%A5%BD%EF%BC%9F%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92%E5%9F%BA%E7%A4%8E%E7%9F%A5%E8%AD%98%EF%BC%9A%E4%BD%A0%E9%9C%80%E8%A6%81%E7%9F%A5%E9%81%93%E7%9A%84%E9%80%99%E4%BA%9B%E9%82%A3%E4%BA%9B/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://milanochuang.github.io/2023/01/08/%E3%80%90NLP%E3%80%91Day-13-%E5%8F%AF%E4%B8%8D%E5%8F%AF%E4%BB%A5%E5%86%8D%E6%B7%B1%E4%B8%80%E9%BB%9E%E9%BB%9E%E5%B0%B1%E5%A5%BD%EF%BC%9F%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92%E5%9F%BA%E7%A4%8E%E7%9F%A5%E8%AD%98%EF%BC%9A%E4%BD%A0%E9%9C%80%E8%A6%81%E7%9F%A5%E9%81%93%E7%9A%84%E9%80%99%E4%BA%9B%E9%82%A3%E4%BA%9B/","path":"2023/01/08/【NLP】Day-13-可不可以再深一點點就好？深度學習基礎知識：你需要知道的這些那些/","title":"【NLP】Day 13: 可不可以再深一點點就好？深度學習基礎知識：你需要知道的這些那些"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>【NLP】Day 13: 可不可以再深一點點就好？深度學習基礎知識：你需要知道的這些那些 | 米蘭牛角尖</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">米蘭牛角尖</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">計算語言學的學習紀錄，偶爾可能會出現野生的電影評論？</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>關於</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分類</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>所有文章</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%87%90%E6%B8%85%E5%90%8D%E8%A9%9E%E8%A7%80%E5%BF%B5"><span class="nav-number">1.</span> <span class="nav-text">釐清名詞觀念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E9%BA%BC%E6%98%AF%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92%EF%BC%9F"><span class="nav-number">2.</span> <span class="nav-text">什麼是深度學習？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%82%BA%E4%BB%80%E9%BA%BC%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92%E9%80%90%E6%BC%B8%E8%AE%8A%E6%88%90%E4%B8%BB%E6%B5%81%EF%BC%9F"><span class="nav-number">2.1.</span> <span class="nav-text">為什麼深度學習逐漸變成主流？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B7%9F%E5%89%8D%E9%9D%A2%E6%8F%90%E5%88%B0%E7%9A%84%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92%E6%9C%89%E4%BB%80%E9%BA%BC%E4%B8%8D%E4%B8%80%E6%A8%A3%EF%BC%9F"><span class="nav-number">2.2.</span> <span class="nav-text">跟前面提到的機器學習有什麼不一樣？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%AF%E4%B8%8D%E5%8F%AF%E4%BB%A5%E5%86%8D%E6%B7%B1%E4%B8%80%E9%BB%9E%E9%BB%9E%E5%B0%B1%E5%A5%BD%EF%BC%9F%E8%B6%8A%E6%B7%B1%E8%B6%8A%E5%A5%BD%EF%BC%9F"><span class="nav-number">3.</span> <span class="nav-text">可不可以再深一點點就好？越深越好？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B7%B1%E5%BA%A6%E7%9A%84%E7%89%B9%E6%80%A7%E5%8F%8D%E8%80%8C%E6%98%AF%E4%B8%80%E6%8A%8A%E9%9B%99%E9%9D%A2%E5%88%83%EF%BC%9F"><span class="nav-number">3.1.</span> <span class="nav-text">深度的特性反而是一把雙面刃？</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Hao Yun Chuang (Milan)"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Hao Yun Chuang (Milan)</p>
+  <div class="site-description" itemprop="description">目前就讀於政大語言所，研究興趣為計算語言學<br/></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">32</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/milanochuang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;milanochuang" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:milanochuang@gmail.com" title="E-Mail → mailto:milanochuang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/milanochuang" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;milanochuang" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/milanochuang" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;milanochuang" rel="noopener" target="_blank"><i class="fab fa-facebook fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://instagram.com/milanochuang" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;milanochuang" rel="noopener" target="_blank"><i class="fab fa-instagram fa-fw"></i></a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/milanochuang" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://milanochuang.github.io/2023/01/08/%E3%80%90NLP%E3%80%91Day-13-%E5%8F%AF%E4%B8%8D%E5%8F%AF%E4%BB%A5%E5%86%8D%E6%B7%B1%E4%B8%80%E9%BB%9E%E9%BB%9E%E5%B0%B1%E5%A5%BD%EF%BC%9F%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92%E5%9F%BA%E7%A4%8E%E7%9F%A5%E8%AD%98%EF%BC%9A%E4%BD%A0%E9%9C%80%E8%A6%81%E7%9F%A5%E9%81%93%E7%9A%84%E9%80%99%E4%BA%9B%E9%82%A3%E4%BA%9B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Hao Yun Chuang (Milan)">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="米蘭牛角尖">
+      <meta itemprop="description" content="目前就讀於政大語言所，研究興趣為計算語言學<br/>">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="【NLP】Day 13: 可不可以再深一點點就好？深度學習基礎知識：你需要知道的這些那些 | 米蘭牛角尖">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【NLP】Day 13: 可不可以再深一點點就好？深度學習基礎知識：你需要知道的這些那些
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2023-01-08 19:46:47 / 修改時間：19:47:08" itemprop="dateCreated datePublished" datetime="2023-01-08T19:46:47+08:00">2023-01-08</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <blockquote>
+<p>人類與動物的學習大都是非監督學習。所以說如果「智慧」是一塊蛋糕，那麼非監督學習才是蛋糕本體，監督學習則是那層糖霜，強化學習不過是上頭的櫻桃。<br>Most of human and animal learning is unsupervised learning. If intelligence was a cake, unsupervised learning would be the cake, supervised learning would be the icing on the cake, and reinforcement learning would be the cherry on the cake.<br><strong>楊立昆 Yann LeCun</strong></p>
+</blockquote>
+<p>不知道昨天大家有沒有看到一則<del>偏宅</del>的新聞，就是星際大戰中達斯維達的配音員詹姆士・厄爾・瓊斯（James Earl Jones），從今開始正式不再為達斯維達配音。我們再也沒有機會聽到本人講那經典的台詞：</p>
+<p><img src="https://media.giphy.com/media/xT9DPpf0zTqRASyzTi/giphy.gif"></p>
+<p><del>喔，對了，防雷警報，達斯維達其實是路克・天行者的老爸。（誰在乎？）</del></p>
+<p>但是新聞還說，雖然本人不再配音，我們在電影中仍然還是可以聽得到他那經典的呼氣聲，並感受它強大的原力？為什麼？這一切都拜那個離我們又遙遠又接近的深度學習技術所賜。</p>
+<p>其實不僅僅是語音合成，文本處理上現在也很流行利用深度學習的技術來完成任務。今天，就讓我們先來簡單大概了解什麼是深度學習，<del>還有大家在吵什麼</del>。</p>
+<h2 id="釐清名詞觀念"><a href="#釐清名詞觀念" class="headerlink" title="釐清名詞觀念"></a>釐清名詞觀念</h2><p>在開始之前，我們得要先釐清名詞觀念。從以前到現在，我們已經學到了好多名詞：人工智慧、機器學習、深度學習、監督式學習、非監督式學習，那這些名詞之間到底有什麼不一樣呢？我們可以這樣理解：</p>
+<p><img src="https://blogs.nvidia.com/wp-content/uploads/2016/07/Deep_Learning_Icons_R5_PNG.jpg.png.webp"><br>Source: <a target="_blank" rel="noopener" href="https://blogs.nvidia.com/blog/2016/07/29/whats-difference-artificial-intelligence-machine-learning-deep-learning-ai/">NVIDIA</a></p>
+<p>人工智慧是一個「雨傘術語」（umbrella term），而機器學習則是人工智慧底下最廣為人知的一個分支。主要目的在於設計和分析一些讓電腦可以自動「學習」的演算法，並利用規律對未知資料進行預測。機器學習又是另外一個「雨傘術語」，因為機器學習又根據演算法分為很多種不同的學習方法，我們這邊提到了監督式學習跟非監督式學習，如果沒看過我之前針對兩者差別進行的介紹，可以去看這篇 **<a target="_blank" rel="noopener" href="https://ithelp.ithome.com.tw/articles/10298197">Day 10: 進入偉大航道！機器學習基礎知識：你需要知道的這些那些</a>**。而深度學習是機器學習的其中一種方式。</p>
+<h2 id="什麼是深度學習？"><a href="#什麼是深度學習？" class="headerlink" title="什麼是深度學習？"></a>什麼是深度學習？</h2><p>深度學習作為機器學習的其中一個分支，若要「沒那麼精確」但要淺顯易懂的解釋，你可以將深度學習理解成「比較深的神經網路」目的在於將資料放進多個節點，經過線性以及非線性的轉換，從原始資料中自動抽取足以代表資料的特徵，自動抽取特徵這點又被稱為<strong>表徵學習</strong>（representation learning），最終都可以得到非常優秀的結果。</p>
+<p>類神經網路通常會有好幾層，每一層會有許多個節點（perceptron），就像人類的神經系統中，神經元與神經元之間的連結一樣，節點與節點之間也會彼此傳遞資訊，之後再經過激勵函數（activation function）轉換成輸出。</p>
+<h3 id="為什麼深度學習逐漸變成主流？"><a href="#為什麼深度學習逐漸變成主流？" class="headerlink" title="為什麼深度學習逐漸變成主流？"></a>為什麼深度學習逐漸變成主流？</h3><p>但其實深度學習的歷史已經非常悠久了。早在六七零年代，就有電腦科學家嘗試重現生物神經網路的架構，希望電腦可以達到跟人類一樣的優秀學習能力。但礙於當時電腦的運算能力還跟不上理論，再加上數位化的資料並不多，無法提供神經網路好的學習資源，所以當時神經網路仍無法展露頭角。</p>
+<p>但現在拜於網路與資訊技術的進步，有越來越多的數位資料可以提供這些神經網路小試身手，除此之外，逐漸成熟的GPU演算技術也幫助了神經網路的運算，速度也有大幅成長（但仍然很慢），天時地利人和之下，神經網路這個名詞才漸漸重新浮出檯面。</p>
+<h3 id="跟前面提到的機器學習有什麼不一樣？"><a href="#跟前面提到的機器學習有什麼不一樣？" class="headerlink" title="跟前面提到的機器學習有什麼不一樣？"></a>跟前面提到的機器學習有什麼不一樣？</h3><p><img src="https://i.imgur.com/jQ2IzW7.png"><br>一般來說，像是我們先前所說的貝氏分類以及羅吉斯回歸這樣的監督式機器學習，都會需要我們手動加入特徵，而這些特徵都是透過我們人類觀察而得的；人工神經網路乃至於深度學習，其實並不需要我們人類進行特徵工程，深度學習模型會自己學習特徵並自動分類，最後輸出分類，但模型找的特徵可能跟我們一般所認知的特徵會有點差距就是了，也就是說，我們會看不懂神經網路找到的特徵。因此，人工神經網路也是黑盒子模型的一種，這部分後面我們會再提。</p>
+<p><img src="https://miro.medium.com/max/1400/0*LFr2lyb_FzhwT8he.png"></p>
+<p>也就是說，資料越多，神經網路所能夠學的特徵就越多，深度學習模型的表現也就越好，好過過去監督式的機器學習模型。</p>
+<h2 id="可不可以再深一點點就好？越深越好？"><a href="#可不可以再深一點點就好？越深越好？" class="headerlink" title="可不可以再深一點點就好？越深越好？"></a>可不可以再深一點點就好？越深越好？</h2><p>深度學習的一個很常被討論的問題就是，既然叫深度學習，是不是越深就越好？現代知名電腦科學家楊立昆（Yann LeCun）在2008年的論文 <a target="_blank" rel="noopener" href="http://yann.lecun.com/exdb/publis/pdf/bengio-lecun-07.pdf">Scaling Learning Algorithms towards AI</a> 中就提到，在特定資料量底下，淺層架構的神經網路運算上或許沒辦法達到它最好的表現，深層才能達到最大效益。台大李宏毅老師在機器學習課程中也有提到，神經網路好像疊越多層、神經元越多，表現就越好。那我們就這樣一直無腦疊下去就好了嗎？模型就會越好嗎？<br><img src="https://i.imgur.com/hSJwdHz.png"></p>
+<h3 id="深度的特性反而是一把雙面刃？"><a href="#深度的特性反而是一把雙面刃？" class="headerlink" title="深度的特性反而是一把雙面刃？"></a>深度的特性反而是一把雙面刃？</h3><p>後面我們會提到加深神經網路在優化上可能會發生的問題，比如像是神經網路的運算時間計算量大、耗時，<a target="_blank" rel="noopener" href="https://proceedings.neurips.cc/paper/1988/file/3def184ad8f4755ff269862ea77393dd-Paper.pdf">即使是一個兩層三節點的神經網路，時間消耗仍然為NP-Complete</a>，NP-Complete就是運行複雜程度的等級，詳細可以來看這篇前輩的<a target="_blank" rel="noopener" href="https://ithelp.ithome.com.tw/articles/10237364">文章</a>。另外，也因為梯度消失以及梯度爆炸的現象（後面文章會介紹），也會導致神經網路找不到最佳解，你可以回想前面我們說羅吉斯迴歸為凸函數，找得到最小值；但神經網路為非凸函數，有可能只找到局部最小值，那該怎麼辦呢？</p>
+<p>答案是，不怎麼辦！因為我們不能保證模型找到最佳解，但是找到的最小值已經非常逼近最佳解，也就是說已經夠好到足以幫助人類完成許多任務了！</p>
+<p>所以其實還是老話一句，越深越好？還是要看任務是什麼，找到最適合的方法才是最重要的。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/01/08/%E3%80%90NLP%E3%80%91Day-12-%E8%B1%AC%E8%80%B3%E6%9C%B5%E9%A4%85%E4%B9%BE%E8%B7%9F%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92%E4%B9%9F%E6%9C%89%E9%97%9C%E4%BF%82%EF%BC%9F%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92%EF%BC%9A%E7%BE%85%E5%90%89%E6%96%AF%E5%9B%9E%E6%AD%B8/" rel="prev" title="【NLP】Day 12: 豬耳朵餅乾跟機器學習也有關係？機器學習：羅吉斯回歸 ">
+                  <i class="fa fa-chevron-left"></i> 【NLP】Day 12: 豬耳朵餅乾跟機器學習也有關係？機器學習：羅吉斯回歸 
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/01/08/%E3%80%90NLP%E3%80%91Day-14-%E7%A5%9E%E7%B6%93%E7%B6%B2%E8%B7%AF%E4%B9%9F%E6%9C%83%E7%A5%9E%E6%A9%9F%E9%8C%AF%E4%BA%82%EF%BC%9F%E4%B8%8D%EF%BC%8C%E5%8F%AA%E6%9C%83%E7%B2%BE%E7%A5%9E%E9%8C%AF%E4%BA%82-%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92%EF%BC%9A%E5%89%8D%E9%A5%8B%E7%A5%9E%E7%B6%93%E7%B6%B2%E8%B7%AF/" rel="next" title="【NLP】Day 14: 神經網路也會神機錯亂？不，只會精神錯亂...深度學習：前饋神經網路">
+                  【NLP】Day 14: 神經網路也會神機錯亂？不，只會精神錯亂...深度學習：前饋神經網路 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa-solid fa-code"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hao Yun Chuang (Milan)</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/assets/hijiki.model.json"},"display":{"superSample":2,"width":250,"height":500,"position":"right","hOffset":-30,"vOffset":-130},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"log":false});</script></body>
+</html>

@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/icon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/icon.png">
+  <link rel="mask-icon" href="/images/icon.png" color="#222">
+  <meta name="google-site-verification" content="DMyRve2tDXDJqmJpSS4BaBWT1R0ZCH9n_EsCnROTiM0">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha256-xejo6yLi6vGtAjcMIsY8BHdKsLg7QynVlFMzdQgUuy8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"milanochuang.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.12.3","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="在這裡，你可以盡情揮灑你的想像力，不覺得這很令人難以想像嗎？《芝麻街》Elmo  在過去幾天的旅程中，我們了解如何利用各種神經網路模型來幫助我們處理不同自然語言處理任務，計算語言學家接著也基於前面講過的那些神經網路模型，陸續發展了許多其他新型態的語言模型，例如：基於BiLSTM的ELMo。我想應該是研究太苦悶了，或者說是一種惡趣味吧？自然語言處理專家特別喜歡用芝麻街的角色來為這些語言模型命名，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【NLP】Day 22: 幫你解決各類NLP任務的BERT，以及其他在芝麻街的好捧油們（上）">
+<meta property="og:url" content="https://milanochuang.github.io/2023/01/08/%E3%80%90NLP%E3%80%91Day-22-%E5%B9%AB%E4%BD%A0%E8%A7%A3%E6%B1%BA%E5%90%84%E9%A1%9ENLP%E4%BB%BB%E5%8B%99%E7%9A%84BERT%EF%BC%8C%E4%BB%A5%E5%8F%8A%E5%85%B6%E4%BB%96%E5%9C%A8%E8%8A%9D%E9%BA%BB%E8%A1%97%E7%9A%84%E5%A5%BD%E6%8D%A7%E6%B2%B9%E5%80%91%EF%BC%88%E4%B8%8A%EF%BC%89/index.html">
+<meta property="og:site_name" content="米蘭牛角尖">
+<meta property="og:description" content="在這裡，你可以盡情揮灑你的想像力，不覺得這很令人難以想像嗎？《芝麻街》Elmo  在過去幾天的旅程中，我們了解如何利用各種神經網路模型來幫助我們處理不同自然語言處理任務，計算語言學家接著也基於前面講過的那些神經網路模型，陸續發展了許多其他新型態的語言模型，例如：基於BiLSTM的ELMo。我想應該是研究太苦悶了，或者說是一種惡趣味吧？自然語言處理專家特別喜歡用芝麻街的角色來為這些語言模型命名，">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://i.imgur.com/tBCYtrl.jpg">
+<meta property="og:image" content="https://leemeng.tw/images/bert/bert-2phase.jpg">
+<meta property="og:image" content="https://leemeng.tw/images/bert/bert-pretrain-tasks.jpg">
+<meta property="og:image" content="https://leemeng.tw/images/bert/bert_fine_tuning_tasks.jpg">
+<meta property="article:published_time" content="2023-01-08T11:57:00.000Z">
+<meta property="article:modified_time" content="2023-01-08T11:58:29.773Z">
+<meta property="article:author" content="Hao Yun Chuang (Milan)">
+<meta property="article:tag" content="自然語言處理">
+<meta property="article:tag" content="NLP">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.imgur.com/tBCYtrl.jpg">
+
+
+<link rel="canonical" href="https://milanochuang.github.io/2023/01/08/%E3%80%90NLP%E3%80%91Day-22-%E5%B9%AB%E4%BD%A0%E8%A7%A3%E6%B1%BA%E5%90%84%E9%A1%9ENLP%E4%BB%BB%E5%8B%99%E7%9A%84BERT%EF%BC%8C%E4%BB%A5%E5%8F%8A%E5%85%B6%E4%BB%96%E5%9C%A8%E8%8A%9D%E9%BA%BB%E8%A1%97%E7%9A%84%E5%A5%BD%E6%8D%A7%E6%B2%B9%E5%80%91%EF%BC%88%E4%B8%8A%EF%BC%89/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://milanochuang.github.io/2023/01/08/%E3%80%90NLP%E3%80%91Day-22-%E5%B9%AB%E4%BD%A0%E8%A7%A3%E6%B1%BA%E5%90%84%E9%A1%9ENLP%E4%BB%BB%E5%8B%99%E7%9A%84BERT%EF%BC%8C%E4%BB%A5%E5%8F%8A%E5%85%B6%E4%BB%96%E5%9C%A8%E8%8A%9D%E9%BA%BB%E8%A1%97%E7%9A%84%E5%A5%BD%E6%8D%A7%E6%B2%B9%E5%80%91%EF%BC%88%E4%B8%8A%EF%BC%89/","path":"2023/01/08/【NLP】Day-22-幫你解決各類NLP任務的BERT，以及其他在芝麻街的好捧油們（上）/","title":"【NLP】Day 22: 幫你解決各類NLP任務的BERT，以及其他在芝麻街的好捧油們（上）"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>【NLP】Day 22: 幫你解決各類NLP任務的BERT，以及其他在芝麻街的好捧油們（上） | 米蘭牛角尖</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">米蘭牛角尖</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">計算語言學的學習紀錄，偶爾可能會出現野生的電影評論？</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>關於</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分類</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>所有文章</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E6%9E%9C%E6%9C%89%E4%B8%80%E5%A4%A9%EF%BC%8C%E6%9C%89%E5%80%8B%E6%A8%A1%E5%9E%8B%E5%B9%AB%E5%8A%A9%E6%88%91%E5%80%91%E5%AE%8C%E6%88%90%E4%BB%BB%E4%BD%95%E4%BA%8B%EF%BC%8C%E9%82%A3%E8%A9%B2%E6%9C%89%E5%A4%9A%E5%A5%BD%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">如果有一天，有個模型幫助我們完成任何事，那該有多好？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A0%90%E8%A8%93%E7%B7%B4%E6%A8%A1%E5%9E%8B%E7%9A%84%E8%A8%93%E7%B7%B4%E6%96%B9%E6%B3%95%EF%BC%9A%E9%81%B7%E7%A7%BB%E5%AD%B8%E7%BF%92%EF%BC%88Transfer-Learning%EF%BC%89"><span class="nav-number">2.</span> <span class="nav-text">預訓練模型的訓練方法：遷移學習（Transfer Learning）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B7%9F%E4%BD%BF%E7%94%A8-LSTM-%E8%A8%93%E7%B7%B4%E7%9A%84%E6%A8%A1%E5%9E%8B%E6%9C%89%E4%BB%80%E9%BA%BC%E4%B8%8D%E4%B8%80%E6%A8%A3%EF%BC%9F"><span class="nav-number">3.</span> <span class="nav-text">跟使用 LSTM 訓練的模型有什麼不一樣？</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Hao Yun Chuang (Milan)"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Hao Yun Chuang (Milan)</p>
+  <div class="site-description" itemprop="description">目前就讀於政大語言所，研究興趣為計算語言學<br/></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">32</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/milanochuang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;milanochuang" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:milanochuang@gmail.com" title="E-Mail → mailto:milanochuang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/milanochuang" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;milanochuang" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/milanochuang" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;milanochuang" rel="noopener" target="_blank"><i class="fab fa-facebook fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://instagram.com/milanochuang" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;milanochuang" rel="noopener" target="_blank"><i class="fab fa-instagram fa-fw"></i></a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/milanochuang" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://milanochuang.github.io/2023/01/08/%E3%80%90NLP%E3%80%91Day-22-%E5%B9%AB%E4%BD%A0%E8%A7%A3%E6%B1%BA%E5%90%84%E9%A1%9ENLP%E4%BB%BB%E5%8B%99%E7%9A%84BERT%EF%BC%8C%E4%BB%A5%E5%8F%8A%E5%85%B6%E4%BB%96%E5%9C%A8%E8%8A%9D%E9%BA%BB%E8%A1%97%E7%9A%84%E5%A5%BD%E6%8D%A7%E6%B2%B9%E5%80%91%EF%BC%88%E4%B8%8A%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Hao Yun Chuang (Milan)">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="米蘭牛角尖">
+      <meta itemprop="description" content="目前就讀於政大語言所，研究興趣為計算語言學<br/>">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="【NLP】Day 22: 幫你解決各類NLP任務的BERT，以及其他在芝麻街的好捧油們（上） | 米蘭牛角尖">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【NLP】Day 22: 幫你解決各類NLP任務的BERT，以及其他在芝麻街的好捧油們（上）
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2023-01-08 19:57:00 / 修改時間：19:58:29" itemprop="dateCreated datePublished" datetime="2023-01-08T19:57:00+08:00">2023-01-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/natural-language-processing/" itemprop="url" rel="index"><span itemprop="name">自然語言處理</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p><img src="https://i.imgur.com/tBCYtrl.jpg"></p>
+<blockquote>
+<p>在這裡，你可以盡情揮灑你的想像力，不覺得這很令人難以想像嗎？<br><strong>《芝麻街》Elmo</strong></p>
+</blockquote>
+<p>在過去幾天的旅程中，我們了解如何利用各種神經網路模型來幫助我們處理不同自然語言處理任務，計算語言學家接著也基於前面講過的那些神經網路模型，陸續發展了許多其他新型態的語言模型，例如：基於BiLSTM的ELMo。我想應該是研究太苦悶了，或者說是一種惡趣味吧？自然語言處理專家特別喜歡用芝麻街的角色來為這些語言模型命名，就算是硬湊名稱，也要把它湊成芝麻街角色的名字（e.g. 今天要介紹的 BERT 就是一個案例）。假如說，現在小小孩想上網抓 Elmo 的照片，結果卻出現一堆莫名其妙的節點跟線的連接圖，會被嚇哭吧？ <del>計算語言學家都是邪惡的。</del> </p>
+<p>不過如果你還有印象，就會記得 BiLSTM 儘管記憶力已經比 RNN 還要好了，但人工智慧學家對仍然不滿足，他們認為如果要了解一個字在文章中的「定位」，就必須要讓模型理解全文才能真正決定。所以接下來學者又開發出了 Transformer ，而其中的 Self-Attention 機制，使每一個字對每一個字來說「沒有位置的概念」。好，我知道有點玄，就套句台大李宏毅老師所說：</p>
+<blockquote>
+<p>海內存知己，天涯若比鄰。</p>
+</blockquote>
+<p>這時候，兩個有關係的字，即使離很遠，模型也能理解之間的關係。就是這樣，Transformer 的 Self-Attention 機制，就可以完全解決 RNN 系列的天生缺陷。而今天要介紹的 BERT 就是基於 Transformer 所搭建的模型。</p>
+<p>在 2018 年時（其實沒有很久以前喔），Google 集先前所有語言模型大成，打造了 BERT，並釋出了模型及原始碼，幫助處理各式各樣的下游任務，而這個 BERT 的表現，以及準確度，都到了迄今仍無人能超越的地步。</p>
+<h2 id="如果有一天，有個模型幫助我們完成任何事，那該有多好？"><a href="#如果有一天，有個模型幫助我們完成任何事，那該有多好？" class="headerlink" title="如果有一天，有個模型幫助我們完成任何事，那該有多好？"></a>如果有一天，有個模型幫助我們完成任何事，那該有多好？</h2><p>話說得有點誇張，不過當時 BERT 模型的釋出，確確實實地撼動了計算語言學界與自然語言處理業界。在那篇被引用了四萬多次的論文（<a target="_blank" rel="noopener" href="https://arxiv.org/abs/1810.04805">BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding</a>）之中，介紹了如何用 BERT 進行兩階段的訓練方法，幫助後續自然語言的處理任務。</p>
+<h2 id="預訓練模型的訓練方法：遷移學習（Transfer-Learning）"><a href="#預訓練模型的訓練方法：遷移學習（Transfer-Learning）" class="headerlink" title="預訓練模型的訓練方法：遷移學習（Transfer Learning）"></a>預訓練模型的訓練方法：遷移學習（Transfer Learning）</h2><p>如果說能夠先訓練出一個對自然語言有一個大致了解的模型，並且基於這模型再針對各種不同下游任務進行調整，這種方法稱為：<strong>遷移學習（Transfer Learning）</strong>。這篇論文的作者就是為了實現這一個目標，將 Transformer 中的 encoder、大量的文本，以及針對目標進行的預訓練，來搭建整個 BERT 模型。而作者為了要達成這個目標，將訓練過程分成兩個階段：</p>
+<p><img src="https://leemeng.tw/images/bert/bert-2phase.jpg"></p>
+<ol>
+<li><strong>預訓練（Pretraining）</strong><br>在論文中有提到，為了要訓練這樣的模型，首先會進行兩種預訓練任務，分別為<strong>克漏字填空</strong>、以及<strong>下文預測</strong>。對於我們人類來說，要理解自然語言是輕而易舉的事，但對於電腦來說卻是一件難如登天的任務。我們一一來說明模型的訓練過程。<ul>
+<li>克漏字填空（Mask Language Model）<br> 比較專業一點的名詞稱為 <strong>Masked Language Model（MLM）</strong>。之所以會說這是克漏字填空，其實因為這完完全全就是我們高中在學英文時最討厭的那種題型，只是我們把它拿給機器來做。大家在圖中可以看到，這些句子在丟進去模型進行訓練的時候，會把一些字詞遮蓋起來，讓模型去預測被遮蓋起來的字詞是什麼。若是以圖中李宏毅老師的簡報為例的話，我們人類很快就可以知道 Mask</li>
+<li>下文預測（Next Sentence Prediction）<br> 英文又叫做 Next Sentence Prediciton (NSP)。其實就是預測下一個可能的句子是什麼。要以這種方式對模型進行預訓練，其實就是為了要解決例如文本生成，或是 QA 的任務。</li>
+</ul>
+</li>
+</ol>
+<p><img src="https://leemeng.tw/images/bert/bert-pretrain-tasks.jpg"></p>
+<ol start="2">
+<li><strong>模型微調（Fine-Tuning）</strong><br>前面的模型訓練結束後，再針對不同的下游任務進行微調。在論文中，作者將模型進行微調後，都達到了空前的正確率。這部分的詳細做法，我們留到明天再來詳細講解。今天只會簡單地介紹 BERT，讓各位先有個概念即可。這些任務包括了以下四種，分別為：<strong>單一句子分類</strong>、<strong>單一句子標註</strong>、<strong>成對句子預測</strong>，以及<strong>問答任務</strong>。明天我們再詳細介紹。</li>
+</ol>
+<p><img src="https://leemeng.tw/images/bert/bert_fine_tuning_tasks.jpg"></p>
+<h2 id="跟使用-LSTM-訓練的模型有什麼不一樣？"><a href="#跟使用-LSTM-訓練的模型有什麼不一樣？" class="headerlink" title="跟使用 LSTM 訓練的模型有什麼不一樣？"></a>跟使用 LSTM 訓練的模型有什麼不一樣？</h2><p>看到這邊，大家可能想說，咦？那跟先前介紹的使用 LSTM 訓練的模型，有什麼差別？好像就是個很厲害的語言模型不是嗎？為什麼好像 BERT 獲得較高的關注？不公平啊！其實使用 LSTM 訓練的模型跟 BERT 有一些結構上還有運用上的差異及差異，這就讓我們一一來看看是怎麼回事吧！</p>
+<ul>
+<li><strong>雙向架構：</strong> 因為前面所說的克漏字填空任務，相較於過去介紹過的模型來說，可以幫助模型確實地「雙向」理解文本。也就是說，雖然説是雙向，但事實上透過 Transformer 中的自注意力機制，對所有字來說，彼此之間的關係「既很近又很遠」，你可以好像就在我身邊，但你其實卻又遠在天邊 <del>就像你的女朋友一樣</del> 。那因為這樣的特性，讓 BERT 模型確實地展露出 「天涯若比鄰」的概念。所以說 BERT 實際上<strong>並不是雙向，但是卻有著雙向的特性，達成了雙向欲達成的目標，因此有了比雙向還要更優秀的理解上下文的能力</strong> <del>這就是為什麼我說其實 BERT 並不是 Bidirectional 的緣故，但人工智慧學家為了湊出 BERT 硬給了他一個 B 開頭的字</del></li>
+<li><strong>適合大量資料訓練：</strong> 相較於其它用 LSTM 訓練而成的深度學習模型，用 Transformer 訓練的模型可以透過平行運算的方式，而這很適合幫助進行資料大的模型訓練。所謂平行運算，簡單來說，就是模型可以將一份大資料分成很多個小部分資料進行計算，比起以往全部的資料一次計算的方式來說，平行運算的速度快非常多，而 BERT 適合這種方式。</li>
+</ul>
+<p>好，今天就講到這，明天就上我們拿起放大鏡，來一一了解 BERT 的訓練過程以及下游任務的應用囉！明天見。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%87%AA%E7%84%B6%E8%AA%9E%E8%A8%80%E8%99%95%E7%90%86/" rel="tag"># 自然語言處理</a>
+              <a href="/tags/NLP/" rel="tag"># NLP</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/01/08/NLP%E3%80%91Day-21-%E6%89%8B%E6%8A%8A%E6%89%8B%E6%95%99%E4%BD%A0%E5%A6%82%E4%BD%95%E5%88%A9%E7%94%A8-Python-%E6%90%AD%E5%BB%BA-Tensorflow-%E7%9A%84%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92%E6%A8%A1%E5%9E%8B/" rel="prev" title="NLP】Day 21: 手把手教你如何利用 Python 搭建 Tensorflow 的深度學習模型 ">
+                  <i class="fa fa-chevron-left"></i> NLP】Day 21: 手把手教你如何利用 Python 搭建 Tensorflow 的深度學習模型 
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/01/08/%E3%80%90NLP%E3%80%91Day-23-%E5%B9%AB%E4%BD%A0%E8%A7%A3%E6%B1%BA%E5%90%84%E9%A1%9ENLP%E4%BB%BB%E5%8B%99%E7%9A%84BERT%EF%BC%8C%E4%BB%A5%E5%8F%8A%E5%85%B6%E4%BB%96%E5%9C%A8%E8%8A%9D%E9%BA%BB%E8%A1%97%E7%9A%84%E5%A5%BD%E6%8D%A7%E6%B2%B9%E5%80%91%EF%BC%88%E4%B8%8B%EF%BC%89/" rel="next" title="【NLP】Day 23: 幫你解決各類NLP任務的BERT，以及其他在芝麻街的好捧油們（下）">
+                  【NLP】Day 23: 幫你解決各類NLP任務的BERT，以及其他在芝麻街的好捧油們（下） <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa-solid fa-code"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hao Yun Chuang (Milan)</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/assets/hijiki.model.json"},"display":{"superSample":2,"width":250,"height":500,"position":"right","hOffset":-30,"vOffset":-130},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"log":false});</script></body>
+</html>

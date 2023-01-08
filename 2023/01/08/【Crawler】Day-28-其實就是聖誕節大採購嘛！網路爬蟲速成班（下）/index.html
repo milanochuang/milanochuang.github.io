@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/icon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/icon.png">
+  <link rel="mask-icon" href="/images/icon.png" color="#222">
+  <meta name="google-site-verification" content="DMyRve2tDXDJqmJpSS4BaBWT1R0ZCH9n_EsCnROTiM0">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha256-xejo6yLi6vGtAjcMIsY8BHdKsLg7QynVlFMzdQgUuy8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"milanochuang.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.12.3","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="聖誕快樂！你這骯髒的小畜生！《小鬼當家2》  昨天我們把所有寫爬蟲時可能會需要的先備知識都學起來了，今天就要直接進入爬蟲主題啦！以往我在教同學寫網路爬蟲的時候，我都會用一個我自己原創的比喻：聖誕節大採購！且聽我娓娓道來吧！ 爬蟲出動！過去從來沒有接觸過網路爬蟲的人，可能會覺得爬蟲是一個很難理解的技術，對初學者而言就更不用說了。但其實爬蟲的概念很簡單，就是：  把所有要爬網頁瀏覽一遍，把我們要的資">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Crawler】Day 28: 其實就是聖誕節大採購嘛！網路爬蟲速成班（下）">
+<meta property="og:url" content="https://milanochuang.github.io/2023/01/08/%E3%80%90Crawler%E3%80%91Day-28-%E5%85%B6%E5%AF%A6%E5%B0%B1%E6%98%AF%E8%81%96%E8%AA%95%E7%AF%80%E5%A4%A7%E6%8E%A1%E8%B3%BC%E5%98%9B%EF%BC%81%E7%B6%B2%E8%B7%AF%E7%88%AC%E8%9F%B2%E9%80%9F%E6%88%90%E7%8F%AD%EF%BC%88%E4%B8%8B%EF%BC%89/index.html">
+<meta property="og:site_name" content="米蘭牛角尖">
+<meta property="og:description" content="聖誕快樂！你這骯髒的小畜生！《小鬼當家2》  昨天我們把所有寫爬蟲時可能會需要的先備知識都學起來了，今天就要直接進入爬蟲主題啦！以往我在教同學寫網路爬蟲的時候，我都會用一個我自己原創的比喻：聖誕節大採購！且聽我娓娓道來吧！ 爬蟲出動！過去從來沒有接觸過網路爬蟲的人，可能會覺得爬蟲是一個很難理解的技術，對初學者而言就更不用說了。但其實爬蟲的概念很簡單，就是：  把所有要爬網頁瀏覽一遍，把我們要的資">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://media4.giphy.com/media/l2YWiHWiFHwmbwIso/giphy.gif">
+<meta property="og:image" content="https://i.imgur.com/pwqViJm.png">
+<meta property="article:published_time" content="2023-01-08T12:04:00.000Z">
+<meta property="article:modified_time" content="2023-01-08T12:04:43.658Z">
+<meta property="article:author" content="Hao Yun Chuang (Milan)">
+<meta property="article:tag" content="自然語言處理">
+<meta property="article:tag" content="程式工具">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://media4.giphy.com/media/l2YWiHWiFHwmbwIso/giphy.gif">
+
+
+<link rel="canonical" href="https://milanochuang.github.io/2023/01/08/%E3%80%90Crawler%E3%80%91Day-28-%E5%85%B6%E5%AF%A6%E5%B0%B1%E6%98%AF%E8%81%96%E8%AA%95%E7%AF%80%E5%A4%A7%E6%8E%A1%E8%B3%BC%E5%98%9B%EF%BC%81%E7%B6%B2%E8%B7%AF%E7%88%AC%E8%9F%B2%E9%80%9F%E6%88%90%E7%8F%AD%EF%BC%88%E4%B8%8B%EF%BC%89/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://milanochuang.github.io/2023/01/08/%E3%80%90Crawler%E3%80%91Day-28-%E5%85%B6%E5%AF%A6%E5%B0%B1%E6%98%AF%E8%81%96%E8%AA%95%E7%AF%80%E5%A4%A7%E6%8E%A1%E8%B3%BC%E5%98%9B%EF%BC%81%E7%B6%B2%E8%B7%AF%E7%88%AC%E8%9F%B2%E9%80%9F%E6%88%90%E7%8F%AD%EF%BC%88%E4%B8%8B%EF%BC%89/","path":"2023/01/08/【Crawler】Day-28-其實就是聖誕節大採購嘛！網路爬蟲速成班（下）/","title":"【Crawler】Day 28: 其實就是聖誕節大採購嘛！網路爬蟲速成班（下）"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>【Crawler】Day 28: 其實就是聖誕節大採購嘛！網路爬蟲速成班（下） | 米蘭牛角尖</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">米蘭牛角尖</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">計算語言學的學習紀錄，偶爾可能會出現野生的電影評論？</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>關於</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分類</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>所有文章</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%88%AC%E8%9F%B2%E5%87%BA%E5%8B%95%EF%BC%81"><span class="nav-number">1.</span> <span class="nav-text">爬蟲出動！</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B6%B2%E9%A0%81%E6%9E%B6%E6%A7%8B"><span class="nav-number">1.1.</span> <span class="nav-text">網頁架構</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%82%BA%E4%BB%80%E9%BA%BC%E6%98%AF%E8%81%96%E8%AA%95%E7%AF%80%E7%9A%84%E5%A4%A7%E6%8E%A1%E8%B3%BC%EF%BC%81%EF%BC%9F"><span class="nav-number">1.2.</span> <span class="nav-text">為什麼是聖誕節的大採購！？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E9%BA%BC%E6%84%8F%E6%80%9D%EF%BC%9F%E6%88%91%E5%80%91%E4%BE%86%E5%AF%AB%E5%AF%AB%E7%A8%8B%E5%BC%8F%E7%A2%BC"><span class="nav-number">1.3.</span> <span class="nav-text">什麼意思？我們來寫寫程式碼</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A6%81%E6%89%BE%E5%89%8D%E9%9D%A2%E9%82%A3%E4%BA%9B%E6%A8%99%E7%B1%A4%E4%BD%8D%E7%BD%AE%E5%A5%BD%E5%83%8F%E5%BE%88%E5%AE%B9%E6%98%93%EF%BC%9F"><span class="nav-number">1.4.</span> <span class="nav-text">要找前面那些標籤位置好像很容易？</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Hao Yun Chuang (Milan)"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Hao Yun Chuang (Milan)</p>
+  <div class="site-description" itemprop="description">目前就讀於政大語言所，研究興趣為計算語言學<br/></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">32</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/milanochuang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;milanochuang" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:milanochuang@gmail.com" title="E-Mail → mailto:milanochuang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/milanochuang" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;milanochuang" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/milanochuang" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;milanochuang" rel="noopener" target="_blank"><i class="fab fa-facebook fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://instagram.com/milanochuang" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;milanochuang" rel="noopener" target="_blank"><i class="fab fa-instagram fa-fw"></i></a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/milanochuang" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://milanochuang.github.io/2023/01/08/%E3%80%90Crawler%E3%80%91Day-28-%E5%85%B6%E5%AF%A6%E5%B0%B1%E6%98%AF%E8%81%96%E8%AA%95%E7%AF%80%E5%A4%A7%E6%8E%A1%E8%B3%BC%E5%98%9B%EF%BC%81%E7%B6%B2%E8%B7%AF%E7%88%AC%E8%9F%B2%E9%80%9F%E6%88%90%E7%8F%AD%EF%BC%88%E4%B8%8B%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Hao Yun Chuang (Milan)">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="米蘭牛角尖">
+      <meta itemprop="description" content="目前就讀於政大語言所，研究興趣為計算語言學<br/>">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="【Crawler】Day 28: 其實就是聖誕節大採購嘛！網路爬蟲速成班（下） | 米蘭牛角尖">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【Crawler】Day 28: 其實就是聖誕節大採購嘛！網路爬蟲速成班（下）
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2023-01-08 20:04:00 / 修改時間：20:04:43" itemprop="dateCreated datePublished" datetime="2023-01-08T20:04:00+08:00">2023-01-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%B6%B2%E8%B7%AF%E7%88%AC%E8%9F%B2/" itemprop="url" rel="index"><span itemprop="name">網路爬蟲</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%B6%B2%E8%B7%AF%E7%88%AC%E8%9F%B2/natural-language-processing/" itemprop="url" rel="index"><span itemprop="name">自然語言處理</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <blockquote>
+<p>聖誕快樂！你這骯髒的小畜生！<br>《小鬼當家2》</p>
+</blockquote>
+<p>昨天我們把所有寫爬蟲時可能會需要的先備知識都學起來了，今天就要直接進入爬蟲主題啦！以往我在教同學寫網路爬蟲的時候，我都會用一個我自己原創的比喻：<strong>聖誕節大採購</strong>！且聽我娓娓道來吧！</p>
+<h2 id="爬蟲出動！"><a href="#爬蟲出動！" class="headerlink" title="爬蟲出動！"></a>爬蟲出動！</h2><p>過去從來沒有接觸過網路爬蟲的人，可能會覺得爬蟲是一個很難理解的技術，對初學者而言就更不用說了。但其實爬蟲的概念很簡單，就是：</p>
+<blockquote>
+<p>把所有要爬網頁瀏覽一遍，把我們要的資訊整理成結構化資料，接著儲存成我們想要的檔案形式。</p>
+</blockquote>
+<p>好像還是有點抽象。沒關係，我們從了解一個網路的架構開始談起。網頁通常會分成兩種：</p>
+<ul>
+<li>動態網頁</li>
+<li>靜態網頁</li>
+</ul>
+<p>動態網頁不是我們平常會看到的那些有很精美的動畫，才能叫做動態網頁。有時候，一個靜態網頁也可能會有很厲害的動畫。決定一個網頁是靜態還是動態，取決於他是否有連接至資料庫。</p>
+<p>對爬蟲而言，抓取靜態跟動態網頁各自有不一樣的寫法。動態網頁稍微複雜一點，今天先講抓取靜態網頁的網路爬蟲寫法。</p>
+<h3 id="網頁架構"><a href="#網頁架構" class="headerlink" title="網頁架構"></a>網頁架構</h3><p>一個網站的基本架構，通常是 html + CSS (+ javascript)</p>
+<p>首先，我們在網路上看到的所有網站，都是透過一個一個的 html 檔所組成的，這些 html 檔又被稱為標籤語言，這是因為你可以看到這是由很多的 <code>&lt;label&gt;</code> 組成的語言，這些標籤中又各自帶有不同的特性。我們先來看 html 檔長什麼樣子，我通常都會把 html 檔稱為<strong>聖誕樹</strong>。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">&quot;en&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">&quot;X-UA-Compatible&quot;</span> <span class="attr">content</span>=<span class="string">&quot;IE=edge&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;viewport&quot;</span> <span class="attr">content</span>=<span class="string">&quot;width=device-width, initial-scale=1.0&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    </span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>之後，在網頁上有時候會再加上 CSS 檔，來裝飾網頁，讓網頁變得更加繽紛。而我通常會稱這些 CSS 檔為<strong>聖誕樹裝飾品還有裝飾燈</strong>。</p>
+<p>有些網站會有 Javascript ，有些沒有。Javascript 主要是用來讓網站回應訪客的要求，並作出適當回饋；又或者是，可以透過 Javascript 來跟後端的資料庫進行溝通。因此我通常稱 Javascript 為<strong>聖誕樹裝飾燈的開關</strong>。</p>
+<p>所以說，爬蟲就是聖誕節搶購！</p>
+<h3 id="為什麼是聖誕節的大採購！？"><a href="#為什麼是聖誕節的大採購！？" class="headerlink" title="為什麼是聖誕節的大採購！？"></a>為什麼是聖誕節的大採購！？</h3><p>所以，如果要用聖誕節大採購來比喻爬蟲的話，基本上就是這樣：</p>
+<ul>
+<li>你可以將一個一個的網頁當作聖誕樹。</li>
+<li>網頁中的文字、連結，則是聖誕樹的裝飾品，也就是你需要的資料。</li>
+<li>你要做的，就是找到一棵一棵的聖誕樹，接著從一棵一棵聖誕樹的樹枝上找到你要的裝飾品。</li>
+<li>接著，將裝飾品裝到你的籃子裡，打包帶回家。</li>
+</ul>
+<p><img src="https://media4.giphy.com/media/l2YWiHWiFHwmbwIso/giphy.gif"></p>
+<h3 id="什麼意思？我們來寫寫程式碼"><a href="#什麼意思？我們來寫寫程式碼" class="headerlink" title="什麼意思？我們來寫寫程式碼"></a>什麼意思？我們來寫寫程式碼</h3><p>首先，我們要下載需要的套件。請先在終端機執行 <code>pip install</code>，爬蟲會用到的套件為 <code>BeautifulSoup</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install BeautifulSoup</span><br></pre></td></tr></table></figure>
+
+<p>如果說今天我們想爬 PTT 電影版的資料作為簡單範例，我們先執行以下程式：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup <span class="keyword">as</span> bs</span><br><span class="line">r = requests.get(<span class="string">&quot;https://www.ptt.cc/bbs/movie/index.html&quot;</span>)</span><br><span class="line">page = bs(r.text, <span class="string">&quot;html.parser&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(page)</span><br></pre></td></tr></table></figure>
+
+<p>就可以得到那個網頁的 html 檔！（注意，如果是動態網頁，很有可能就抓不到需要的內容，那時就需要另外一種寫法）以下貼一部分的輸出即可（我有特別擷取某一段，所以你的輸出會跟我長得不太一樣）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line"></span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;meta charset=&quot;utf-8&quot;/&gt;</span><br><span class="line">&lt;meta content=&quot;width=device-width, initial-scale=1&quot; name=&quot;viewport&quot;/&gt;</span><br><span class="line">&lt;title&gt;看板 movie 文章列表 - 批踢踢實業坊&lt;/title&gt;</span><br><span class="line">&lt;link href=&quot;//images.ptt.cc/bbs/v2.27/bbs-common.css&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot;/&gt;</span><br><span class="line">&lt;link href=&quot;//images.ptt.cc/bbs/v2.27/bbs-base.css&quot; media=&quot;screen&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot;/&gt;</span><br><span class="line">&lt;link href=&quot;//images.ptt.cc/bbs/v2.27/bbs-custom.css&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot;/&gt;</span><br><span class="line">&lt;link href=&quot;//images.ptt.cc/bbs/v2.27/pushstream.css&quot; media=&quot;screen&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot;/&gt;</span><br><span class="line">&lt;link href=&quot;//images.ptt.cc/bbs/v2.27/bbs-print.css&quot; media=&quot;print&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot;/&gt;</span><br><span class="line">&lt;script async=&quot;&quot; src=&quot;/cdn-cgi/challenge-platform/h/b/scripts/invisible.js?ts=1652421600&quot;&gt;&lt;/script&gt;&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;div id=&quot;topbar-container&quot;&gt;</span><br><span class="line">&lt;div class=&quot;bbs-content&quot; id=&quot;topbar&quot;&gt;</span><br><span class="line">&lt;a href=&quot;/bbs/&quot; id=&quot;logo&quot;&gt;批踢踢實業坊&lt;/a&gt;</span><br><span class="line">&lt;span&gt;›&lt;/span&gt;</span><br><span class="line">&lt;a class=&quot;board&quot; href=&quot;/bbs/movie/index.html&quot;&gt;&lt;span class=&quot;board-label&quot;&gt;看板 &lt;/span&gt;movie&lt;/a&gt;</span><br><span class="line">&lt;a class=&quot;right small&quot; href=&quot;/about.html&quot;&gt;關於我們&lt;/a&gt;</span><br><span class="line">&lt;a class=&quot;right small&quot; href=&quot;/contact.html&quot;&gt;聯絡資訊&lt;/a&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&lt;div id=&quot;main-container&quot;&gt;</span><br><span class="line">&lt;div id=&quot;action-bar-container&quot;&gt;</span><br><span class="line">&lt;div class=&quot;action-bar&quot;&gt;</span><br><span class="line">&lt;div class=&quot;btn-group btn-group-dir&quot;&gt;</span><br><span class="line">&lt;a class=&quot;btn selected&quot; href=&quot;/bbs/movie/index.html&quot;&gt;看板&lt;/a&gt;</span><br><span class="line">&lt;a class=&quot;btn&quot; href=&quot;/man/movie/index.html&quot;&gt;精華區&lt;/a&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&lt;div class=&quot;btn-group btn-group-paging&quot;&gt;</span><br><span class="line">&lt;a class=&quot;btn wide&quot; href=&quot;/bbs/movie/index1.html&quot;&gt;最舊&lt;/a&gt;</span><br><span class="line">&lt;a class=&quot;btn wide&quot; href=&quot;/bbs/movie/index9510.html&quot;&gt;‹ 上頁&lt;/a&gt;</span><br><span class="line">&lt;a class=&quot;btn wide disabled&quot;&gt;下頁 ›&lt;/a&gt;</span><br><span class="line">&lt;a class=&quot;btn wide&quot; href=&quot;/bbs/movie/index.html&quot;&gt;最新&lt;/a&gt;</span><br><span class="line">&lt;div class=&quot;r-ent&quot;&gt;</span><br><span class="line">&lt;div class=&quot;nrec&quot;&gt;&lt;span class=&quot;hl f2&quot;&gt;6&lt;/span&gt;&lt;/div&gt;</span><br><span class="line">&lt;div class=&quot;title&quot;&gt;</span><br><span class="line">&lt;a href=&quot;/bbs/movie/M.1652075354.A.59B.html&quot;&gt;[新聞] 民族誌紀錄片工作者，胡台麗逝世&lt;/a&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&lt;div class=&quot;meta&quot;&gt;</span><br><span class="line">&lt;div class=&quot;author&quot;&gt;mysmalllamb&lt;/div&gt;</span><br><span class="line">&lt;div class=&quot;article-menu&quot;&gt;</span><br><span class="line">&lt;div class=&quot;trigger&quot;&gt;⋯&lt;/div&gt;</span><br><span class="line">&lt;div class=&quot;dropdown&quot;&gt;</span><br><span class="line">&lt;div class=&quot;item&quot;&gt;&lt;a href=&quot;/bbs/movie/search?q=thread%3A%5B%E6%96%B0%E8%81%9E%5D+%E6%B0%91%E6%97%8F%E8%AA%8C%E7%B4%80%E9%8C%84%E7%89%87%E5%B7%A5%E4%BD%9C%E8%80%85%EF%BC%8C%E8%83%A1%E5%8F%B0%E9%BA%97%E9%80%9D%E4%B8%96&quot;&gt;搜尋同標題文章&lt;/a&gt;&lt;/div&gt;</span><br><span class="line">&lt;div class=&quot;item&quot;&gt;&lt;a href=&quot;/bbs/movie/search?q=author%3Amysmalllamb&quot;&gt;搜尋看板內 mysmalllamb 的文章&lt;/a&gt;&lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&lt;div class=&quot;date&quot;&gt; 5/09&lt;/div&gt;</span><br><span class="line">&lt;div class=&quot;mark&quot;&gt;&lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+
+<p>注意，我們現在目錄頁！但我們想要的資料在文章的網頁裡面。所以現在要找的是文章網頁的網址。仔細觀察一篇一篇的文章中，超連結通常會存在前面的標籤中，所以需要透過以下程式碼得到需要的那段 html：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">page.find(<span class="string">&quot;div&quot;</span>, <span class="string">&quot;r-ent&quot;</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&lt;div class=&quot;r-ent&quot;&gt;</span><br><span class="line">&lt;div class=&quot;nrec&quot;&gt;&lt;span class=&quot;hl f2&quot;&gt;6&lt;/span&gt;&lt;/div&gt;</span><br><span class="line">&lt;div class=&quot;title&quot;&gt;</span><br><span class="line">&lt;a href=&quot;/bbs/movie/M.1652075354.A.59B.html&quot;&gt;[新聞] 民族誌紀錄片工作者，胡台麗逝世&lt;/a&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&lt;div class=&quot;meta&quot;&gt;</span><br><span class="line">&lt;div class=&quot;author&quot;&gt;mysmalllamb&lt;/div&gt;</span><br><span class="line">&lt;div class=&quot;article-menu&quot;&gt;</span><br><span class="line">&lt;div class=&quot;trigger&quot;&gt;⋯&lt;/div&gt;</span><br><span class="line">&lt;div class=&quot;dropdown&quot;&gt;</span><br><span class="line">&lt;div class=&quot;item&quot;&gt;&lt;a href=&quot;/bbs/movie/search?q=thread%3A%5B%E6%96%B0%E8%81%9E%5D+%E6%B0%91%E6%97%8F%E8%AA%8C%E7%B4%80%E9%8C%84%E7%89%87%E5%B7%A5%E4%BD%9C%E8%80%85%EF%BC%8C%E8%83%A1%E5%8F%B0%E9%BA%97%E9%80%9D%E4%B8%96&quot;&gt;搜尋同標題文章&lt;/a&gt;&lt;/div&gt;</span><br><span class="line">&lt;div class=&quot;item&quot;&gt;&lt;a href=&quot;/bbs/movie/search?q=author%3Amysmalllamb&quot;&gt;搜尋看板內 mysmalllamb 的文章&lt;/a&gt;&lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&lt;div class=&quot;date&quot;&gt; 5/09&lt;/div&gt;</span><br><span class="line">&lt;div class=&quot;mark&quot;&gt;&lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+
+<p><code>.find</code>雖然可以找到第一篇文章的部分 html 檔可是我們需要的是所有文章，這時可以用另外一個函式 <code>.find_all()</code> 回傳的就會是一個<code>list</code>，這裡就不貼輸出了。</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">page.find_all(<span class="string">&quot;div&quot;</span>, <span class="string">&quot;r-ent&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>但記得，我們需要的是網址，但並不是每個標籤都有我們想要的網址，這時 <code>try...except...</code>就派上用場了。</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">divs = page.find_all(<span class="string">&quot;div&quot;</span>, <span class="string">&quot;r-ent&quot;</span>)</span><br><span class="line"><span class="keyword">for</span> div <span class="keyword">in</span> divs:</span><br><span class="line">  <span class="keyword">try</span>:</span><br><span class="line">    href = div.find(<span class="string">&#x27;a&#x27;</span>)[<span class="string">&#x27;href&#x27;</span>]</span><br><span class="line">    <span class="built_in">print</span>(href)</span><br><span class="line">  <span class="keyword">except</span>:</span><br><span class="line">    <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+
+<p>這時，我們就可以得到網址的「後半部分」</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">/bbs/movie/M.1652075354.A.59B.html</span><br><span class="line">/bbs/movie/M.1652076208.A.B5C.html</span><br><span class="line">/bbs/movie/M.1652077025.A.469.html</span><br><span class="line">/bbs/movie/M.1652077434.A.D63.html</span><br><span class="line">/bbs/movie/M.1652077492.A.F65.html</span><br><span class="line">/bbs/movie/M.1652078673.A.2B7.html</span><br><span class="line">/bbs/movie/M.1652079315.A.0AC.html</span><br><span class="line">/bbs/movie/M.1652079447.A.571.html</span><br><span class="line">/bbs/movie/M.1652081468.A.575.html</span><br><span class="line">/bbs/movie/M.1652081735.A.D22.html</span><br><span class="line">/bbs/movie/M.1652083107.A.CED.html</span><br><span class="line">/bbs/movie/M.1652086174.A.524.html</span><br><span class="line">/bbs/movie/M.1652087613.A.7D7.html</span><br><span class="line">/bbs/movie/M.1652088346.A.D6C.html</span><br><span class="line">/bbs/movie/M.1652089057.A.132.html</span><br><span class="line">/bbs/movie/M.1652089740.A.BA4.html</span><br><span class="line">/bbs/movie/M.1652089754.A.A1E.html</span><br><span class="line">/bbs/movie/M.1652092096.A.6BC.html</span><br><span class="line">/bbs/movie/M.1652097109.A.975.html</span><br><span class="line">/bbs/movie/M.1630756788.A.1FE.html</span><br><span class="line">/bbs/movie/M.1636002497.A.7EC.html</span><br></pre></td></tr></table></figure>
+
+<p>重新整理一遍，讓輸出的結果是完整網址。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">divs = page.find_all(<span class="string">&quot;div&quot;</span>, <span class="string">&quot;r-ent&quot;</span>)</span><br><span class="line">baseURL = <span class="string">&quot;https://www.ptt.cc&quot;</span></span><br><span class="line"><span class="keyword">for</span> div <span class="keyword">in</span> divs:</span><br><span class="line">  <span class="keyword">try</span>:</span><br><span class="line">    href = baseURL+div.find(<span class="string">&#x27;a&#x27;</span>)[<span class="string">&#x27;href&#x27;</span>]</span><br><span class="line">    <span class="built_in">print</span>(href)</span><br><span class="line">  <span class="keyword">except</span>:</span><br><span class="line">    <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+
+<p>現在試著把他包成函式：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">indexGrabber</span>(<span class="params">inputURL</span>):</span><br><span class="line">  r = requests.get(inputURL)</span><br><span class="line">  page = bs(r.text, <span class="string">&quot;html.parser&quot;</span>)</span><br><span class="line">  divs = page.find_all(<span class="string">&quot;div&quot;</span>, <span class="string">&quot;r-ent&quot;</span>)</span><br><span class="line">  UrlLIST = []</span><br><span class="line">  baseURL = <span class="string">&quot;https://www.ptt.cc&quot;</span></span><br><span class="line">  <span class="keyword">for</span> div <span class="keyword">in</span> divs:</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">      href = baseURL + div.find(<span class="string">&#x27;a&#x27;</span>)[<span class="string">&#x27;href&#x27;</span>]</span><br><span class="line">      UrlLIST.append(href)</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">      <span class="keyword">pass</span></span><br><span class="line">  <span class="keyword">return</span> UrlLIST</span><br><span class="line"></span><br><span class="line">indexGrabber(<span class="string">&quot;https://www.ptt.cc/bbs/movie/index9501.html&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>我們接下來抓取目錄頁的網址，這樣才能將前面的函式用上。</p>
+<p><img src="https://i.imgur.com/pwqViJm.png"></p>
+<p>可以發現，一個一個的目錄頁，是由後面那段數字組成，所以到時候我們用<code>for ... in range():</code> 寫就可以了。（大部分目錄頁都會是用這種寫法，仔細觀察！）</p>
+<h3 id="要找前面那些標籤位置好像很容易？"><a href="#要找前面那些標籤位置好像很容易？" class="headerlink" title="要找前面那些標籤位置好像很容易？"></a>要找前面那些標籤位置好像很容易？</h3><p>前面要找那些資訊的時候，你可能發現在參數中，我加上了<code>(&quot;div&quot;, &quot;r-ent&quot;)</code> 這是因為，PTT的結構相對簡單，可是如果我們碰到結構複雜的網頁，該怎麼辦？我們可以用以下工具，你可以根據你的瀏覽器選擇對應的套件：</p>
+<ul>
+<li>Chrome: <a target="_blank" rel="noopener" href="https://chrome.google.com/webstore/detail/chropath/ljngjbnaijcbncmcnjfhigebomdlkcjo?utm_source=chrome-ntp-icon">ChroPath</a><ul>
+<li>(網頁任意處右鍵) -&gt; 檢查 -&gt; 元素 -&gt; (右側「樣式」列的最右側，若沒看到則按”&gt;&gt;”) -&gt; (檢查元素) -&gt; (複製CSS或XPath)</li>
+</ul>
+</li>
+<li>Firefox: <a target="_blank" rel="noopener" href="https://addons.mozilla.org/zh-TW/firefox/addon/selectorshub/?utm_source=addons.mozilla.org&utm_medium=referral&utm_content=search">SelectorsHub</a><ul>
+<li>(網頁任意處右鍵) -&gt; 檢測 -&gt; 檢測器 -&gt; (右側「樣式」列的最右側，若沒看到則按向下箭頭樣式) -&gt; (檢查元素) -&gt; (複製CSS或XPath)</li>
+<li>Alternatives: 移動游標至欲檢測之目標上方 -&gt; (右鍵) -&gt; SelectorsHub -&gt; “Copy Rel cssSelector” or “Copy Rel XPath”</li>
+</ul>
+</li>
+</ul>
+<p>現在來練習 imdb 的網站，我們要將標題跟分數抓下來，透過以上方式，我們可以找到標題跟分數的位置如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">titlePath = <span class="string">&quot;.sc-b73cd867-0.eKrKux&quot;</span></span><br><span class="line">scorePath = <span class="string">&quot;div[class=&#x27;sc-db8c1937-0 eGmDjE sc-94726ce4-4 dyFVGl&#x27;] span[class=&#x27;sc-7ab21ed2-1 jGRxWM&#x27;]&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>那我們執行跟前面一樣的動作：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup <span class="keyword">as</span> bs</span><br><span class="line">r = requests.get(<span class="string">&quot;https://www.imdb.com/title/tt3783958/?ref_=fn_al_tt_1&quot;</span>)</span><br><span class="line">page = bs(r.text, <span class="string">&quot;html.parser&quot;</span>)</span><br><span class="line">rawTitle = page.select(titlePath)</span><br><span class="line">rawScore = page.select(scorePath)</span><br><span class="line"><span class="built_in">print</span>(rawTitle)</span><br><span class="line"><span class="built_in">print</span>(rawScore)</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">type</span>(rawTitle))</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">type</span>(rawScore))</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[&lt;h1 class=&quot;sc-b73cd867-0 eKrKux&quot; data-testid=&quot;hero-title-block__title&quot; textlength=&quot;10&quot;&gt;La La Land&lt;/h1&gt;]</span><br><span class="line">[&lt;span class=&quot;sc-7ab21ed2-1 jGRxWM&quot;&gt;8.0&lt;/span&gt;]</span><br><span class="line">&lt;class &#x27;list&#x27;&gt;</span><br><span class="line">&lt;class &#x27;list&#x27;&gt;</span><br></pre></td></tr></table></figure>
+
+<p>可以發現輸出的資料型態都是 <code>list</code>。所以要得到我們需要的資訊，除了指定索引值之外，需要再加上<code>.text</code>，告訴爬蟲，我們只需要中間的字串即可。我們可以這麼做：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">title = rawTitle[<span class="number">0</span>].text</span><br><span class="line">score = rawScore[<span class="number">0</span>].text</span><br><span class="line"><span class="built_in">print</span>(title)</span><br><span class="line"><span class="built_in">print</span>(score)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">La La Land</span><br><span class="line">8.0</span><br></pre></td></tr></table></figure>
+
+<p>好，寫到這邊，大家應該都對爬蟲有概念了，若有任何問題可以一起來討論喔！我們明天見。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%87%AA%E7%84%B6%E8%AA%9E%E8%A8%80%E8%99%95%E7%90%86/" rel="tag"># 自然語言處理</a>
+              <a href="/tags/%E7%A8%8B%E5%BC%8F%E5%B7%A5%E5%85%B7/" rel="tag"># 程式工具</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/01/08/%E3%80%90Crawler%E3%80%91Day-27-%E7%88%AC%E7%88%AC%E7%88%AC%EF%BC%8C%E5%90%91%E5%89%8D%E7%88%AC%EF%BC%81%E7%B6%B2%E8%B7%AF%E7%88%AC%E8%9F%B2%E9%80%9F%E6%88%90%E7%8F%AD%EF%BC%81%EF%BC%88%E4%B8%8A%EF%BC%89/" rel="prev" title="【Crawler】Day 27: 爬爬爬，向前爬！網路爬蟲速成班！（上）">
+                  <i class="fa fa-chevron-left"></i> 【Crawler】Day 27: 爬爬爬，向前爬！網路爬蟲速成班！（上）
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/01/08/%E3%80%90Other%E3%80%91Day-29-%E9%99%A4%E4%BA%86%E8%87%AA%E7%84%B6%E8%AA%9E%E8%A8%80%E8%99%95%E7%90%86%EF%BC%8C%E6%88%91%E5%80%91%E9%82%84%E8%A6%81-%EF%BC%9F%E8%99%95%E7%90%86%E8%B3%87%E6%96%99%E6%99%82%EF%BC%8C%E4%BD%A0%E5%8F%AF%E8%83%BD%E9%9C%80%E8%A6%81%E6%9C%83%E7%9A%84%E9%80%99%E4%BA%9B%E9%82%A3%E4%BA%9B/" rel="next" title="【Other】Day 29: 除了自然語言處理，我們還要...？處理資料時，你可能需要會的這些那些">
+                  【Other】Day 29: 除了自然語言處理，我們還要...？處理資料時，你可能需要會的這些那些 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa-solid fa-code"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hao Yun Chuang (Milan)</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/assets/hijiki.model.json"},"display":{"superSample":2,"width":250,"height":500,"position":"right","hOffset":-30,"vOffset":-130},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"log":false});</script></body>
+</html>

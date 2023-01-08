@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/icon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/icon.png">
+  <link rel="mask-icon" href="/images/icon.png" color="#222">
+  <meta name="google-site-verification" content="DMyRve2tDXDJqmJpSS4BaBWT1R0ZCH9n_EsCnROTiM0">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha256-xejo6yLi6vGtAjcMIsY8BHdKsLg7QynVlFMzdQgUuy8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"milanochuang.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.12.3","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="我們尋找的並不應該是英雄，而是一個好的想法Noam Chomsky  前言還記得碩一下的時候，Lab 的老師找了以前一個現在在擔任軟體工程師的同學來課堂上演講，還有職涯分享。這位工程師說：「自然語言處理在台灣還不算特別盛行，但我覺得有慢慢被重視的感覺。就像每年 台灣PyCon 都會有一位名字叫 PeterWolf 的人，都會在 PyCon 上分享自然語言處理的技術，我覺得他超級猛。」 心想，真巧">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【NLP】Day 25: 自然語言處理的另外一種想像！Articut、Loki 以及他的好助手們！（上）">
+<meta property="og:url" content="https://milanochuang.github.io/2023/01/08/%E3%80%90NLP%E3%80%91Day-25-%E8%87%AA%E7%84%B6%E8%AA%9E%E8%A8%80%E8%99%95%E7%90%86%E7%9A%84%E5%8F%A6%E5%A4%96%E4%B8%80%E7%A8%AE%E6%83%B3%E5%83%8F%EF%BC%81Articut%E3%80%81Loki-%E4%BB%A5%E5%8F%8A%E4%BB%96%E7%9A%84%E5%A5%BD%E5%8A%A9%E6%89%8B%E5%80%91%EF%BC%81%EF%BC%88%E4%B8%8A%EF%BC%89/index.html">
+<meta property="og:site_name" content="米蘭牛角尖">
+<meta property="og:description" content="我們尋找的並不應該是英雄，而是一個好的想法Noam Chomsky  前言還記得碩一下的時候，Lab 的老師找了以前一個現在在擔任軟體工程師的同學來課堂上演講，還有職涯分享。這位工程師說：「自然語言處理在台灣還不算特別盛行，但我覺得有慢慢被重視的感覺。就像每年 台灣PyCon 都會有一位名字叫 PeterWolf 的人，都會在 PyCon 上分享自然語言處理的技術，我覺得他超級猛。」 心想，真巧">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/The_X-bar_structure_of_%22John_studies_linguistics_at_the_university%22.png/600px-The_X-bar_structure_of_%22John_studies_linguistics_at_the_university%22.png">
+<meta property="article:published_time" content="2023-01-08T12:00:55.000Z">
+<meta property="article:modified_time" content="2023-01-08T12:01:13.255Z">
+<meta property="article:author" content="Hao Yun Chuang (Milan)">
+<meta property="article:tag" content="自然語言處理, 計算語言學, 機器學習, 人工智慧, 電影">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/The_X-bar_structure_of_%22John_studies_linguistics_at_the_university%22.png/600px-The_X-bar_structure_of_%22John_studies_linguistics_at_the_university%22.png">
+
+
+<link rel="canonical" href="https://milanochuang.github.io/2023/01/08/%E3%80%90NLP%E3%80%91Day-25-%E8%87%AA%E7%84%B6%E8%AA%9E%E8%A8%80%E8%99%95%E7%90%86%E7%9A%84%E5%8F%A6%E5%A4%96%E4%B8%80%E7%A8%AE%E6%83%B3%E5%83%8F%EF%BC%81Articut%E3%80%81Loki-%E4%BB%A5%E5%8F%8A%E4%BB%96%E7%9A%84%E5%A5%BD%E5%8A%A9%E6%89%8B%E5%80%91%EF%BC%81%EF%BC%88%E4%B8%8A%EF%BC%89/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://milanochuang.github.io/2023/01/08/%E3%80%90NLP%E3%80%91Day-25-%E8%87%AA%E7%84%B6%E8%AA%9E%E8%A8%80%E8%99%95%E7%90%86%E7%9A%84%E5%8F%A6%E5%A4%96%E4%B8%80%E7%A8%AE%E6%83%B3%E5%83%8F%EF%BC%81Articut%E3%80%81Loki-%E4%BB%A5%E5%8F%8A%E4%BB%96%E7%9A%84%E5%A5%BD%E5%8A%A9%E6%89%8B%E5%80%91%EF%BC%81%EF%BC%88%E4%B8%8A%EF%BC%89/","path":"2023/01/08/【NLP】Day-25-自然語言處理的另外一種想像！Articut、Loki-以及他的好助手們！（上）/","title":"【NLP】Day 25: 自然語言處理的另外一種想像！Articut、Loki 以及他的好助手們！（上）"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>【NLP】Day 25: 自然語言處理的另外一種想像！Articut、Loki 以及他的好助手們！（上） | 米蘭牛角尖</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">米蘭牛角尖</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">計算語言學的學習紀錄，偶爾可能會出現野生的電影評論？</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>關於</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分類</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>所有文章</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AA%9E%E8%A8%80%E5%AD%B8%E6%98%AF%E4%BB%80%E9%BA%BC%EF%BC%9F%E8%83%BD%E5%90%83%E5%97%8E%EF%BC%9F"><span class="nav-number">2.</span> <span class="nav-text">語言學是什麼？能吃嗎？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%80%8C-Articut%EF%BC%8C%E5%B0%B1%E6%98%AF%E5%9F%BA%E6%96%BC-X-bar-theory-%E6%89%80%E6%89%93%E9%80%A0%E7%9A%84%E6%96%B7%E8%A9%9E%E7%B3%BB%E7%B5%B1%E3%80%82"><span class="nav-number">2.0.1.</span> <span class="nav-text">而 Articut，就是基於 X-bar theory 所打造的斷詞系統。</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Chomsky-%E6%98%AF%E6%80%8E%E9%BA%BC%E7%9C%8B%E5%BE%85-NLP-%E7%9A%84%EF%BC%9F%E4%BE%86%E6%BA%90"><span class="nav-number">2.1.</span> <span class="nav-text">Chomsky 是怎麼看待 NLP 的？來源</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Articut"><span class="nav-number">3.</span> <span class="nav-text">Articut</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A5%B5%E9%AB%98%E7%9A%84%E6%A8%A1%E5%9E%8B%E8%A7%A3%E9%87%8B%E5%8A%9B"><span class="nav-number">3.1.</span> <span class="nav-text">極高的模型解釋力</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%9F%E8%83%BD%E5%A4%9A%E5%90%88%E4%B8%80"><span class="nav-number">3.2.</span> <span class="nav-text">功能多合一</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Hao Yun Chuang (Milan)"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Hao Yun Chuang (Milan)</p>
+  <div class="site-description" itemprop="description">目前就讀於政大語言所，研究興趣為計算語言學<br/></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">32</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/milanochuang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;milanochuang" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:milanochuang@gmail.com" title="E-Mail → mailto:milanochuang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/milanochuang" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;milanochuang" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/milanochuang" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;milanochuang" rel="noopener" target="_blank"><i class="fab fa-facebook fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://instagram.com/milanochuang" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;milanochuang" rel="noopener" target="_blank"><i class="fab fa-instagram fa-fw"></i></a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/milanochuang" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://milanochuang.github.io/2023/01/08/%E3%80%90NLP%E3%80%91Day-25-%E8%87%AA%E7%84%B6%E8%AA%9E%E8%A8%80%E8%99%95%E7%90%86%E7%9A%84%E5%8F%A6%E5%A4%96%E4%B8%80%E7%A8%AE%E6%83%B3%E5%83%8F%EF%BC%81Articut%E3%80%81Loki-%E4%BB%A5%E5%8F%8A%E4%BB%96%E7%9A%84%E5%A5%BD%E5%8A%A9%E6%89%8B%E5%80%91%EF%BC%81%EF%BC%88%E4%B8%8A%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Hao Yun Chuang (Milan)">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="米蘭牛角尖">
+      <meta itemprop="description" content="目前就讀於政大語言所，研究興趣為計算語言學<br/>">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="【NLP】Day 25: 自然語言處理的另外一種想像！Articut、Loki 以及他的好助手們！（上） | 米蘭牛角尖">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【NLP】Day 25: 自然語言處理的另外一種想像！Articut、Loki 以及他的好助手們！（上）
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2023-01-08 20:00:55 / 修改時間：20:01:13" itemprop="dateCreated datePublished" datetime="2023-01-08T20:00:55+08:00">2023-01-08</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <blockquote>
+<p>我們尋找的並不應該是英雄，而是一個好的想法<br><strong>Noam Chomsky</strong></p>
+</blockquote>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>還記得碩一下的時候，Lab 的老師找了以前一個現在在擔任軟體工程師的同學來課堂上演講，還有職涯分享。這位工程師說：「自然語言處理在台灣還不算特別盛行，但我覺得有慢慢被重視的感覺。就像每年 台灣PyCon 都會有一位名字叫 PeterWolf 的人，都會在 PyCon 上分享自然語言處理的技術，我覺得他超級猛。」</p>
+<p>心想，真巧，我在大學時就擔任了他第一屆的實習生呢。</p>
+<p>其實上了語言所之後，對自然語言處理以及計算語言學才開始漸漸理出個頭緒，如今再回頭來看當時所學的這些，才發現，若要單純依靠先前所介紹的那些模型，又要求要在短時間內訓練並達到相同目的，實在是不簡單。我想，過去的鐵人賽中，也尚未有其他參賽者介紹過 PeterWolf 以及他的團隊所開發的這些產品以及工具，那這次就先由我來拋磚引玉一下吧。</p>
+<p>不知道你記不記得，我在第八天的文章：<a target="_blank" rel="noopener" href="https://ithelp.ithome.com.tw/articles/10296818">【NLP】Day 8: 你拿定主意的話…葛萊芬多！BOW＆TF-IDF</a> 之中曾經提到，在過去的研究脈絡中，所謂的<strong>語言模型，指的是運用統計方法以及機率來估計語言使用的可能性嗎？</strong> 在那之後，計算語言學以及自然語言處理的應用，大多都是延續這個邏輯脈絡，發展出各式各樣不同的模型，如 RNN、N-Gram 等。</p>
+<p>今天，我需要你把先前所學的那些模型，<strong>通通忘掉</strong>。</p>
+<h2 id="語言學是什麼？能吃嗎？"><a href="#語言學是什麼？能吃嗎？" class="headerlink" title="語言學是什麼？能吃嗎？"></a>語言學是什麼？能吃嗎？</h2><p>台灣的各位想必對語言學應該都很陌生，每次跟其他人說自己是讀語言學的時候，別人總會說：「哇！那你是讀哪種語言？」心裡總是百般的無奈，我想這句話對語言學人來說，一定都心有戚戚焉。其實語言學並不是在學習「語言」，而是學習「語言結構」的一門「科學方法」。語言學分成了許多不同的支派，研究聲音的語音學、音韻學，還有語用學、語意學，一直到我們今天會提到「一點點」的句法學，都是語言學的大家庭。</p>
+<p>太複雜了嗎？簡單來說，語言學就是一門</p>
+<blockquote>
+<p>觀察語言，並歸納出一系列規則的學問。</p>
+</blockquote>
+<p>研究語句架構的句法學更是一門已經研究多年的學問，已經有相對較為龐大的研究基礎。我還記得，當時 Peter 對我們所有實習生說：</p>
+<blockquote>
+<p>「明明語言學家已經分析並歸納出了語言系統的運作規則，那就來好好運用那些規則，不應該繼續以為只能用統計機率的角度來進行斷詞的計算。」</p>
+</blockquote>
+<p>PeterWolf 會這麼說，原因是：</p>
+<p>在過去，語言學界的巨擘 Noam Chomsky 提出了一個假設。在這個假設裡，所有的語言，在底層都擁有相同的文法結構。 Chomsky 的理論革新點在於，只要是符合語法規則的語句，都可以透過程式語言邏輯產生。而每一句話皆可以透過語言規則將其進行歸納，其表現方法就是透過句法樹的形式呈現，而 Chomsky 後來也發展出了一套句法範疇理論，也就是 X-bar theory，X-bar theory 是每一個語言學專業的學生都一定學過的句法學理論，一定也基於 X-bar theory 畫了不少句法樹。</p>
+<p>也就是說：</p>
+<blockquote>
+<p>以電腦科學的角度來看，語法規則看似是無窮無盡，但在語言學的觀點裡，語言學規則是列得完的！</p>
+</blockquote>
+<blockquote>
+<h4 id="而-Articut，就是基於-X-bar-theory-所打造的斷詞系統。"><a href="#而-Articut，就是基於-X-bar-theory-所打造的斷詞系統。" class="headerlink" title="而 Articut，就是基於 X-bar theory 所打造的斷詞系統。"></a>而 Articut，就是基於 X-bar theory 所打造的斷詞系統。</h4></blockquote>
+<p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/The_X-bar_structure_of_%22John_studies_linguistics_at_the_university%22.png/600px-The_X-bar_structure_of_%22John_studies_linguistics_at_the_university%22.png"><br><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/X-bar_theory">Source</a>: 基於X-bar theory 規則所畫出來的句法樹</p>
+<h3 id="Chomsky-是怎麼看待-NLP-的？來源"><a href="#Chomsky-是怎麼看待-NLP-的？來源" class="headerlink" title="Chomsky 是怎麼看待 NLP 的？來源"></a>Chomsky 是怎麼看待 NLP 的？<a target="_blank" rel="noopener" href="https://kopu.chat/%E5%96%AC%E5%A7%86%E6%96%AF%E5%9F%BA%E7%9A%84%E6%99%AE%E9%81%8D%E8%AA%9E%E6%B3%95%E7%90%86%E8%AB%96/#lwptoc8">來源</a></h3><p>在 2011 年，麻省理工學院所舉辦的研討會，就有人問了 Chomsky 這樣的一個問題：</p>
+<blockquote>
+<p>如何看待機器學習、機率模型近年來被應用在自然語言處理 (NLP) 與認知科學領域的趨勢。畢竟機率的方法在喬姆斯基的年代並不是主流的研究方法。</p>
+</blockquote>
+<p>Chomsky 回應道，確實現在有許多的自然語言處理相關研究，是透過<strong>統計模型</strong>來解決各式各樣的語言學問題，有些成功，有些失敗。成功的案例，大多是因為統計方法跟語言的基本理論的結合。但若不考慮語言的實際結構就應用統計方法，那所謂的成功就不是正常意義下的成功。Chomsky 用蜜蜂的行為研究做了個比喻，他說，這就像科學家只是對蜜蜂錄影，並記錄過去蜜蜂的行為資料，並透過這些資料來預測蜜蜂的行為。機器學習的方法可能可以預測的很好，但並不算真正科學意義上的成功，因為沒有真正了解語言底層的實際架構。 <del>老人家一番話讓一堆人中槍XD</del></p>
+<p>但… Articut 辦到了？</p>
+<h2 id="Articut"><a href="#Articut" class="headerlink" title="Articut"></a>Articut</h2><p>Articut 是基於語法規則所搭建的斷詞系統，跟先前我們介紹過的斷詞系統不一樣，Articut 可以離線運行，且不需要大數據訓練，因此修改模型速度也較迅速，即使是新詞，也可以得到正確的結果。但我想要特別提出以下幾點來講：</p>
+<h3 id="極高的模型解釋力"><a href="#極高的模型解釋力" class="headerlink" title="極高的模型解釋力"></a>極高的模型解釋力</h3><p>在所有斷詞系統中，Articut 最吸引我的就是有著<strong>非常非常高的解釋力</strong>（在最後一天的文章中，我會好好說明為什麼我認為解釋力非常重要）舉例來說：</p>
+<blockquote>
+<p>張三愛女生</p>
+</blockquote>
+<p>CKIP &#x3D;&gt; <code>張三愛(Nb)　女生(Na)</code>  且其語義辨識結果是 <code>張三愛 (person) 女生 (woman)</code></p>
+<p>Articut &#x3D;&gt; <code>張三(ENTITY_person)  愛(ACTION_verb)  女生(ENTITY_noun)</code></p>
+<p>CKIP （及其它基於資料模型的方案）  的運算是由左到右，遇到「張」這個中文姓氏時，就開始計算。因為中文人名「絕大部份是三個字符」，因此接下來就會在這「三個字符」的長度裡計算它是人名的可能性，的確「張三愛」有可能是個人名；接著後面的「女」+「生」+ ending 的分佈裡，也很容易在資料裡出現「女生」這樣的組合，因此結果就是「張三愛&#x2F;女生」。</p>
+<p>但 Articut 是基於「句法 （syntax）」的，而一個完整的句子一定要有動詞！動詞出現以前，這個句子的意義是模糊的。就像日文的動詞在最後面，是一種 SOV 語言，V 表示動詞。在句子的動詞出現以前，是無法確定對方究竟說的是什麼的。</p>
+<p>所以，Articut 的運算步驟會是…「這五個字符，哪一個有動詞的時態標記啊？哇～都沒有，那麼因為中文是動詞置中的 SVO 語言，所以先假設最靠近中間的那幾個是動詞。於是「愛」就先被擺在上述那個英文的句法樹的 V 的位置 （剛好英文也是 SVO 語言，所以它的 V 也在句子的中間）。」</p>
+<p>然後開始第二步的推測「如果 V&#x3D;愛，那麼前面有一個 NP  嗎？有，剛好有一個中文姓氏+數字。這在結構和音韻上都是可行的中文單名人名。那後面有其它的標記表示它不是一個名詞嗎？（e.g., 「很」是副詞&#x2F;形容詞標記，但這句並不是「張三愛很滿」），沒有！那就把後面的字符當名詞，組成一個句法樹看看它能爬到多高的節點位置。」於是就能產生出「張三_person&#x2F;愛_verb&#x2F;女生_noun」這樣同時處理完詞性與斷詞的結果了。 </p>
+<h3 id="功能多合一"><a href="#功能多合一" class="headerlink" title="功能多合一"></a>功能多合一</h3><p>除了解釋力超級高之外，我覺得功能多合一的 Articut 也非常厲害。做一次斷詞，就可以得到不只斷詞結果，也可以得到 Part-of-speech tag，更可以進行命名實體辨識。由於是台灣本土的公司，所以也在原來的基礎上加入了許多台灣的資料，例如觀光景點。除此之外，也加入了化學命名的實體辨識。<del>越寫越覺得好像在業配呀</del> 如果想知道更多，可以按這個<a target="_blank" rel="noopener" href="https://github.com/Droidtown/ArticutAPI/wiki/09_%E5%91%BD%E5%90%8D%E5%AF%A6%E9%AB%94%E6%A8%99%E8%A8%98-(NER)">連結</a>！</p>
+<p>我覺得這是自然語言處理的另外一種可能性。用機率統計的方式計算語言固然是一種觀點，也是解決問題的方法，但或許也可以考慮看看用這個觀點去看待自然語言處理，或許可以有更多不一樣的想法。</p>
+<p>好，今天先講到這，明天再來介紹基於 Articut 的自然語言理解引擎 Loki。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/01/08/%E3%80%90NLP%E3%80%91Day-24-%E6%AC%B8%EF%BC%81BERT%EF%BC%81%E4%BD%A0%E5%9C%A8%E5%B9%B9%E5%98%9B%E5%91%80%EF%BC%9FBERT-%E6%A8%A1%E5%9E%8B%E5%AF%A6%E4%BD%9C%EF%BC%86%E7%A8%8B%E5%BC%8F%E7%A2%BC%E8%A7%A3%E6%9E%90/" rel="prev" title="【NLP】Day 24: 欸！BERT！你在幹嘛呀？BERT 模型實作＆程式碼解析">
+                  <i class="fa fa-chevron-left"></i> 【NLP】Day 24: 欸！BERT！你在幹嘛呀？BERT 模型實作＆程式碼解析
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/01/08/%E3%80%90NLP%E3%80%91Day-26-%E8%87%AA%E7%84%B6%E8%AA%9E%E8%A8%80%E8%99%95%E7%90%86%E7%9A%84%E5%8F%A6%E5%A4%96%E4%B8%80%E7%A8%AE%E6%83%B3%E5%83%8F%EF%BC%81Articut%E3%80%81Loki-%E4%BB%A5%E5%8F%8A%E4%BB%96%E7%9A%84%E5%A5%BD%E5%8A%A9%E6%89%8B%E5%80%91%EF%BC%81%EF%BC%88%E4%B8%8B%EF%BC%89/" rel="next" title="【NLP】Day 26: 自然語言處理的另外一種想像！Articut、Loki 以及他的好助手們！（下）">
+                  【NLP】Day 26: 自然語言處理的另外一種想像！Articut、Loki 以及他的好助手們！（下） <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa-solid fa-code"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hao Yun Chuang (Milan)</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/assets/hijiki.model.json"},"display":{"superSample":2,"width":250,"height":500,"position":"right","hOffset":-30,"vOffset":-130},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"log":false});</script></body>
+</html>

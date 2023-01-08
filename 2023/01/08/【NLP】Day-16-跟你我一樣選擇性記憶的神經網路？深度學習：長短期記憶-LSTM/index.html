@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/icon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/icon.png">
+  <link rel="mask-icon" href="/images/icon.png" color="#222">
+  <meta name="google-site-verification" content="DMyRve2tDXDJqmJpSS4BaBWT1R0ZCH9n_EsCnROTiM0">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha256-xejo6yLi6vGtAjcMIsY8BHdKsLg7QynVlFMzdQgUuy8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"milanochuang.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.12.3","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="記憶是個很奇妙的東西。他並不如我想像中那樣運作的。我們太受限於時間了，尤其是時間的順序…《異星入境》Louise Banks  昨天我們剛介紹完循環神經網路（Recurrent Neural Network），提到說雖然循環神經網路很常被拿來利用在自然語言處理上，原因是因為循環神經網路有記憶的功能，可以考慮到輸入文本的上下文關係，並藉此來達到更好的效果。 但再厲害的技術，也都會有它優缺點，就如同">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【NLP】Day 16: 跟你我一樣選擇性記憶的神經網路？深度學習：長短期記憶 LSTM">
+<meta property="og:url" content="https://milanochuang.github.io/2023/01/08/%E3%80%90NLP%E3%80%91Day-16-%E8%B7%9F%E4%BD%A0%E6%88%91%E4%B8%80%E6%A8%A3%E9%81%B8%E6%93%87%E6%80%A7%E8%A8%98%E6%86%B6%E7%9A%84%E7%A5%9E%E7%B6%93%E7%B6%B2%E8%B7%AF%EF%BC%9F%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92%EF%BC%9A%E9%95%B7%E7%9F%AD%E6%9C%9F%E8%A8%98%E6%86%B6-LSTM/index.html">
+<meta property="og:site_name" content="米蘭牛角尖">
+<meta property="og:description" content="記憶是個很奇妙的東西。他並不如我想像中那樣運作的。我們太受限於時間了，尤其是時間的順序…《異星入境》Louise Banks  昨天我們剛介紹完循環神經網路（Recurrent Neural Network），提到說雖然循環神經網路很常被拿來利用在自然語言處理上，原因是因為循環神經網路有記憶的功能，可以考慮到輸入文本的上下文關係，並藉此來達到更好的效果。 但再厲害的技術，也都會有它優缺點，就如同">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://chart.googleapis.com/chart?cht=tx&chl=w_i">
+<meta property="og:image" content="https://chart.googleapis.com/chart?cht=tx&chl=w_i%3C1">
+<meta property="og:image" content="https://chart.googleapis.com/chart?cht=tx&chl=w_i%3E1">
+<meta property="og:image" content="https://programmathically.com/wp-content/uploads/2021/10/Screenshot-2021-10-29-at-15.21.19-1024x189.png">
+<meta property="og:image" content="https://i.imgur.com/cnuDCQ3.png">
+<meta property="og:image" content="https://pic4.zhimg.com/80/v2-e4f9851cad426dfe4ab1c76209546827_1440w.webp">
+<meta property="og:image" content="https://chart.googleapis.com/chart?cht=tx&chl=c%5Et">
+<meta property="og:image" content="https://chart.googleapis.com/chart?cht=tx&chl=c%5Et">
+<meta property="og:image" content="https://chart.googleapis.com/chart?cht=tx&chl=h">
+<meta property="og:image" content="https://chart.googleapis.com/chart?cht=tx&chl=z">
+<meta property="og:image" content="https://chart.googleapis.com/chart?cht=tx&chl=z%5Ef">
+<meta property="og:image" content="https://chart.googleapis.com/chart?cht=tx&chl=z%5Ei">
+<meta property="og:image" content="https://chart.googleapis.com/chart?cht=tx&chl=z%5Eo">
+<meta property="og:image" content="https://chart.googleapis.com/chart?cht=tx&chl=z">
+<meta property="og:image" content="https://chart.googleapis.com/chart?cht=tx&chl=z%5Ei">
+<meta property="og:image" content="https://chart.googleapis.com/chart?cht=tx&chl=z%5Eo">
+<meta property="og:image" content="https://chart.googleapis.com/chart?cht=tx&chl=z%5Ef">
+<meta property="og:image" content="https://i.imgur.com/z9aXZdF.png">
+<meta property="og:image" content="https://pic2.zhimg.com/80/v2-556c74f0e025a47fea05dc0f76ea775d_1440w.webp">
+<meta property="og:image" content="https://chart.googleapis.com/chart?cht=tx&chl=z%5E%7Bf%7D">
+<meta property="og:image" content="https://chart.googleapis.com/chart?cht=tx&chl=c%5E%7Bt-1%7D">
+<meta property="og:image" content="https://chart.googleapis.com/chart?cht=tx&chl=z%5Ei">
+<meta property="og:image" content="https://chart.googleapis.com/chart?cht=tx&chl=x%5Et">
+<meta property="og:image" content="https://chart.googleapis.com/chart?cht=tx&chl=c%5Et">
+<meta property="og:image" content="https://chart.googleapis.com/chart?cht=tx&chl=c%5Et">
+<meta property="og:image" content="https://chart.googleapis.com/chart?cht=tx&chl=tanh">
+<meta property="og:image" content="https://chart.googleapis.com/chart?cht=tx&chl=z%5E0">
+<meta property="og:image" content="https://chart.googleapis.com/chart?cht=tx&chl=tanh">
+<meta property="og:image" content="https://chart.googleapis.com/chart?cht=tx&chl=c%5Et">
+<meta property="og:image" content="https://chart.googleapis.com/chart?cht=tx&chl=h%5Et">
+<meta property="article:published_time" content="2023-01-08T11:49:50.000Z">
+<meta property="article:modified_time" content="2023-01-08T11:50:09.028Z">
+<meta property="article:author" content="Hao Yun Chuang (Milan)">
+<meta property="article:tag" content="自然語言處理, 計算語言學, 機器學習, 人工智慧, 電影">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://chart.googleapis.com/chart?cht=tx&chl=w_i">
+
+
+<link rel="canonical" href="https://milanochuang.github.io/2023/01/08/%E3%80%90NLP%E3%80%91Day-16-%E8%B7%9F%E4%BD%A0%E6%88%91%E4%B8%80%E6%A8%A3%E9%81%B8%E6%93%87%E6%80%A7%E8%A8%98%E6%86%B6%E7%9A%84%E7%A5%9E%E7%B6%93%E7%B6%B2%E8%B7%AF%EF%BC%9F%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92%EF%BC%9A%E9%95%B7%E7%9F%AD%E6%9C%9F%E8%A8%98%E6%86%B6-LSTM/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://milanochuang.github.io/2023/01/08/%E3%80%90NLP%E3%80%91Day-16-%E8%B7%9F%E4%BD%A0%E6%88%91%E4%B8%80%E6%A8%A3%E9%81%B8%E6%93%87%E6%80%A7%E8%A8%98%E6%86%B6%E7%9A%84%E7%A5%9E%E7%B6%93%E7%B6%B2%E8%B7%AF%EF%BC%9F%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92%EF%BC%9A%E9%95%B7%E7%9F%AD%E6%9C%9F%E8%A8%98%E6%86%B6-LSTM/","path":"2023/01/08/【NLP】Day-16-跟你我一樣選擇性記憶的神經網路？深度學習：長短期記憶-LSTM/","title":"【NLP】Day 16: 跟你我一樣選擇性記憶的神經網路？深度學習：長短期記憶 LSTM"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>【NLP】Day 16: 跟你我一樣選擇性記憶的神經網路？深度學習：長短期記憶 LSTM | 米蘭牛角尖</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">米蘭牛角尖</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">計算語言學的學習紀錄，偶爾可能會出現野生的電影評論？</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>關於</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分類</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>所有文章</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%95%B7%E7%9F%AD%E6%9C%9F%E8%A8%98%E6%86%B6%E6%A8%A1%E5%9E%8B%EF%BC%88Long-Short-term-memory%EF%BC%89"><span class="nav-number">1.</span> <span class="nav-text">長短期記憶模型（Long Short-term memory）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%B0%E5%BA%95%E4%BB%80%E9%BA%BC%E6%98%AFLSTM%EF%BC%9F"><span class="nav-number">1.1.</span> <span class="nav-text">到底什麼是LSTM？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%86%9F%E6%82%89%E6%A6%82%E5%BF%B5%E5%BE%8C%EF%BC%8C%E6%88%91%E5%80%91%E4%BE%86%E7%9C%8B%E7%9C%8B%E6%95%B8%E5%AD%B8%E5%8E%9F%E7%90%86%E4%BB%A5%E5%8F%8A%E6%A8%A1%E5%9E%8B%E5%90%A7%EF%BC%81"><span class="nav-number">1.1.1.</span> <span class="nav-text">熟悉概念後，我們來看看數學原理以及模型吧！</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%95%8F%E9%A1%8C%E8%88%87%E8%A8%8E%E8%AB%96"><span class="nav-number">2.</span> <span class="nav-text">問題與討論</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9C%80%E8%A6%81%E6%94%B9%E9%80%B2%E7%9A%84%E5%9C%B0%E6%96%B9"><span class="nav-number">2.1.</span> <span class="nav-text">需要改進的地方</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Hao Yun Chuang (Milan)"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Hao Yun Chuang (Milan)</p>
+  <div class="site-description" itemprop="description">目前就讀於政大語言所，研究興趣為計算語言學<br/></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">32</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/milanochuang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;milanochuang" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:milanochuang@gmail.com" title="E-Mail → mailto:milanochuang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/milanochuang" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;milanochuang" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/milanochuang" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;milanochuang" rel="noopener" target="_blank"><i class="fab fa-facebook fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://instagram.com/milanochuang" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;milanochuang" rel="noopener" target="_blank"><i class="fab fa-instagram fa-fw"></i></a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/milanochuang" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://milanochuang.github.io/2023/01/08/%E3%80%90NLP%E3%80%91Day-16-%E8%B7%9F%E4%BD%A0%E6%88%91%E4%B8%80%E6%A8%A3%E9%81%B8%E6%93%87%E6%80%A7%E8%A8%98%E6%86%B6%E7%9A%84%E7%A5%9E%E7%B6%93%E7%B6%B2%E8%B7%AF%EF%BC%9F%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92%EF%BC%9A%E9%95%B7%E7%9F%AD%E6%9C%9F%E8%A8%98%E6%86%B6-LSTM/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Hao Yun Chuang (Milan)">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="米蘭牛角尖">
+      <meta itemprop="description" content="目前就讀於政大語言所，研究興趣為計算語言學<br/>">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="【NLP】Day 16: 跟你我一樣選擇性記憶的神經網路？深度學習：長短期記憶 LSTM | 米蘭牛角尖">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【NLP】Day 16: 跟你我一樣選擇性記憶的神經網路？深度學習：長短期記憶 LSTM
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2023-01-08 19:49:50 / 修改時間：19:50:09" itemprop="dateCreated datePublished" datetime="2023-01-08T19:49:50+08:00">2023-01-08</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <blockquote>
+<p>記憶是個很奇妙的東西。他並不如我想像中那樣運作的。我們太受限於時間了，尤其是時間的順序…<br><strong>《異星入境》Louise Banks</strong></p>
+</blockquote>
+<p>昨天我們剛介紹完循環神經網路（Recurrent Neural Network），提到說雖然循環神經網路很常被拿來利用在自然語言處理上，原因是因為循環神經網路有記憶的功能，可以考慮到輸入文本的上下文關係，並藉此來達到更好的效果。</p>
+<p>但再厲害的技術，也都會有它優缺點，就如同我第一週所說的那樣，科學的演進都源自於對完美的追求，這也正是 Steven Pinker 在《再啟蒙的年代》一書中所說，只要是可以衡量的事物，而這些事物若是有所變化的，那就是人類社會便是一直在進步的路上邁進。</p>
+<p>所以說同樣地，RNN 也有先天上的缺陷。像是因為過多層神經網路導致的梯度爆炸或是梯度消失，影響了模型學習成果以及表現，最後的準確度反倒下降了。昨天說到，LSTM 就是 RNN 的是日救星。</p>
+<h2 id="長短期記憶模型（Long-Short-term-memory）"><a href="#長短期記憶模型（Long-Short-term-memory）" class="headerlink" title="長短期記憶模型（Long Short-term memory）"></a>長短期記憶模型（Long Short-term memory）</h2><p>這邊用一個簡單的例子再來重新解釋梯度爆炸跟梯度消失：假如說我們今天利用以下的資料訓練一個可以完成QA任務的循環神經網路。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">魯夫說他想成為海賊王</span><br></pre></td></tr></table></figure>
+
+<p>在最後測試模型時，問了模型：「是誰想要成為海賊王？」。這時候可能會出現一個問題：</p>
+<p>記不記得我們先前所說 RNN 的記憶特性，而會有這個特性正是因為模型也會將先前所學習的詞彙資訊（權重）在隱藏層中傳遞，最後才會得到的結果。之後，模型會將這個結果進行反向傳播，也就是模型在「反省」先前的學習成果時，都會乘上一個自己的參數 <img src="https://chart.googleapis.com/chart?cht=tx&chl=w_i" alt="https://chart.googleapis.com/chart?cht=tx&amp;chl=w_i">，若這個參數 <img src="https://chart.googleapis.com/chart?cht=tx&chl=w_i%3C1" alt="https://chart.googleapis.com/chart?cht=tx&amp;chl=w_i%3C1"> 的話，在資訊通過不同節點的過程中，若太多層神經網路，則會越乘越小，最後無限逼近於0，模型也就「忘記」先前所學的資訊，是為<strong>梯度消失</strong>；反之，若<img src="https://chart.googleapis.com/chart?cht=tx&chl=w_i%3E1" alt="https://chart.googleapis.com/chart?cht=tx&amp;chl=w_i%3E1">，某個資訊的概率也就越乘越大，而神經網路就被撐死了，是為<strong>梯度爆炸</strong>。</p>
+<p><img src="https://programmathically.com/wp-content/uploads/2021/10/Screenshot-2021-10-29-at-15.21.19-1024x189.png"></p>
+<p>由於「是誰想要成為海賊王？」的答案（魯夫）在訓練資料中幾乎是在最前面的位置。若模型產生梯度消失的現象，答案在訓練的過程中就會漸漸地被模型「忘記」，最後模型就無法正確回答問題的答案，準確率就下降了。而長短期記憶就可以有效解決這個問題。</p>
+<h3 id="到底什麼是LSTM？"><a href="#到底什麼是LSTM？" class="headerlink" title="到底什麼是LSTM？"></a>到底什麼是LSTM？</h3><p>LSTM（Long Short-term memory），作為循環神經網路的一個變體，可以先從這張圖來理解，在這邊允許我借用左岸朋友莫煩大大的劇情比喻。</p>
+<!-- ![](https://i.imgur.com/4G5veS4.png) -->
+<!-- ![](https://i.imgur.com/iGAHTFV.png) -->
+<p><img src="https://i.imgur.com/cnuDCQ3.png"></p>
+<p>我們可以這麼理解，首先將藍色粗線視為電影的主線劇情、紅色線是為支線劇情，而輸入、忘記、以及輸出都是劇情的「把關者」。今天，「輸入把關者」在看電影時，會決定支線的劇情有多少對電影結局有影響，並依照劇情重要程度寫入主線劇情；但假如這些分線劇情會改變我們對於先前主線劇情的看法的話，「忘記把關者」就會將之前的主線劇情忘記，按照比例替換成現在的新劇情。也就是說，主線劇情的組成主要取決於「輸入把關者」跟「忘記把關者」。也就是說，相對於什麼都記，但時間一久就會忘記的單純循環神經網路，LSTM 則是會「選擇重點記，而且記得比較久」。</p>
+<h4 id="熟悉概念後，我們來看看數學原理以及模型吧！"><a href="#熟悉概念後，我們來看看數學原理以及模型吧！" class="headerlink" title="熟悉概念後，我們來看看數學原理以及模型吧！"></a>熟悉概念後，我們來看看數學原理以及模型吧！</h4><p><img src="https://pic4.zhimg.com/80/v2-e4f9851cad426dfe4ab1c76209546827_1440w.webp"></p>
+<p>這是台大李弘毅教授機器學習課程中的投影片。在圖中，我們可以看到左邊的是一般的循環神經網路，右邊的則是  LSTM。可以發現，兩者最大的差別就是，LSTM 多了一個變數 <img src="https://chart.googleapis.com/chart?cht=tx&chl=c%5Et" alt="https://chart.googleapis.com/chart?cht=tx&amp;chl=c%5Et">，稱為cell state，也就是前面所說的支線劇情。<img src="https://chart.googleapis.com/chart?cht=tx&chl=c%5Et" alt="https://chart.googleapis.com/chart?cht=tx&amp;chl=c%5Et"> 改變速度很慢且幅度小，而<img src="https://chart.googleapis.com/chart?cht=tx&chl=h" alt="https://chart.googleapis.com/chart?cht=tx&amp;chl=h"> 的改變速度則較快，而且幅度比較大。</p>
+<p>在進入一個新節點時，總共得到四個狀態，分別是<img src="https://chart.googleapis.com/chart?cht=tx&chl=z" alt="https://chart.googleapis.com/chart?cht=tx&amp;chl=z">, <img src="https://chart.googleapis.com/chart?cht=tx&chl=z%5Ef" alt="https://chart.googleapis.com/chart?cht=tx&amp;chl=z%5Ef">, <img src="https://chart.googleapis.com/chart?cht=tx&chl=z%5Ei" alt="https://chart.googleapis.com/chart?cht=tx&amp;chl=z%5Ei">, <img src="https://chart.googleapis.com/chart?cht=tx&chl=z%5Eo" alt="https://chart.googleapis.com/chart?cht=tx&amp;chl=z%5Eo">。<img src="https://chart.googleapis.com/chart?cht=tx&chl=z" alt="https://chart.googleapis.com/chart?cht=tx&amp;chl=z"> 作為主要的資料輸入，而另外由激勵函數所包起來的 <img src="https://chart.googleapis.com/chart?cht=tx&chl=z%5Ei" alt="https://chart.googleapis.com/chart?cht=tx&amp;chl=z%5Ei">, <img src="https://chart.googleapis.com/chart?cht=tx&chl=z%5Eo" alt="https://chart.googleapis.com/chart?cht=tx&amp;chl=z%5Eo">, <img src="https://chart.googleapis.com/chart?cht=tx&chl=z%5Ef" alt="https://chart.googleapis.com/chart?cht=tx&amp;chl=z%5Ef">，則是作為前面所說把關的三個「門閥」。</p>
+<!-- ![](https://pic4.zhimg.com/80/v2-15c5eb554f843ec492579c6d87e1497b_1440w.webp) -->
+<!-- ![](https://pic1.zhimg.com/80/v2-d044fd0087e1df5d2a1089b441db9970_1440w.webp) -->
+<p><img src="https://i.imgur.com/z9aXZdF.png"></p>
+<p>而這四個狀態分別在長短期記憶的一個節點中，分別在運算的三個階段中扮演著不一樣的角色。先讓我們來看看以下這張圖，其中⊙代表矩陣相乘，⊕代表矩陣相加。（高中數學，還記得吧！）：</p>
+<p><img src="https://pic2.zhimg.com/80/v2-556c74f0e025a47fea05dc0f76ea775d_1440w.webp"></p>
+<p>在這張圖中的運算過程共分成三個階段：</p>
+<ol>
+<li><strong>忘記階段</strong><br>在這個階段會選擇性忘記上一個節點所傳來的資訊，簡單來說，就是決定「把重要的記起來，把不重要的忘記」。實際上的運算是，<img src="https://chart.googleapis.com/chart?cht=tx&chl=z%5E%7Bf%7D" alt="https://chart.googleapis.com/chart?cht=tx&amp;chl=z%5E%7Bf%7D">作為遺忘閥（forget gate），像篩子一樣，來控制上一個階段的<img src="https://chart.googleapis.com/chart?cht=tx&chl=c%5E%7Bt-1%7D" alt="https://chart.googleapis.com/chart?cht=tx&amp;chl=c%5E%7Bt-1%7D">哪些需要記得，哪些需要忘記。</li>
+<li><strong>選擇記憶階段</strong><br>而在這個階段，LSTM 則會決定哪些是重要的資訊，而哪些不是，並將重點記起來。主要是透過輸入閥（input gate）<img src="https://chart.googleapis.com/chart?cht=tx&chl=z%5Ei" alt="https://chart.googleapis.com/chart?cht=tx&amp;chl=z%5Ei"> 來決定當前的輸入內容<img src="https://chart.googleapis.com/chart?cht=tx&chl=x%5Et" alt="https://chart.googleapis.com/chart?cht=tx&amp;chl=x%5Et">哪些是重點，哪些不是。<blockquote>
+<p>以上兩者所得結果相加，就會是這個階段的<img src="https://chart.googleapis.com/chart?cht=tx&chl=c%5Et" alt="https://chart.googleapis.com/chart?cht=tx&amp;chl=c%5Et">。</p>
+</blockquote>
+</li>
+<li><strong>輸出階段</strong><br>這個階段則是以前述兩者之和<img src="https://chart.googleapis.com/chart?cht=tx&chl=c%5Et" alt="https://chart.googleapis.com/chart?cht=tx&amp;chl=c%5Et">，經由激勵函數<img src="https://chart.googleapis.com/chart?cht=tx&chl=tanh" alt="https://chart.googleapis.com/chart?cht=tx&amp;chl=tanh">的縮放後，以<img src="https://chart.googleapis.com/chart?cht=tx&chl=z%5E0" alt="https://chart.googleapis.com/chart?cht=tx&amp;chl=z%5E0">來決定經過<img src="https://chart.googleapis.com/chart?cht=tx&chl=tanh" alt="https://chart.googleapis.com/chart?cht=tx&amp;chl=tanh">的 <img src="https://chart.googleapis.com/chart?cht=tx&chl=c%5Et" alt="https://chart.googleapis.com/chart?cht=tx&amp;chl=c%5Et">資訊中，有哪些適合做為當節點的輸出，並計算出下一個節點的 <img src="https://chart.googleapis.com/chart?cht=tx&chl=h%5Et" alt="https://chart.googleapis.com/chart?cht=tx&amp;chl=h%5Et">。</li>
+</ol>
+<h2 id="問題與討論"><a href="#問題與討論" class="headerlink" title="問題與討論"></a>問題與討論</h2><p>在過去讀書階段中，各位一定都有碰過兩種同學，一種是死命地想辦法將所有資訊記下來的同學，另一種則是只記重點，一些太枝微末節的小細節就會選擇性地放棄。而因為前者想要將所有東西都記下來，看起來好像很厲害，但時間一久反而會忘記最重要的重點，考試的表現就容易比較差，這種的大家通常都會說「沒有讀書方法」；反而是後者因為只記重點，所以記的東西就比較少，反而不容易忘記，考試的表現就會比前者還要好。</p>
+<p>所以說，拉回來神經網路，比起 RNN 那樣死命地將所有的資訊記起來，不僅容易忘記先前所記下來的資訊，最後的表現也不會好；相對的 LSTM 會忘記不重要的資訊，只記得重要的，表現結果就會比較好。</p>
+<h3 id="需要改進的地方"><a href="#需要改進的地方" class="headerlink" title="需要改進的地方"></a>需要改進的地方</h3><ol>
+<li>語意限制：同樣是RNN的一種，所以也遺傳了RNN的其中一個缺點，詳見：<a target="_blank" rel="noopener" href="https://ithelp.ithome.com.tw/articles/10301346">Day 15: 圓圓圈圈圓圓～深度學習：循環神經網路 RNN</a></li>
+<li>訓練複雜度提升<br>相對於 RNN，我們光是看圖就可以發現，LSTM 其中新增了許多的參數，那一旦資料量提升，訓練複雜度也就會增加。而為了解決這個問題，資訊科學家又發明了與LSTM相同效果，訓練又較不複雜的 GRU（Gate Recurrent Unit），來搭建資料量大的模型，也就是我們明天的文章內容。</li>
+</ol>
+<p>下一篇文章</p>
+<blockquote>
+<p>➡️ <a target="_blank" rel="noopener" href="https://ithelp.ithome.com.tw/articles/10302765">【NLP】Day 17: 每天成為更好的自己！神經網路也是！深度學習模型 GRU</a></p>
+</blockquote>
+<p>若你有空，也歡迎來看看其他文章</p>
+<blockquote>
+<p>➡️ <a target="_blank" rel="noopener" href="https://ithelp.ithome.com.tw/articles/10301346">【NLP】Day 15: 圓圓圈圈圓圓～深度學習：循環神經網路 RNN</a><br>➡️ <a target="_blank" rel="noopener" href="https://ithelp.ithome.com.tw/articles/10300871">【NLP】Day 14: 神經網路也會神機錯亂？不，只會精神錯亂…深度學習：前饋神經網路</a><br>➡️ <a target="_blank" rel="noopener" href="https://ithelp.ithome.com.tw/articles/10300307">【NLP】Day 13: 可不可以再深一點點就好？深度學習基礎知識：你需要知道的這些那些</a></p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/01/08/%E3%80%90NLP%E3%80%91Day-15-%E5%9C%93%E5%9C%93%E5%9C%88%E5%9C%88%E5%9C%93%E5%9C%93%EF%BD%9E%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92%EF%BC%9A%E5%BE%AA%E7%92%B0%E7%A5%9E%E7%B6%93%E7%B6%B2%E8%B7%AF-RNN/" rel="prev" title="【NLP】Day 15: 圓圓圈圈圓圓～深度學習：循環神經網路 RNN">
+                  <i class="fa fa-chevron-left"></i> 【NLP】Day 15: 圓圓圈圈圓圓～深度學習：循環神經網路 RNN
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/01/08/%E3%80%90NLP%E3%80%91Day-17-%E6%AF%8F%E5%A4%A9%E6%88%90%E7%82%BA%E6%9B%B4%E5%A5%BD%E7%9A%84%E8%87%AA%E5%B7%B1%EF%BC%81%E7%A5%9E%E7%B6%93%E7%B6%B2%E8%B7%AF%E4%B9%9F%E6%98%AF%EF%BC%81%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92%E6%A8%A1%E5%9E%8B-GRU/" rel="next" title="【NLP】Day 17: 每天成為更好的自己！神經網路也是！深度學習模型 GRU">
+                  【NLP】Day 17: 每天成為更好的自己！神經網路也是！深度學習模型 GRU <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa-solid fa-code"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hao Yun Chuang (Milan)</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/assets/hijiki.model.json"},"display":{"superSample":2,"width":250,"height":500,"position":"right","hOffset":-30,"vOffset":-130},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"log":false});</script></body>
+</html>

@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/icon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/icon.png">
+  <link rel="mask-icon" href="/images/icon.png" color="#222">
+  <meta name="google-site-verification" content="DMyRve2tDXDJqmJpSS4BaBWT1R0ZCH9n_EsCnROTiM0">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha256-xejo6yLi6vGtAjcMIsY8BHdKsLg7QynVlFMzdQgUuy8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"milanochuang.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.12.3","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="你所做的這些浮誇的浪漫舉動—其實你做的、你所說的根本一點都不重要，真正重要的是你的意圖。真正重要的是你願意花時間在那個你在乎的人身上，告訴他：「我願意就這樣看著你，也願意聆聽你的聲音。」我很清楚，你現在需要的是什麼，然後我現在在告訴你，你知道這件事情，對我來說有多麼重要。Jack Pearson《這就是我們》  昨天分享了 Articut ，今天來介紹 Loki。 有了 Articut 的基礎，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【NLP】Day 26: 自然語言處理的另外一種想像！Articut、Loki 以及他的好助手們！（下）">
+<meta property="og:url" content="https://milanochuang.github.io/2023/01/08/%E3%80%90NLP%E3%80%91Day-26-%E8%87%AA%E7%84%B6%E8%AA%9E%E8%A8%80%E8%99%95%E7%90%86%E7%9A%84%E5%8F%A6%E5%A4%96%E4%B8%80%E7%A8%AE%E6%83%B3%E5%83%8F%EF%BC%81Articut%E3%80%81Loki-%E4%BB%A5%E5%8F%8A%E4%BB%96%E7%9A%84%E5%A5%BD%E5%8A%A9%E6%89%8B%E5%80%91%EF%BC%81%EF%BC%88%E4%B8%8B%EF%BC%89/index.html">
+<meta property="og:site_name" content="米蘭牛角尖">
+<meta property="og:description" content="你所做的這些浮誇的浪漫舉動—其實你做的、你所說的根本一點都不重要，真正重要的是你的意圖。真正重要的是你願意花時間在那個你在乎的人身上，告訴他：「我願意就這樣看著你，也願意聆聽你的聲音。」我很清楚，你現在需要的是什麼，然後我現在在告訴你，你知道這件事情，對我來說有多麼重要。Jack Pearson《這就是我們》  昨天分享了 Articut ，今天來介紹 Loki。 有了 Articut 的基礎，">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://i.imgur.com/sB7GFMf.png">
+<meta property="og:image" content="https://i.imgur.com/4PDNoin.png">
+<meta property="og:image" content="https://i.imgur.com/hebPIqz.png">
+<meta property="og:image" content="https://i.imgur.com/3vvoC5l.png">
+<meta property="og:image" content="https://i.imgur.com/jkUqMwi.png">
+<meta property="og:image" content="https://i.imgur.com/3puZiqw.png">
+<meta property="og:image" content="https://i.imgur.com/M6JItSk.png">
+<meta property="og:image" content="https://i.imgur.com/MqXplqq.png">
+<meta property="og:image" content="https://i.imgur.com/G4ammO9.png">
+<meta property="og:image" content="https://i.imgur.com/hCaPzHc.png">
+<meta property="article:published_time" content="2023-01-08T12:02:16.000Z">
+<meta property="article:modified_time" content="2023-01-08T12:02:54.607Z">
+<meta property="article:author" content="Hao Yun Chuang (Milan)">
+<meta property="article:tag" content="自然語言處理, 計算語言學, 機器學習, 人工智慧, 電影">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.imgur.com/sB7GFMf.png">
+
+
+<link rel="canonical" href="https://milanochuang.github.io/2023/01/08/%E3%80%90NLP%E3%80%91Day-26-%E8%87%AA%E7%84%B6%E8%AA%9E%E8%A8%80%E8%99%95%E7%90%86%E7%9A%84%E5%8F%A6%E5%A4%96%E4%B8%80%E7%A8%AE%E6%83%B3%E5%83%8F%EF%BC%81Articut%E3%80%81Loki-%E4%BB%A5%E5%8F%8A%E4%BB%96%E7%9A%84%E5%A5%BD%E5%8A%A9%E6%89%8B%E5%80%91%EF%BC%81%EF%BC%88%E4%B8%8B%EF%BC%89/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://milanochuang.github.io/2023/01/08/%E3%80%90NLP%E3%80%91Day-26-%E8%87%AA%E7%84%B6%E8%AA%9E%E8%A8%80%E8%99%95%E7%90%86%E7%9A%84%E5%8F%A6%E5%A4%96%E4%B8%80%E7%A8%AE%E6%83%B3%E5%83%8F%EF%BC%81Articut%E3%80%81Loki-%E4%BB%A5%E5%8F%8A%E4%BB%96%E7%9A%84%E5%A5%BD%E5%8A%A9%E6%89%8B%E5%80%91%EF%BC%81%EF%BC%88%E4%B8%8B%EF%BC%89/","path":"2023/01/08/【NLP】Day-26-自然語言處理的另外一種想像！Articut、Loki-以及他的好助手們！（下）/","title":"【NLP】Day 26: 自然語言處理的另外一種想像！Articut、Loki 以及他的好助手們！（下）"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>【NLP】Day 26: 自然語言處理的另外一種想像！Articut、Loki 以及他的好助手們！（下） | 米蘭牛角尖</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">米蘭牛角尖</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">計算語言學的學習紀錄，偶爾可能會出現野生的電影評論？</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>關於</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分類</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>所有文章</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E7%84%B6%E8%AA%9E%E8%A8%80%E7%90%86%E8%A7%A3%EF%BC%88Natural-Language-Understanding-NLU%EF%BC%89"><span class="nav-number">1.</span> <span class="nav-text">自然語言理解（Natural Language Understanding, NLU）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9C%BC%E5%B0%96%E7%9A%84%E6%9C%8B%E5%8F%8B%E5%8F%AF%E8%83%BD%E7%99%BC%E7%8F%BE%E6%96%B0%E5%90%8D%E8%A9%9E%E4%BA%86%EF%BC%9A%E6%84%8F%E5%9C%96"><span class="nav-number">1.1.</span> <span class="nav-text">眼尖的朋友可能發現新名詞了：意圖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Loki"><span class="nav-number">1.2.</span> <span class="nav-text">Loki</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B5%90%E8%AA%9E"><span class="nav-number">2.</span> <span class="nav-text">結語</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BB%B6%E4%BC%B8%E9%96%B1%E8%AE%80%EF%BC%9A%E6%B7%B1%E5%BA%A6%E7%A0%94%E8%A8%8E%EF%BD%9CNLP%E2%89%A0NLU%EF%BC%8C%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92%E7%84%A1%E6%B3%95%E7%90%86%E8%A7%A3%E4%BA%BA%E9%A1%9E%E8%AA%9E%E8%A8%80"><span class="nav-number">2.0.1.</span> <span class="nav-text">延伸閱讀：深度研討｜NLP≠NLU，機器學習無法理解人類語言</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Hao Yun Chuang (Milan)"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Hao Yun Chuang (Milan)</p>
+  <div class="site-description" itemprop="description">目前就讀於政大語言所，研究興趣為計算語言學<br/></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">32</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/milanochuang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;milanochuang" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:milanochuang@gmail.com" title="E-Mail → mailto:milanochuang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/milanochuang" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;milanochuang" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/milanochuang" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;milanochuang" rel="noopener" target="_blank"><i class="fab fa-facebook fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://instagram.com/milanochuang" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;milanochuang" rel="noopener" target="_blank"><i class="fab fa-instagram fa-fw"></i></a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/milanochuang" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://milanochuang.github.io/2023/01/08/%E3%80%90NLP%E3%80%91Day-26-%E8%87%AA%E7%84%B6%E8%AA%9E%E8%A8%80%E8%99%95%E7%90%86%E7%9A%84%E5%8F%A6%E5%A4%96%E4%B8%80%E7%A8%AE%E6%83%B3%E5%83%8F%EF%BC%81Articut%E3%80%81Loki-%E4%BB%A5%E5%8F%8A%E4%BB%96%E7%9A%84%E5%A5%BD%E5%8A%A9%E6%89%8B%E5%80%91%EF%BC%81%EF%BC%88%E4%B8%8B%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Hao Yun Chuang (Milan)">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="米蘭牛角尖">
+      <meta itemprop="description" content="目前就讀於政大語言所，研究興趣為計算語言學<br/>">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="【NLP】Day 26: 自然語言處理的另外一種想像！Articut、Loki 以及他的好助手們！（下） | 米蘭牛角尖">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【NLP】Day 26: 自然語言處理的另外一種想像！Articut、Loki 以及他的好助手們！（下）
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2023-01-08 20:02:16 / 修改時間：20:02:54" itemprop="dateCreated datePublished" datetime="2023-01-08T20:02:16+08:00">2023-01-08</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <blockquote>
+<p>你所做的這些浮誇的浪漫舉動—其實你做的、你所說的根本一點都不重要，真正重要的是你的意圖。真正重要的是你願意花時間在那個你在乎的人身上，告訴他：「我願意就這樣看著你，也願意聆聽你的聲音。」我很清楚，你現在需要的是什麼，然後我現在在告訴你，你知道這件事情，對我來說有多麼重要。<br>Jack Pearson《這就是我們》</p>
+</blockquote>
+<p>昨天分享了 Articut ，今天來介紹 Loki。</p>
+<p>有了 Articut 的基礎，Loki 就誕生了。不是雷神的弟弟，而是 Linguistic Oriented Keyword Interface (語言導向的關鍵詞介面)，是一種自然語言理解的引擎。但在開始之前，我們得先知道，什麼是自然語言理解？</p>
+<h2 id="自然語言理解（Natural-Language-Understanding-NLU）"><a href="#自然語言理解（Natural-Language-Understanding-NLU）" class="headerlink" title="自然語言理解（Natural Language Understanding, NLU）"></a>自然語言理解（Natural Language Understanding, NLU）</h2><p>自然語言理解，是自然語言處理的其中一種技術應用，旨在讓電腦可以理解更複雜的語言輸入。我們現在有很多日常生活中的科技都會需要用到自然語言理解的技術，比如說我們平常手機常用的語音助理，就是一種自然語言理解。其最終目的在於，我們有辦法用日常生活中所運用的自然語言，直接與機器進行溝通。這是為了讓人機互動可以更為順暢，且幫助未來的生活可以更加便利，不需要讓人類順應機器的理解模式，來與機器互動。如果我們想知道高鐵時刻表，我們會在 Google 打入：</p>
+<blockquote>
+<p>高鐵 時刻表</p>
+</blockquote>
+<p>但若電腦可以直接理解你的自然語言，我們就不需要使用這種順應機器的說話方式，我們可以直接說：</p>
+<blockquote>
+<p>我想知道有沒有兩點左右台北往台南的高鐵</p>
+</blockquote>
+<p>從這句話中，電腦可以立刻就知道你的<strong>意圖</strong>是想要知道「兩點左右」<strong>（時間）</strong>是否有「台北」<strong>（起點站）</strong>到「台南」<strong>（終點站）</strong>的「高鐵」<strong>交通工具</strong>，這麼一來，電腦就可以直接回答：</p>
+<blockquote>
+<p>兩點十六分有一班台北往台南的高鐵，請問要幫您訂票嗎？</p>
+</blockquote>
+<p>這是自然語言理解的技術上所欲達成的目標。想像一下，我們可以透過日常生活的對話，直接告訴電腦我想做的事情，不正是大家想像中未來世界應該要有的模樣嗎？</p>
+<h3 id="眼尖的朋友可能發現新名詞了：意圖"><a href="#眼尖的朋友可能發現新名詞了：意圖" class="headerlink" title="眼尖的朋友可能發現新名詞了：意圖"></a>眼尖的朋友可能發現新名詞了：意圖</h3><p>我們人類說的每一句話，裡面都一定隱藏著所謂的「意圖」，而我們就是透過這個「意圖」來互相理解彼此，對於電腦來說也是，而我前面所舉的例子，就是。我們重新回到訂票的案例。</p>
+<p>例如：</p>
+<blockquote>
+<p>我要一張兩點以前左營往南港的票</p>
+</blockquote>
+<p>在這句話中，就包含了三個意圖：「車票張數」、「乘車時間」、「起點站」、「終點站」。</p>
+<p>實習時，Peter 跟我們說，他的假設是，在同一個情境下，為了達成某種目的或意圖，使用的句型是有限的。想想看，假如要買車票，你可以想出幾種不一樣的說法？直到想不到為止，你就會發現能夠買車票的句型，其實也就那幾句而已。那在這樣的基礎下，也就是「意圖」＋「有限句型」兩個要素之下，Loki 誕生了。</p>
+<h3 id="Loki"><a href="#Loki" class="headerlink" title="Loki"></a>Loki</h3><p>在這邊就以我當時實作的專案為例，來進行簡單的 Tutorial。</p>
+<ol>
+<li>首先先來到卓騰的 <a target="_blank" rel="noopener" href="https://api.droidtown.co/member/">API 官網</a></li>
+<li>在登入畫面，選取 Loki 之後，可以看到這樣的畫面</li>
+</ol>
+<p><img src="https://i.imgur.com/sB7GFMf.png"></p>
+<ol start="3">
+<li>選取專案後，就可以看到在專案底下的不同意圖，在建立意圖前，你必須要先思考的是情境中會應用到的句型，其中可能會有哪些意圖（intent），例如我這裡就是大人小孩的車票張數、起點站、終點站、啟程時間、抵達時間、以及詢問時間的句型。</li>
+</ol>
+<p><img src="https://i.imgur.com/4PDNoin.png"></p>
+<ol start="4">
+<li>我們在這裡就先以 <code>departure</code> 意圖為例，在建立好意圖後，我們可以看到第三部分。在這裡要思考的是<strong>跟售票員說從哪裡到哪裡的時候，有幾種說法？</strong>，當初在建置模型時，大家集思廣益了這些句型。</li>
+</ol>
+<p><img src="https://i.imgur.com/hebPIqz.png"></p>
+<ol start="5">
+<li>按下全句分析後，會出現以下畫面：</li>
+</ol>
+<p><img src="https://i.imgur.com/3vvoC5l.png"></p>
+<p>垃圾桶就是刪除語句，這應該大家都懂；另外你可能可以發現，在每一句型右邊，都會有數字。以第4句為例，第4句右邊有一個數字6，這代表第4句跟第6句對 Loki 來說是相同的。至於你問我為什麼我還有這些數字，這是因為我實習的時候還沒有這功能啊！<del>歲月催人老</del></p>
+<p>來一一解說各個按鈕的功能各是什麼：若你按下數字，會出現 Articut 的斷詞結果，例如：</p>
+<p><img src="https://i.imgur.com/jkUqMwi.png"></p>
+<p>在這裡，你就可以確認 Articut 是否有正確理解你的句型。若進階一點的人，則可以按下 regex 確認句型是否有被正確理解。若你按下紅色框框，在這裡我按下「出發」，則會出現以下視窗：</p>
+<p><img src="https://i.imgur.com/3puZiqw.png"></p>
+<p>在這裡，系統也會根據機器學習的運算結果，來提示你同義詞可能有哪些，若你勾選這些同義詞，則可以讓 Loki 同時也理解這些詞彙。</p>
+<ol start="6">
+<li>假如我今天想要測試句子，則可以在區塊 6 測試。例如：我想測試「自新竹」是否有對到句型，則可以這麼做：</li>
+</ol>
+<p><img src="https://i.imgur.com/M6JItSk.png"></p>
+<p>從圖中可以發現，「自新竹」對到的是「從台北」的語句，因為「自」跟「從」都是 FUNC_inner，「台北」跟「新竹」則都是 LOCATION。所以這兩種是同一種句型。等一切都確定之後，你再按下部署模型之後，就可以回到上上一頁，再按下<strong>「下載範本」</strong>，並選擇 Python，就會出現 Python 的範本。我們就用編譯器打開樣本。</p>
+<ol start="7">
+<li>來一一介紹範本功能，若按到 <code>intent/Loki_departure.py</code>，你就可以看到以下畫面。</li>
+</ol>
+<p><img src="https://i.imgur.com/MqXplqq.png"></p>
+<p>在這裡，你可以設定抓到意圖之後要做些什麼，我在這裡做的是將抓取到的資訊存到<code>dict</code>字典裡，接著就可以透過這些搜集到的資料來做後續的任務。</p>
+<p><img src="https://i.imgur.com/G4ammO9.png"></p>
+<ol start="8">
+<li>運行程式檔 <code>python3 TransportationBot.py</code> 就可以一次測試句子在所有意圖的運行結果為何。</li>
+</ol>
+<p><img src="https://i.imgur.com/hCaPzHc.png"></p>
+<h2 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h2><p>在過去抓取意圖的處理方式，通常也運用統計語言模型，搭配上 embedding 去讓模型猜測你可能的意圖是什麼，但大家都不知道為什麼模型做出的樣的決定，就變得比較像是模型「剛好」猜中你想表達的意思，因此 NLU 對統計觀點的自然語言處理來說，是相對困難的技術。因為解釋力低、而且難以訓練。但是運用 Loki，我們就可以合理推斷並猜測，「從台北」的句型與「自新竹」一致，所以對模型來說，只要能抓到「從台北」的台北，那麼即使你用相同句型的「自新竹」，同樣也能讓模型透過「從台北」的句型抓到「新竹」。</p>
+<h4 id="延伸閱讀：深度研討｜NLP≠NLU，機器學習無法理解人類語言"><a href="#延伸閱讀：深度研討｜NLP≠NLU，機器學習無法理解人類語言" class="headerlink" title="延伸閱讀：深度研討｜NLP≠NLU，機器學習無法理解人類語言"></a>延伸閱讀：<a target="_blank" rel="noopener" href="https://communeit.medium.com/%E6%B7%B1%E5%BA%A6%E7%A0%94%E8%A8%8E-nlp-nlu-%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92%E7%84%A1%E6%B3%95%E7%90%86%E8%A7%A3%E4%BA%BA%E9%A1%9E%E8%AA%9E%E8%A8%80-4ea83b7bd356">深度研討｜NLP≠NLU，機器學習無法理解人類語言</a></h4>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/01/08/%E3%80%90NLP%E3%80%91Day-25-%E8%87%AA%E7%84%B6%E8%AA%9E%E8%A8%80%E8%99%95%E7%90%86%E7%9A%84%E5%8F%A6%E5%A4%96%E4%B8%80%E7%A8%AE%E6%83%B3%E5%83%8F%EF%BC%81Articut%E3%80%81Loki-%E4%BB%A5%E5%8F%8A%E4%BB%96%E7%9A%84%E5%A5%BD%E5%8A%A9%E6%89%8B%E5%80%91%EF%BC%81%EF%BC%88%E4%B8%8A%EF%BC%89/" rel="prev" title="【NLP】Day 25: 自然語言處理的另外一種想像！Articut、Loki 以及他的好助手們！（上）">
+                  <i class="fa fa-chevron-left"></i> 【NLP】Day 25: 自然語言處理的另外一種想像！Articut、Loki 以及他的好助手們！（上）
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/01/08/%E3%80%90Crawler%E3%80%91Day-27-%E7%88%AC%E7%88%AC%E7%88%AC%EF%BC%8C%E5%90%91%E5%89%8D%E7%88%AC%EF%BC%81%E7%B6%B2%E8%B7%AF%E7%88%AC%E8%9F%B2%E9%80%9F%E6%88%90%E7%8F%AD%EF%BC%81%EF%BC%88%E4%B8%8A%EF%BC%89/" rel="next" title="【Crawler】Day 27: 爬爬爬，向前爬！網路爬蟲速成班！（上）">
+                  【Crawler】Day 27: 爬爬爬，向前爬！網路爬蟲速成班！（上） <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa-solid fa-code"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hao Yun Chuang (Milan)</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/assets/hijiki.model.json"},"display":{"superSample":2,"width":250,"height":500,"position":"right","hOffset":-30,"vOffset":-130},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"log":false});</script></body>
+</html>

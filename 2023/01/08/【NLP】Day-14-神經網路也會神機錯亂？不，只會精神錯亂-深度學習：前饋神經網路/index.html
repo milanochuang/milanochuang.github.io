@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/icon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/icon.png">
+  <link rel="mask-icon" href="/images/icon.png" color="#222">
+  <meta name="google-site-verification" content="DMyRve2tDXDJqmJpSS4BaBWT1R0ZCH9n_EsCnROTiM0">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha256-xejo6yLi6vGtAjcMIsY8BHdKsLg7QynVlFMzdQgUuy8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"milanochuang.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.12.3","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="在夜城，不要相信任何人，受到背叛也是自己的錯…琦薇《電馭叛客：邊緣行者》  我很喜歡賽博龐克風格的相關作品，像是銀翼殺手、攻殼機動隊，都是我很愛的作品。最近在看《電馭叛客：邊緣行者》（好看，推薦大家去看），在動畫中，或是說在賽博龐克風格作品中的人物，為了要達到更高更強大的身體能力，會用電子零件（像是電子手臂，或是增快移動速度的軍事武器植入物等）將身體的一部分改造。而在電馭叛客中有個名詞：神機錯亂">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【NLP】Day 14: 神經網路也會神機錯亂？不，只會精神錯亂...深度學習：前饋神經網路">
+<meta property="og:url" content="https://milanochuang.github.io/2023/01/08/%E3%80%90NLP%E3%80%91Day-14-%E7%A5%9E%E7%B6%93%E7%B6%B2%E8%B7%AF%E4%B9%9F%E6%9C%83%E7%A5%9E%E6%A9%9F%E9%8C%AF%E4%BA%82%EF%BC%9F%E4%B8%8D%EF%BC%8C%E5%8F%AA%E6%9C%83%E7%B2%BE%E7%A5%9E%E9%8C%AF%E4%BA%82-%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92%EF%BC%9A%E5%89%8D%E9%A5%8B%E7%A5%9E%E7%B6%93%E7%B6%B2%E8%B7%AF/index.html">
+<meta property="og:site_name" content="米蘭牛角尖">
+<meta property="og:description" content="在夜城，不要相信任何人，受到背叛也是自己的錯…琦薇《電馭叛客：邊緣行者》  我很喜歡賽博龐克風格的相關作品，像是銀翼殺手、攻殼機動隊，都是我很愛的作品。最近在看《電馭叛客：邊緣行者》（好看，推薦大家去看），在動畫中，或是說在賽博龐克風格作品中的人物，為了要達到更高更強大的身體能力，會用電子零件（像是電子手臂，或是增快移動速度的軍事武器植入物等）將身體的一部分改造。而在電馭叛客中有個名詞：神機錯亂">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://cdn.oneesports.gg/cdn-data/2022/07/CyberpunkEdgerunners_hack.jpg">
+<meta property="og:image" content="https://i.imgur.com/zXooHW7.png">
+<meta property="og:image" content="https://i.imgur.com/1BPTrAt.png">
+<meta property="og:image" content="https://i.imgur.com/UKx4SaC.png">
+<meta property="og:image" content="https://i.imgur.com/YKY4TsI.png">
+<meta property="article:published_time" content="2023-01-08T11:47:00.000Z">
+<meta property="article:modified_time" content="2023-01-08T11:48:05.453Z">
+<meta property="article:author" content="Hao Yun Chuang (Milan)">
+<meta property="article:tag" content="自然語言處理">
+<meta property="article:tag" content="NLP">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.oneesports.gg/cdn-data/2022/07/CyberpunkEdgerunners_hack.jpg">
+
+
+<link rel="canonical" href="https://milanochuang.github.io/2023/01/08/%E3%80%90NLP%E3%80%91Day-14-%E7%A5%9E%E7%B6%93%E7%B6%B2%E8%B7%AF%E4%B9%9F%E6%9C%83%E7%A5%9E%E6%A9%9F%E9%8C%AF%E4%BA%82%EF%BC%9F%E4%B8%8D%EF%BC%8C%E5%8F%AA%E6%9C%83%E7%B2%BE%E7%A5%9E%E9%8C%AF%E4%BA%82-%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92%EF%BC%9A%E5%89%8D%E9%A5%8B%E7%A5%9E%E7%B6%93%E7%B6%B2%E8%B7%AF/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://milanochuang.github.io/2023/01/08/%E3%80%90NLP%E3%80%91Day-14-%E7%A5%9E%E7%B6%93%E7%B6%B2%E8%B7%AF%E4%B9%9F%E6%9C%83%E7%A5%9E%E6%A9%9F%E9%8C%AF%E4%BA%82%EF%BC%9F%E4%B8%8D%EF%BC%8C%E5%8F%AA%E6%9C%83%E7%B2%BE%E7%A5%9E%E9%8C%AF%E4%BA%82-%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92%EF%BC%9A%E5%89%8D%E9%A5%8B%E7%A5%9E%E7%B6%93%E7%B6%B2%E8%B7%AF/","path":"2023/01/08/【NLP】Day-14-神經網路也會神機錯亂？不，只會精神錯亂-深度學習：前饋神經網路/","title":"【NLP】Day 14: 神經網路也會神機錯亂？不，只會精神錯亂...深度學習：前饋神經網路"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>【NLP】Day 14: 神經網路也會神機錯亂？不，只會精神錯亂...深度學習：前饋神經網路 | 米蘭牛角尖</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">米蘭牛角尖</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">計算語言學的學習紀錄，偶爾可能會出現野生的電影評論？</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>關於</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分類</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>所有文章</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A5%9E%E7%B6%93%E7%B6%B2%E8%B7%AF%E7%9A%84%E7%B5%90%E6%A7%8B"><span class="nav-number">1.</span> <span class="nav-text">神經網路的結構</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A5%9E%E7%B6%93%E5%85%83"><span class="nav-number">1.1.</span> <span class="nav-text">神經元</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BF%80%E5%8B%B5%E5%87%BD%E6%95%B8"><span class="nav-number">1.2.</span> <span class="nav-text">激勵函數</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D"><span class="nav-number">1.3.</span> <span class="nav-text">梯度下降</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Error-backpropagation"><span class="nav-number">1.4.</span> <span class="nav-text">Error backpropagation</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E7%84%B6%E8%AA%9E%E8%A8%80%E8%99%95%E7%90%86%E7%9A%84%E9%81%8B%E4%BD%9C"><span class="nav-number">2.</span> <span class="nav-text">自然語言處理的運作</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Hao Yun Chuang (Milan)"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Hao Yun Chuang (Milan)</p>
+  <div class="site-description" itemprop="description">目前就讀於政大語言所，研究興趣為計算語言學<br/></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">32</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/milanochuang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;milanochuang" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:milanochuang@gmail.com" title="E-Mail → mailto:milanochuang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/milanochuang" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;milanochuang" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/milanochuang" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;milanochuang" rel="noopener" target="_blank"><i class="fab fa-facebook fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://instagram.com/milanochuang" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;milanochuang" rel="noopener" target="_blank"><i class="fab fa-instagram fa-fw"></i></a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/milanochuang" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://milanochuang.github.io/2023/01/08/%E3%80%90NLP%E3%80%91Day-14-%E7%A5%9E%E7%B6%93%E7%B6%B2%E8%B7%AF%E4%B9%9F%E6%9C%83%E7%A5%9E%E6%A9%9F%E9%8C%AF%E4%BA%82%EF%BC%9F%E4%B8%8D%EF%BC%8C%E5%8F%AA%E6%9C%83%E7%B2%BE%E7%A5%9E%E9%8C%AF%E4%BA%82-%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92%EF%BC%9A%E5%89%8D%E9%A5%8B%E7%A5%9E%E7%B6%93%E7%B6%B2%E8%B7%AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Hao Yun Chuang (Milan)">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="米蘭牛角尖">
+      <meta itemprop="description" content="目前就讀於政大語言所，研究興趣為計算語言學<br/>">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="【NLP】Day 14: 神經網路也會神機錯亂？不，只會精神錯亂...深度學習：前饋神經網路 | 米蘭牛角尖">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【NLP】Day 14: 神經網路也會神機錯亂？不，只會精神錯亂...深度學習：前饋神經網路
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2023-01-08 19:47:00 / 修改時間：19:48:05" itemprop="dateCreated datePublished" datetime="2023-01-08T19:47:00+08:00">2023-01-08</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <blockquote>
+<p>在夜城，不要相信任何人，受到背叛也是自己的錯…<br><strong>琦薇《電馭叛客：邊緣行者》</strong></p>
+</blockquote>
+<p>我很喜歡賽博龐克風格的相關作品，像是銀翼殺手、攻殼機動隊，都是我很愛的作品。最近在看《電馭叛客：邊緣行者》（好看，推薦大家去看），在動畫中，或是說在賽博龐克風格作品中的人物，為了要達到更高更強大的身體能力，會用電子零件（像是電子手臂，或是增快移動速度的軍事武器植入物等）將身體的一部分改造。而在電馭叛客中有個名詞：<em>神機錯亂</em>，意指若身上已經乘載過多改裝與植入，這些電子組件會侵蝕人性，並擾亂心智，到最後迷失自我。</p>
+<p>最近在寫神經網路的我，突然覺得神經網路跟神機錯亂真像。在一開始，疊了一層兩層的神經網路，得到了還算可以（夠用）的結果，但為了要達到更高的準確度、更好的表現，疊了更多層的神經網路上去，卻在梯度下降找最佳解時，碰到梯度爆炸或是梯度消失的問題，最後就一直徘徊在局部最小值的谷底出不來，然後他就停止學習了，<strong>不就很像神機錯亂嗎？</strong></p>
+<p><img src="https://cdn.oneesports.gg/cdn-data/2022/07/CyberpunkEdgerunners_hack.jpg"></p>
+<p>扯遠了<del>不可能每次都扯遠吧</del>，今天首先要介紹的是前饋神經網路，若說機器學習的第一個模型是貝氏分類模型，那麼深度學習就一定要從前饋神經網路開始講起。首先會先從神經網路的基本結構開始，一直到自然語言處理實務上的操作，話不多說，就讓我們開始吧！</p>
+<h2 id="神經網路的結構"><a href="#神經網路的結構" class="headerlink" title="神經網路的結構"></a>神經網路的結構</h2><p>神經網路的基本架構大致上可以分成三個部分：</p>
+<ul>
+<li><strong>輸入層（input layer）</strong>：初步資料會先經過輸入層進行處理。在自然語言處理中通常會是傳遞給embedding layer的one-hot vector。</li>
+<li><strong>隱藏層（hidden layer）</strong>：隱藏層可以有一層以上，在隱藏層中，會透過「權重」計算輸出。通常隱藏層會篩選出多餘的資訊，並將所習得之重要資訊傳遞給下一層隱藏層。</li>
+<li><strong>輸出層（output layer）</strong>：學習成果，通常會是以機率的形式呈現。</li>
+</ul>
+<h3 id="神經元"><a href="#神經元" class="headerlink" title="神經元"></a>神經元</h3><p>這些神經層中，是由一個一個的節點組成，這些節點有時候也會被稱為 <strong>「神經元」（neuron）</strong> ，這些節點其實就是將<strong>特徵乘上權重</strong>，再加上一個偏項b，那麼很多個節點所組成的神經網路，事實上也就是很多個函式所組成的函式組！</p>
+<!-- ![](https://i.imgur.com/u7qOiHj.png) -->
+<p><img src="https://i.imgur.com/zXooHW7.png"></p>
+<p>有沒有覺得很熟悉，因為這個計算方式跟羅吉斯迴歸<strong>一模模一樣樣！！！</strong> 也就是當時在羅吉斯迴歸時所說的<strong>計算原始分數</strong>，再將我們計算的z值，也就是原始分數，放入<strong>激勵函數</strong>，將線性解轉換成非線性解，因為有些狀況之下，線性解並無法解決。</p>
+<p><img src="https://i.imgur.com/1BPTrAt.png"></p>
+<p>比如說像以上這種狀況，要畫一條線把藍點跟白點分開，左邊數過來第一張圖跟第二張圖都可以只利用一條線將兩者區別，但難保現實中會有第三張圖，這時候就會需要非線性解來幫助我們解決這種類型的問題。</p>
+<h3 id="激勵函數"><a href="#激勵函數" class="headerlink" title="激勵函數"></a>激勵函數</h3><p>我們在前幾天有討論過Sigmoid以及Softmax，這裡就先不贅述，若遺漏掉那部份的可以回去看我之前的<a target="_blank" rel="noopener" href="https://ithelp.ithome.com.tw/articles/10299617">文章</a>。今天要來討論另外兩個激勵函數，也就是tanh 以及Rectified Linear Unit（ReLU）。<br><img src="https://i.imgur.com/UKx4SaC.png"><br>A圖是tanh，B圖是ReLU，一樣也是各有優缺點。</p>
+<ul>
+<li><strong>tanh函式</strong>：在接近上下界時也趨近於平，所以也能像Sigmoid一樣擅長處理離群值，另外一樣也可以微分，記得先前所說找最佳解時，可不可微是很重要的特性，<del>通常我們希望可微啦，人稱<strong>欲可微</strong></del>。</li>
+<li><strong>ReLU</strong>：結果可以非常接近線性。</li>
+</ul>
+<blockquote>
+<p>但像是Sigmoid或是tanh這種上下界趨平的函式，一階導數很有可能接近於零，接近零的結果，就是在進行梯度下降時發現梯度不見，模型也停止學習了，這就是所謂的<strong>梯度消失（gradient vanishing）</strong></p>
+</blockquote>
+<h3 id="梯度下降"><a href="#梯度下降" class="headerlink" title="梯度下降"></a>梯度下降</h3><p>詳見我先前的文章：<a target="_blank" rel="noopener" href="https://ithelp.ithome.com.tw/articles/10299617">【NLP】Day 12: 豬耳朵餅乾跟機器學習也有關係？機器學習：羅吉斯回歸</a></p>
+<h3 id="Error-backpropagation"><a href="#Error-backpropagation" class="headerlink" title="Error backpropagation"></a>Error backpropagation</h3><p>神經網路有另外一個優點是，如果發現錯誤，模型會往回修正。但這部分有點複雜，我們在之後的文章再詳細介紹。</p>
+<h2 id="自然語言處理的運作"><a href="#自然語言處理的運作" class="headerlink" title="自然語言處理的運作"></a>自然語言處理的運作</h2><p>自然語言處理上的神經網路又有一點不一樣，在這裡為了處理訓練資料中所沒有的資料，會再多一個嵌入層（embedding layer）。<br><img src="https://i.imgur.com/YKY4TsI.png"></p>
+<ol>
+<li><strong>輸入層（input layer）</strong>：one-hot vector<br>自然語言處理的第一層神經網路通常會是one-hot vector，通常是為了標注其在嵌入層中的位置，藉此幫助模型更好理解語意。假如說今天<code>海賊王</code>在embedding layer中的第三個位置，並假設embedding layer的矩陣維度為5，那麼one-hot vector就會是<code>[0, 0, 1, 0, 0]</code>。</li>
+<li><strong>嵌入層（embedding layer）</strong><br>記得在講Word2Vec時（忘記的話可以回去複習 <a target="_blank" rel="noopener" href="https://ithelp.ithome.com.tw/articles/10297745">Day 9: 又是國王皇后的例子啦！Word2Vec、N-Gram</a>，我這篇的點閱率低的可憐。）我們有提到可以訓練一個word embedding，讓電腦了解語意間的關係，但是要注意這裡的語意關係很吃訓練資料的領域跟品質。這麼一來，即使出現了模型先前沒「看」過的字，透過這個embedding也能較好地處理這類的問題。比如說： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">training data: 索隆/跟/龍馬/拿/劍/決鬥</span><br><span class="line">test data: 鷹眼/跟/比斯塔/用/劍/對決</span><br></pre></td></tr></table></figure>
+ 即使模型沒有在訓練資料看過鷹眼，但是因為Word embedding，我們可以推斷「索隆」跟「鷹眼」有很近的「語意關係」（可能因為都是劍客？），所以還是能推斷「鷹眼」後面可能會出現的字，跟「索隆」很接近。</li>
+<li><strong>隱藏層（hidden layer）</strong><br>再次乘上學習過後的權重。</li>
+<li><strong>輸出層（output layer）</strong>：activation function<br>同樣就是透過激勵函數輸出成機率，詳見前文。</li>
+</ol>
+<p>就是這樣，明天見！</p>
+<p>下一篇文章</p>
+<blockquote>
+<p>➡️ <a target="_blank" rel="noopener" href="https://ithelp.ithome.com.tw/articles/10302256">【NLP】Day 15: 跟你我一樣選擇性記憶的神經網路？深度學習：長短期記憶 LSTM</a></p>
+</blockquote>
+<p>若你有空，也歡迎來看看其他文章</p>
+<blockquote>
+<p>➡️ <a target="_blank" rel="noopener" href="https://ithelp.ithome.com.tw/articles/10300307">【NLP】Day 13: 可不可以再深一點點就好？深度學習基礎知識：你需要知道的這些那些</a><br>➡️ <a target="_blank" rel="noopener" href="https://ithelp.ithome.com.tw/articles/10299617">【NLP】Day 12: 豬耳朵餅乾跟機器學習也有關係？機器學習：羅吉斯回歸</a><br>➡️ <a target="_blank" rel="noopener" href="https://ithelp.ithome.com.tw/articles/10298847">【NLP】Day 11: 什麼？妳男友有乾妹妹？那你很大機率被綠了！機器學習：貝氏分類器</a></p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%87%AA%E7%84%B6%E8%AA%9E%E8%A8%80%E8%99%95%E7%90%86/" rel="tag"># 自然語言處理</a>
+              <a href="/tags/NLP/" rel="tag"># NLP</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/01/08/%E3%80%90NLP%E3%80%91Day-13-%E5%8F%AF%E4%B8%8D%E5%8F%AF%E4%BB%A5%E5%86%8D%E6%B7%B1%E4%B8%80%E9%BB%9E%E9%BB%9E%E5%B0%B1%E5%A5%BD%EF%BC%9F%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92%E5%9F%BA%E7%A4%8E%E7%9F%A5%E8%AD%98%EF%BC%9A%E4%BD%A0%E9%9C%80%E8%A6%81%E7%9F%A5%E9%81%93%E7%9A%84%E9%80%99%E4%BA%9B%E9%82%A3%E4%BA%9B/" rel="prev" title="【NLP】Day 13: 可不可以再深一點點就好？深度學習基礎知識：你需要知道的這些那些">
+                  <i class="fa fa-chevron-left"></i> 【NLP】Day 13: 可不可以再深一點點就好？深度學習基礎知識：你需要知道的這些那些
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/01/08/%E3%80%90NLP%E3%80%91Day-15-%E5%9C%93%E5%9C%93%E5%9C%88%E5%9C%88%E5%9C%93%E5%9C%93%EF%BD%9E%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92%EF%BC%9A%E5%BE%AA%E7%92%B0%E7%A5%9E%E7%B6%93%E7%B6%B2%E8%B7%AF-RNN/" rel="next" title="【NLP】Day 15: 圓圓圈圈圓圓～深度學習：循環神經網路 RNN">
+                  【NLP】Day 15: 圓圓圈圈圓圓～深度學習：循環神經網路 RNN <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa-solid fa-code"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hao Yun Chuang (Milan)</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/assets/hijiki.model.json"},"display":{"superSample":2,"width":250,"height":500,"position":"right","hOffset":-30,"vOffset":-130},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"log":false});</script></body>
+</html>

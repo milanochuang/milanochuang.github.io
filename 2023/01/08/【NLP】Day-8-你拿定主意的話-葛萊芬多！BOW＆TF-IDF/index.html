@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/icon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/icon.png">
+  <link rel="mask-icon" href="/images/icon.png" color="#222">
+  <meta name="google-site-verification" content="DMyRve2tDXDJqmJpSS4BaBWT1R0ZCH9n_EsCnROTiM0">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha256-xejo6yLi6vGtAjcMIsY8BHdKsLg7QynVlFMzdQgUuy8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"milanochuang.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.12.3","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="「拿定主意了嗎？你能成大器，你知道，在你一念之間，史萊哲林能幫助你走向輝煌，這毫無疑問——不樂意？那好，既然你已經拿定主意——那就最好去葛來芬多吧！」分類帽《哈利波特：神秘的魔法石》  這幾天下來我們學了正規表達式、斷詞等等，這些都是屬於資料前處理的範疇。是說，剛剛在寫稿前，還被我的隊友罵說，啊我的正規表達式怎麼寫那麼少！欸不是，在這邊跟各位解釋一下，我的規劃就是簡單介紹正規表達式的三個函式，然">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【NLP】Day 8: 你拿定主意的話...葛萊芬多！BOW＆TF-IDF">
+<meta property="og:url" content="https://milanochuang.github.io/2023/01/08/%E3%80%90NLP%E3%80%91Day-8-%E4%BD%A0%E6%8B%BF%E5%AE%9A%E4%B8%BB%E6%84%8F%E7%9A%84%E8%A9%B1-%E8%91%9B%E8%90%8A%E8%8A%AC%E5%A4%9A%EF%BC%81BOW%EF%BC%86TF-IDF/index.html">
+<meta property="og:site_name" content="米蘭牛角尖">
+<meta property="og:description" content="「拿定主意了嗎？你能成大器，你知道，在你一念之間，史萊哲林能幫助你走向輝煌，這毫無疑問——不樂意？那好，既然你已經拿定主意——那就最好去葛來芬多吧！」分類帽《哈利波特：神秘的魔法石》  這幾天下來我們學了正規表達式、斷詞等等，這些都是屬於資料前處理的範疇。是說，剛剛在寫稿前，還被我的隊友罵說，啊我的正規表達式怎麼寫那麼少！欸不是，在這邊跟各位解釋一下，我的規劃就是簡單介紹正規表達式的三個函式，然">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://miro.medium.com/max/1400/1*ujkZ3JrQ6ubSuEpepHE4Aw.png">
+<meta property="og:image" content="https://i.imgur.com/62G3jIE.png">
+<meta property="og:image" content="https://i.imgur.com/Apsf9ei.png">
+<meta property="og:image" content="https://chart.googleapis.com/chart?cht=tx&chl=d_%7B%7Bj%7D%7D">
+<meta property="og:image" content="https://chart.googleapis.com/chart?cht=tx&chl=%7B%5Cdisplaystyle%20n_%7Bk,j%7D%7D">
+<meta property="og:image" content="https://chart.googleapis.com/chart?cht=tx&chl=%7B%5Cdisplaystyle%20t_%7Bk%7D%7D">
+<meta property="og:image" content="https://chart.googleapis.com/chart?cht=tx&chl=n_%7B%7Bi,j%7D%7D">
+<meta property="og:image" content="https://chart.googleapis.com/chart?cht=tx&chl=%7B%5Csum%20_%7Bk%7Dn_%7B%7Bk,j%7D%7D%7D">
+<meta property="og:image" content="https://chart.googleapis.com/chart?cht=tx&chl=d_%7B%7Bj%7D%7D">
+<meta property="og:image" content="https://i.imgur.com/xCnZlRe.png">
+<meta property="og:image" content="https://chart.googleapis.com/chart?cht=tx&chl=%7CD%7C">
+<meta property="og:image" content="https://chart.googleapis.com/chart?cht=tx&chl=%7C%5C%7Bj:t_%7B%7Bi%7D%7D%5Cin%20d_%7B%7Bj%7D%7D%5C%7D%7C">
+<meta property="og:image" content="https://chart.googleapis.com/chart?cht=tx&chl=t_%7B%7Bi%7D%7D">
+<meta property="article:published_time" content="2023-01-08T11:40:00.000Z">
+<meta property="article:modified_time" content="2023-01-08T11:40:55.200Z">
+<meta property="article:author" content="Hao Yun Chuang (Milan)">
+<meta property="article:tag" content="自然語言處理">
+<meta property="article:tag" content="NLP">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://miro.medium.com/max/1400/1*ujkZ3JrQ6ubSuEpepHE4Aw.png">
+
+
+<link rel="canonical" href="https://milanochuang.github.io/2023/01/08/%E3%80%90NLP%E3%80%91Day-8-%E4%BD%A0%E6%8B%BF%E5%AE%9A%E4%B8%BB%E6%84%8F%E7%9A%84%E8%A9%B1-%E8%91%9B%E8%90%8A%E8%8A%AC%E5%A4%9A%EF%BC%81BOW%EF%BC%86TF-IDF/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://milanochuang.github.io/2023/01/08/%E3%80%90NLP%E3%80%91Day-8-%E4%BD%A0%E6%8B%BF%E5%AE%9A%E4%B8%BB%E6%84%8F%E7%9A%84%E8%A9%B1-%E8%91%9B%E8%90%8A%E8%8A%AC%E5%A4%9A%EF%BC%81BOW%EF%BC%86TF-IDF/","path":"2023/01/08/【NLP】Day-8-你拿定主意的話-葛萊芬多！BOW＆TF-IDF/","title":"【NLP】Day 8: 你拿定主意的話...葛萊芬多！BOW＆TF-IDF"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>【NLP】Day 8: 你拿定主意的話...葛萊芬多！BOW＆TF-IDF | 米蘭牛角尖</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">米蘭牛角尖</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">計算語言學的學習紀錄，偶爾可能會出現野生的電影評論？</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>關於</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分類</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>所有文章</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AA%9E%E8%A8%80%E6%A8%A1%E5%9E%8B%EF%BC%88Language-Modeling%EF%BC%89"><span class="nav-number">1.</span> <span class="nav-text">語言模型（Language Modeling）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A9%9E%E8%A2%8B%EF%BC%88Bag-of-Words%EF%BC%89"><span class="nav-number">2.</span> <span class="nav-text">詞袋（Bag-of-Words）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TF-IDF"><span class="nav-number">3.</span> <span class="nav-text">TF-IDF</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Term-frequency-%EF%BC%88TF%EF%BC%89"><span class="nav-number">3.1.</span> <span class="nav-text">Term frequency （TF）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Inversed-Document-frequency-%EF%BC%88IDF%EF%BC%89"><span class="nav-number">3.2.</span> <span class="nav-text">Inversed Document frequency （IDF）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%95%8F%E9%A1%8C%E8%88%87%E8%A8%8E%E8%AB%96"><span class="nav-number">4.</span> <span class="nav-text">問題與討論</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Hao Yun Chuang (Milan)"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Hao Yun Chuang (Milan)</p>
+  <div class="site-description" itemprop="description">目前就讀於政大語言所，研究興趣為計算語言學<br/></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">32</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/milanochuang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;milanochuang" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:milanochuang@gmail.com" title="E-Mail → mailto:milanochuang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/milanochuang" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;milanochuang" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/milanochuang" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;milanochuang" rel="noopener" target="_blank"><i class="fab fa-facebook fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://instagram.com/milanochuang" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;milanochuang" rel="noopener" target="_blank"><i class="fab fa-instagram fa-fw"></i></a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/milanochuang" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://milanochuang.github.io/2023/01/08/%E3%80%90NLP%E3%80%91Day-8-%E4%BD%A0%E6%8B%BF%E5%AE%9A%E4%B8%BB%E6%84%8F%E7%9A%84%E8%A9%B1-%E8%91%9B%E8%90%8A%E8%8A%AC%E5%A4%9A%EF%BC%81BOW%EF%BC%86TF-IDF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Hao Yun Chuang (Milan)">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="米蘭牛角尖">
+      <meta itemprop="description" content="目前就讀於政大語言所，研究興趣為計算語言學<br/>">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="【NLP】Day 8: 你拿定主意的話...葛萊芬多！BOW＆TF-IDF | 米蘭牛角尖">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【NLP】Day 8: 你拿定主意的話...葛萊芬多！BOW＆TF-IDF
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2023-01-08 19:40:00 / 修改時間：19:40:55" itemprop="dateCreated datePublished" datetime="2023-01-08T19:40:00+08:00">2023-01-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/natural-language-processing/" itemprop="url" rel="index"><span itemprop="name">自然語言處理</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <blockquote>
+<p>「拿定主意了嗎？你能成大器，你知道，在你一念之間，史萊哲林能幫助你走向輝煌，這毫無疑問——不樂意？那好，既然你已經拿定主意——那就最好去葛來芬多吧！」<br><strong>分類帽《哈利波特：神秘的魔法石》</strong></p>
+</blockquote>
+<p>這幾天下來我們學了正規表達式、斷詞等等，這些都是屬於資料前處理的範疇。是說，剛剛在寫稿前，還被我的隊友罵說，啊我的正規表達式怎麼寫那麼少！欸不是，在這邊跟各位解釋一下，我的規劃就是簡單介紹正規表達式的三個函式，然後正規表達式常用的三個函式就是那三個，如果用到第四個再去查就可以了，<del>我甚至很懷疑有沒有第四個函式</del>，這個系列的文章就是適合我引你進門，至於修行就是要看個人啦！如果還想要更詳細的介紹文章，那我大力推薦我隊友<a target="_blank" rel="noopener" href="https://ithelp.ithome.com.tw/users/20151687/ironman/5359">fish_in_bed</a>以及<a target="_blank" rel="noopener" href="https://ithelp.ithome.com.tw/users/20151689/ironman/5357">cjon_06991</a>寫的文章，內容真的很豐富，在這邊提供傳送門給各位。</p>
+<p>OK！閒聊結束！</p>
+<p>今天漸漸要進入自然語言目前主流的機器學習方法，預計將會介紹詞袋（Bag-of-Words, BoW）、TF-IDF，應該啦，如果我寫得了這麼多的話。</p>
+<h2 id="語言模型（Language-Modeling）"><a href="#語言模型（Language-Modeling）" class="headerlink" title="語言模型（Language Modeling）"></a>語言模型（Language Modeling）</h2><p>不知道各位在第一次看到所謂「語言模型」時，想到的是什麼？是以語言學搭建的機器學習模型嗎？還是大量資料丟進去演算的人工智慧？（在這裡，我偏好使用自然語言處理）其實自然語言處理<strong>在過去的研究脈絡中，傾向於將各語言的最小單位視作一個一個的token，並透過這些token進行統計上的機率模擬及運算</strong>，因此也有些人也會稱其為<strong>統計語言模型（Statistical Language Modeling）</strong> 。</p>
+<p>像是有一篇計算語言學學生必讀的經典論文 <strong><a target="_blank" rel="noopener" href="https://www.jmlr.org/papers/volume3/bengio03a/bengio03a.pdf">A Neural Probabilistic Language Model</a></strong> 摘要的第一行就寫著：</p>
+<blockquote>
+<p>統計語言模型的目標是透過文字序列了解在語言中字與字之間的聯合機率。</p>
+</blockquote>
+<p>其實就是將文字轉成數字的形式讓電腦理解啦！不過若你仔細一想，倒也很好可以理解為什麼需要從統計的角度去看待自然語言處理，這是因為電腦跟人腦不同，電腦無法直接處理文字資料，但電腦非常擅長處理數值資料的演算，因此自然語言處理領域有一大半都是將文字轉成數值資料的研究。</p>
+<p>而我們接下來要介紹的就是三種經典文本轉數值的常見方法。</p>
+<h2 id="詞袋（Bag-of-Words）"><a href="#詞袋（Bag-of-Words）" class="headerlink" title="詞袋（Bag-of-Words）"></a>詞袋（Bag-of-Words）</h2><p><img src="https://miro.medium.com/max/1400/1*ujkZ3JrQ6ubSuEpepHE4Aw.png"></p>
+<p>前人種樹，後人乘涼。另外一本計算語言學的必讀經典 <a target="_blank" rel="noopener" href="https://web.stanford.edu/~jurafsky/slp3/">Speech and Language Processing</a> 其中的一張圖就完美詮釋了詞袋（Bag of Words）的概念。我們前面已經介紹過斷詞，其實詞袋就是將斷詞過後所得到的這些詞類作為一個一個的袋子，接著將這些字一一丟進這些袋子裡面。這就是詞袋的概念，這種計算詞頻的方式也是詞袋的其中一種做法。</p>
+<p>另外一種做法，則是以獨熱編碼（One-Hot Encoding）的形式呈現<del>其實根本沒有人會用中文吧？</del> 也就是說，先找出詞袋後，詞袋中的詞序為隨機，接著對照每一個句子，若句子有詞袋中的字，則編碼為<code>1</code>，無則<code>0</code>。</p>
+<p>讓我們來看看以下例子：</p>
+<ul>
+<li><strong>斷詞後的結果</strong>  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">魯夫/說/他/想要/成為/海賊王</span><br><span class="line">娜美/說/他/想要/描繪/世界海圖</span><br></pre></td></tr></table></figure></li>
+<li><strong>詞袋</strong>  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[&#x27;魯夫&#x27;, &#x27;娜美&#x27;, &#x27;説&#x27;, &#x27;他&#x27;, &#x27;想要&#x27;, 成為&#x27;, &#x27;描繪&#x27;, &#x27;海賊王&#x27;, &#x27;世界海圖&#x27;]</span><br></pre></td></tr></table></figure></li>
+<li><strong>獨熱編碼（One-Hot Encoding）</strong>  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[1, 0, 1, 1, 1, 1, 0, 1, 0]</span><br><span class="line">[0, 1, 1, 1, 1, 0, 1, 0, 1]</span><br></pre></td></tr></table></figure>
+我們可以發現詞袋像是一條模板一樣，將它跟句子比對之後，接著賦值。這麼一來，每一個句子就會有屬於自己的encoding，並利用這種方式賦予每一個句子獨立的存在。但就如同前面我們不斷建立的一個觀念一樣，沒有最好或是最差的方式，只有最適合的方式。既然是最早的文字轉數值方法，一定有這種方法的缺點：</li>
+</ul>
+<ol>
+<li><strong>維度災難（Disaster of Dimensionality）</strong>：假如說今天的文本詞類高達1000多種，那輸入資料的維度也就高達1000多維，意即有1000多個欄位，這是何其驚人！如此龐大的維度其實並不利於電腦的機器學習，可能會造成<strong>維度災難（Disaster of Dimensionality）</strong>，也對電腦是一大負擔。</li>
+<li><strong>資料稀疏（Data sparsity）</strong>：當資料越來越多，詞彙也跟著越來越多時，你可能會發現說，這麼一來在編碼內的<code>0</code>也會越來越多。這種情形稱為<strong>資料的稀疏性（Data sparsity）</strong>。相對於其他數值上的機器學習，這在NLP中是一個很嚴重的問題。這是因為資料一旦稀疏，就難以讓演算法判別不同句子之間的差異性（記得之前提到BoW的一個很大重點是句子之間的差異嗎？）更不用說語言具有無限可能。若出現其他新的模型沒看過的資料，BoW就比較沒辦法處理了。</li>
+</ol>
+<p>那麼後人為了解決這些問題，TF-IDF以及Word2Vec出現了。</p>
+<h2 id="TF-IDF"><a href="#TF-IDF" class="headerlink" title="TF-IDF"></a>TF-IDF</h2><p>TF-IDF，是一種在一個大語料庫中，找出每一篇文章關鍵字的計算方式。顧名思義，包含了字詞頻率（Term Frequency）以及逆向文件頻率(Inversed Document Frequency)，並將兩者相乘，所得的分數稱為TF-IDF。</p>
+<p><img src="https://i.imgur.com/62G3jIE.png"></p>
+<h3 id="Term-frequency-（TF）"><a href="#Term-frequency-（TF）" class="headerlink" title="Term frequency （TF）"></a>Term frequency （TF）</h3><p>記得前面的斷詞所分成的token嗎？TF就是這些token在文本中的出現頻率，再除以那篇文章的字數，這是因為文本的篇幅都有長有短，一篇落落長的文章，詞彙出現的次數當然就可能會比較多囉，為了避免這種狀況，通常都會除上文章字數，這樣子的過程叫做將文本<strong>正規化</strong>。</p>
+<p><img src="https://i.imgur.com/Apsf9ei.png"></p>
+<p>檔案<img src="https://chart.googleapis.com/chart?cht=tx&chl=d_%7B%7Bj%7D%7D" alt="https://chart.googleapis.com/chart?cht=tx&amp;chl=d_%7B%7Bj%7D%7D">中共有$k$個詞語<br><img src="https://chart.googleapis.com/chart?cht=tx&chl=%7B%5Cdisplaystyle%20n_%7Bk,j%7D%7D" alt="https://chart.googleapis.com/chart?cht=tx&amp;chl=%7B%5Cdisplaystyle%20n_%7Bk%2Cj%7D%7D">：<img src="https://chart.googleapis.com/chart?cht=tx&chl=%7B%5Cdisplaystyle%20t_%7Bk%7D%7D" alt="https://chart.googleapis.com/chart?cht=tx&amp;chl=%7B%5Cdisplaystyle%20t_%7Bk%7D%7D">在檔案$d_$中出現的次數<br><img src="https://chart.googleapis.com/chart?cht=tx&chl=n_%7B%7Bi,j%7D%7D" alt="https://chart.googleapis.com/chart?cht=tx&amp;chl=n_%7B%7Bi%2Cj%7D%7D">：該詞在檔案$d_$中的出現次數<br><img src="https://chart.googleapis.com/chart?cht=tx&chl=%7B%5Csum%20_%7Bk%7Dn_%7B%7Bk,j%7D%7D%7D" alt="https://chart.googleapis.com/chart?cht=tx&amp;chl=%7B%5Csum%20_%7Bk%7Dn_%7B%7Bk%2Cj%7D%7D%7D">：在檔案<img src="https://chart.googleapis.com/chart?cht=tx&chl=d_%7B%7Bj%7D%7D" alt="https://chart.googleapis.com/chart?cht=tx&amp;chl=d_%7B%7Bj%7D%7D">中所有字詞的出現次數之和。</p>
+<h3 id="Inversed-Document-frequency-（IDF）"><a href="#Inversed-Document-frequency-（IDF）" class="headerlink" title="Inversed Document frequency （IDF）"></a>Inversed Document frequency （IDF）</h3><p>那為了要減少term frequency在某些文章中過高，或者是有些字在文章中雖然很常出現，但是卻不代表任何意義的情形（e.g. a, an, the），所以也要乘上一個數，可以使其值減低。對機器學習有一點概念的朋友，我認為可以把IDF想像成Penalty。Inversed Document frequency計算的則是以語料庫中的文本數除以文本中含有token的文本數，接著再取自然對數。白話的意思就是，若<strong>某些字集中出現在某幾篇文本中，代表這些字在這些文本中越重要，idf就越高</strong>，反之，<strong>若某些字在幾乎所有文本中都有出現，代表這些字其實並不那麼重要，idf就越低。</strong></p>
+<p><img src="https://i.imgur.com/xCnZlRe.png"></p>
+<p><img src="https://chart.googleapis.com/chart?cht=tx&chl=%7CD%7C" alt="https://chart.googleapis.com/chart?cht=tx&amp;chl=%7CD%7C">：語料庫中的檔案總數<br><img src="https://chart.googleapis.com/chart?cht=tx&chl=%7C%5C%7Bj:t_%7B%7Bi%7D%7D%5Cin%20d_%7B%7Bj%7D%7D%5C%7D%7C" alt="https://chart.googleapis.com/chart?cht=tx&amp;chl=%7C%5C%7Bj%3At_%7B%7Bi%7D%7D%5Cin%20d_%7B%7Bj%7D%7D%5C%7D%7C">：包含詞語<img src="https://chart.googleapis.com/chart?cht=tx&chl=t_%7B%7Bi%7D%7D" alt="https://chart.googleapis.com/chart?cht=tx&amp;chl=t_%7B%7Bi%7D%7D">的檔案數目</p>
+<p>下面提供簡單程式碼：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> feature_extraction  </span><br><span class="line"><span class="keyword">from</span> sklearn.feature_extraction.text <span class="keyword">import</span> TfidfTransformer  </span><br><span class="line"><span class="keyword">from</span> sklearn.feature_extraction.text <span class="keyword">import</span> CountVectorizer  </span><br><span class="line">corpus = [<span class="string">&quot;魯夫 是 想要 成為 海賊王 的 男人&quot;</span>, </span><br><span class="line">        <span class="string">&quot;索隆 是 想要 成為 世界 最強 劍士 的 男人&quot;</span>, </span><br><span class="line">        <span class="string">&quot;娜美 想要 畫出 全 世界 的 海圖&quot;</span>, </span><br><span class="line">        <span class="string">&quot;香吉士 想要 找到 ALL_BLUE&quot;</span>, </span><br><span class="line">        <span class="string">&quot;騙人布 想要 成為 勇敢 的 海上戰士&quot;</span>, </span><br><span class="line">        <span class="string">&quot;喬巴 想要 成為 萬靈藥&quot;</span>, </span><br><span class="line">        <span class="string">&quot;羅賓 想要 找到 所有 歷史本文&quot;</span>, </span><br><span class="line">        <span class="string">&quot;佛朗基 想要 千陽號 航向 世界 盡頭&quot;</span>, </span><br><span class="line">        <span class="string">&quot;布魯克 想要 環繞 世界 重逢 拉布&quot;</span>]</span><br><span class="line">vectorizer=CountVectorizer() </span><br><span class="line">transformer=TfidfTransformer()  </span><br><span class="line">tfidf=transformer.fit_transform(vectorizer.fit_transform(corpus))</span><br><span class="line">word=vectorizer.get_feature_names()</span><br><span class="line">weight=tfidf.toarray() </span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(weight)):  </span><br><span class="line"><span class="built_in">print</span>(<span class="string">u&quot;-------這裡輸出第&quot;</span>,i,<span class="string">u&quot;類文字的詞語tf-idf權重------&quot;</span>)</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(word)):  </span><br><span class="line">        <span class="built_in">print</span>(word[j],weight[i][j]  )</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">all_blue 0.0</span></span><br><span class="line"><span class="string">世界 0.0</span></span><br><span class="line"><span class="string">佛朗基 0.0</span></span><br><span class="line"><span class="string">劍士 0.0</span></span><br><span class="line"><span class="string">勇敢 0.0</span></span><br><span class="line"><span class="string">千陽號 0.0</span></span><br><span class="line"><span class="string">喬巴 0.0</span></span><br><span class="line"><span class="string">娜美 0.0</span></span><br><span class="line"><span class="string">布魯克 0.0</span></span><br><span class="line"><span class="string">想要 0.21155991248018197</span></span><br><span class="line"><span class="string">成為 0.3582020693353289</span></span><br><span class="line"><span class="string">所有 0.0</span></span><br><span class="line"><span class="string">找到 0.0</span></span><br><span class="line"><span class="string">拉布 0.0</span></span><br><span class="line"><span class="string">最強 0.0</span></span><br><span class="line"><span class="string">歷史本文 0.0</span></span><br><span class="line"><span class="string">海上戰士 0.0</span></span><br><span class="line"><span class="string">海圖 0.0</span></span><br><span class="line"><span class="string">海賊王 0.552052456377027</span></span><br><span class="line"><span class="string">環繞 0.0</span></span><br><span class="line"><span class="string">男人 0.4662722935918962</span></span><br><span class="line"><span class="string">畫出 0.0</span></span><br><span class="line"><span class="string">盡頭 0.0</span></span><br><span class="line"><span class="string">索隆 0.0</span></span><br><span class="line"><span class="string">羅賓 0.0</span></span><br><span class="line"><span class="string">航向 0.0</span></span><br><span class="line"><span class="string">萬靈藥 0.0</span></span><br><span class="line"><span class="string">重逢 0.0</span></span><br><span class="line"><span class="string">香吉士 0.0</span></span><br><span class="line"><span class="string">騙人布 0.0</span></span><br><span class="line"><span class="string">魯夫 0.552052456377027</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="問題與討論"><a href="#問題與討論" class="headerlink" title="問題與討論"></a>問題與討論</h2><p>被台灣教育荼毒過的對這五個字一定很熟悉，但很重要！不免俗，我們來討論一下TF-IDF可能需要特別注意哪些地方，以及缺點。</p>
+<ul>
+<li><strong>語料庫的選擇很重要</strong><br>前面有提到這些TF-IDF的計算方法高度依賴語料庫中其他文本的詞類，因此當你要找關鍵字時，<strong>詞庫與詞庫間、文本檔案與檔案間的對應要特別留意</strong>，假如你要找的是某領域語料庫的關鍵字有哪些，那就不能用相同領域的對應語料庫（referent corpus），否則關鍵字就浮不出來了；同理，如果你要找的是某特定文本在某個語料庫中的關鍵字，那就要以「自己比自己」的方式，方可找到你要的結果。孰好孰壞？老話一句，<strong>看你的目的為何</strong>。</li>
+<li><strong>放大檢視優缺點</strong><br>優點就是簡單快速容易理解，但缺點的話，由於詞與詞之間都被切開來，單純以詞頻的角度去看待文章，這麼做反倒會忽略詞在文章中的位置（我們得要知道同一個詞在文章中的不同位置，可能代表不同的意義）另外，很少見的生澀詞彙可能會爆冷門變成關鍵詞，但重要的人名地名等等反倒不會出現在關鍵詞的前幾名中。</li>
+</ul>
+<p>參考資料：</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://medium.com/@derekliao_62575/nlp%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%9F%B7%E8%A1%8C%E6%AD%A5%E9%A9%9F-ii-bag-of-words-%E8%A9%9E%E8%A2%8B%E8%AA%9E%E8%A8%80%E6%A8%A1%E5%9E%8B-3b670a0c7009">NLP的基本執行步驟(II) — Bag of Words 詞袋語言模型</a></li>
+<li><a target="_blank" rel="noopener" href="https://stats.stackexchange.com/questions/274720/why-is-it-a-big-problem-to-have-sparsity-issues-in-natural-language-processing">Why is it a big problem to have sparsity issues in Natural Language processing (NLP)?</a></li>
+<li><a target="_blank" rel="noopener" href="https://shangzhi-huang.gitbook.io/workspace/nlp-zhi-guan-jian-ci-ti-qu/gai-jin-tfidf-suan-fa">改进TF-IDF算法</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.796t.com/content/1546773727.html">[python] 使用scikit-learn工具計算文字TF-IDF值</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%87%AA%E7%84%B6%E8%AA%9E%E8%A8%80%E8%99%95%E7%90%86/" rel="tag"># 自然語言處理</a>
+              <a href="/tags/NLP/" rel="tag"># NLP</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/01/08/Untitled/" rel="prev" title="【NLP】Day 7: 現出你的原形！tokenization、lemmatization、stemming ">
+                  <i class="fa fa-chevron-left"></i> 【NLP】Day 7: 現出你的原形！tokenization、lemmatization、stemming 
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/01/08/%E3%80%90NLP%E3%80%91Day-9-%E5%8F%88%E6%98%AF%E5%9C%8B%E7%8E%8B%E7%9A%87%E5%90%8E%E7%9A%84%E4%BE%8B%E5%AD%90%E5%95%A6%EF%BC%81Word2Vec%E3%80%81N-Gram/" rel="next" title="【NLP】Day 9: 又是國王皇后的例子啦！Word2Vec、N-Gram">
+                  【NLP】Day 9: 又是國王皇后的例子啦！Word2Vec、N-Gram <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa-solid fa-code"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hao Yun Chuang (Milan)</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/assets/hijiki.model.json"},"display":{"superSample":2,"width":250,"height":500,"position":"right","hOffset":-30,"vOffset":-130},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"log":false});</script></body>
+</html>
