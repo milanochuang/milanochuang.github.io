@@ -131,7 +131,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">33</span>
+          <span class="site-state-item-count">32</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -191,125 +191,6 @@
 
 
     <div class="main-inner index posts-expand">
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://milanochuang.github.io/2023/01/08/%E3%80%90NLP%E3%80%91Day-12-%E8%B1%AC%E8%80%B3%E6%9C%B5%E9%A4%85%E4%B9%BE%E8%B7%9F%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92%E4%B9%9F%E6%9C%89%E9%97%9C%E4%BF%82%EF%BC%9F%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92%EF%BC%9A%E7%BE%85%E5%90%89%E6%96%AF%E5%9B%9E%E6%AD%B8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="Hao Yun Chuang (Milan)">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="米蘭牛角尖">
-      <meta itemprop="description" content="目前就讀於政大語言所，研究興趣為計算語言學<br/>">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 米蘭牛角尖">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/01/08/%E3%80%90NLP%E3%80%91Day-12-%E8%B1%AC%E8%80%B3%E6%9C%B5%E9%A4%85%E4%B9%BE%E8%B7%9F%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92%E4%B9%9F%E6%9C%89%E9%97%9C%E4%BF%82%EF%BC%9F%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92%EF%BC%9A%E7%BE%85%E5%90%89%E6%96%AF%E5%9B%9E%E6%AD%B8/" class="post-title-link" itemprop="url">【NLP】Day 12: 豬耳朵餅乾跟機器學習也有關係？機器學習：羅吉斯回歸 </a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">發表於</span>
-      
-
-      <time title="創建時間：2023-01-08 19:45:00 / 修改時間：19:45:57" itemprop="dateCreated datePublished" datetime="2023-01-08T19:45:00+08:00">2023-01-08</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分類於</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/natural-language-processing/" itemprop="url" rel="index"><span itemprop="name">自然語言處理</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <blockquote>
-<p>麵粉、砂糖、水、植物油為主，其它成份則視做法及口感需求而有不同。餅乾之所以會出現螺旋線，這是由於兩種顏色的麵糰桿成皮狀，再將彼此疊合而捲成柱狀，以刀切割成每一片厚度相當的餅乾，就可以看出每一片餅乾都帶有螺旋線，經過烘烤後成形，即可食用。<br>維基百科《螺仔餅》</p>
-</blockquote>
-<p>我先承認我真的沒梗，引言就找這個了XD</p>
-<p>昨天我們講到了貝氏分類器，希望大家都有稍微理解機器學習模型大概會是以什麼方式呈現。我們在進入羅吉斯回歸的模型之前，先來回顧一下所謂的機率性機器學習分類器（probabilistic machine learning classifier）的大致組成吧，其實幾乎所有的機器學習模型都是依循這樣的模式在進行分類的，即便是神經網路也是幾乎雷同，而自然語言處理的模型也不排除在外。</p>
-<h2 id="模型架構"><a href="#模型架構" class="headerlink" title="模型架構"></a>模型架構</h2><ul>
-<li><strong>特徵輸入</strong><br>將資料整理成機器學習模型可以理解的形式，首先就是要將這些文字轉換成數字，相信大家都還記得。那其實這種所謂「不同種將文字轉成數字」的方式，也有個專有名詞，稱為<strong>特徵工程（feature engineering）</strong>，特徵工程所得之資料即可作為特徵輸入至模型。</li>
-<li><strong>換算機率</strong><br>完成前面的特徵工程之後，會得到一系列的特徵相關數字，由於這些數字並不是模型的理想輸出（因為記得前面所提模型需要輸出的是<em>分類的機率</em>）所以會經過一系列的數學運算過後，得到最後為0~1之間的機率呈現。</li>
-<li><strong>最大化與正確答案相符的可能性（Log-likelihood &amp; Loss function）</strong><br>接著得到的機率有可能也不會是最好的答案，因為我們需要最小化所謂的損失函數，那要最小化的話，可以透過梯度下降的方式來求得最佳解。<ul>
-<li>損失函數</li>
-<li>梯度下降</li>
-</ul>
-</li>
-</ul>
-<h2 id="羅吉斯回歸"><a href="#羅吉斯回歸" class="headerlink" title="羅吉斯回歸"></a>羅吉斯回歸</h2><h3 id="特徵輸入"><a href="#特徵輸入" class="headerlink" title="特徵輸入"></a>特徵輸入</h3><p>在自然語言處理的領域中，除了可以透過<strong>直覺</strong>來判斷文本中可能的特徵之外，<strong>不同領域的文本</strong>也會有他們各自的特徵（比如說，前一陣子很有名的霸社，或者是將官首文化中的文本，可能就會有屬於其次文化的特殊語言特徵）；另外，近期流行的自然語言處理方式，也會透過先前所說的 <strong>Word embedding</strong> 的方式作為特徵加入BERT語言模型中。</p>
-<h3 id="利用特徵計算原始分數"><a href="#利用特徵計算原始分數" class="headerlink" title="利用特徵計算原始分數"></a>利用特徵計算原始分數</h3><p>經過特徵工程之後，我們會得到一串數字（或是向量vector）羅吉斯回歸的第一步，就是先將這些向量x與權重 w（weight）進行內積（dot product）<del>是不是又出現另外一個熟悉的名詞？</del> ，內積過後得到的數字再加上 b （bias term, a.k.a intercept），這是為了避免有些過度表現的特徵影響了模型的判斷。</p>
-<p><img src="https://i.imgur.com/q26xFAQ.png"></p>
-<p>我會稱這段過程為<strong>計算原始分數</strong>。現在說考學測應該還不會暴露年齡吧？你可以這麼理解，我們計算的這個原始分數代表<strong>文章是正面或是負面的可能「程度」</strong>，就像是學測考完都會有一個「原始分數」。但這個所謂的程度或是原始分數，不是我們想要的結果，對吧？因為我們想要的是<strong>這個文本的可能是正面或是負面的「機率」是多少</strong>，就像是我們想要知道學測的「級分」，因為「級分」的高低才真正代表表現的好壞。為了要讓模型輸出機率，會再將這個「原始分數」加入激勵函數（activation function）將輸出數值轉換成機率。</p>
-<h3 id="利用激勵函數換算機率"><a href="#利用激勵函數換算機率" class="headerlink" title="利用激勵函數換算機率"></a>利用激勵函數換算機率</h3><p>經過前面的計算得到了原始分數之後，我們需要將這段原始分數加入激勵函數來輸出機率。激勵函數有很多種，其中包括今天會介紹的Sigmoid以及softmax，之後會再介紹另外兩種。同樣地，如同先前所說，這些函數各有優缺點，我們在下面來一一討論：</p>
-<h4 id="Sigmoid-function"><a href="#Sigmoid-function" class="headerlink" title="Sigmoid function"></a>Sigmoid function</h4><p><img src="https://i.imgur.com/28S02CU.png"><br><img src="https://i.imgur.com/2wk2nWj.png"><br>Sigmoid函數是最基礎，也是用來處理二元分類最常用的激勵函數。而Sigmoid activation function有幾個好處：</p>
-<ol>
-<li>Sigmoid可以將「原始分數」<strong>壓到[0, 1]之間</strong>，正好也是我們所需要的機率形式</li>
-<li>在接近0以及接近1的地方，可以發現函數圖形逐漸趨平。這代表<strong>若有任何離群值（outlier），Sigmoid函數也可以把他壓縮到接近0或1，但卻又不會超過</strong>。</li>
-<li><strong>可微分</strong>（differentiable），在後續做最佳解時會是一個有利的工具。</li>
-</ol>
-<h4 id="softmax-function"><a href="#softmax-function" class="headerlink" title="softmax function"></a>softmax function</h4><p>softmax跟Sigmoid不同的地方在於，這是做多元分類時常用的激勵函數，只是差別在於前者只會給一個機率，而softmax則是會給每個標籤相對應機率，然後加總起來都會等於1。<br><img src="https://i.imgur.com/K8zftXE.png"><br>所以假如說加入「原始分數」，就會是這樣的結果。<br><img src="https://i.imgur.com/2ly0KbI.png"></p>
-<h3 id="最大化與正確答案相符的可能性"><a href="#最大化與正確答案相符的可能性" class="headerlink" title="最大化與正確答案相符的可能性"></a>最大化與正確答案相符的可能性</h3><p>前面你可能會發現，咦？那權重是怎麼來的？這就要先從Loss function開始講起：</p>
-<h4 id="損失函數（loss-function）"><a href="#損失函數（loss-function）" class="headerlink" title="損失函數（loss function）"></a>損失函數（loss function）</h4><p>損失函數其實就是為了要評估<strong>實際答案跟預測答案之間的差距</strong>，而要找出這段差距，首先要先進行條件最大機率估算（conditional maximum likelihood estimation），聽起來很複雜，但其實就是要將<strong>預測正確的可能性最大化</strong>，也就是所謂的log-likelihood。而權重就會在每一次的計算過程中不斷調整，直到找到最佳解。在這邊不會有複雜的數學推演，我只會簡單介紹計算的邏輯。<br><img src="https://i.imgur.com/PJ2renE.png"><br>這裡是一個最大化的最佳解問題。那為了將它變成損失函數，也就是最小化的最佳解問題，在這裡會乘上一個負號<br><img src="https://i.imgur.com/1PnzQsf.png"></p>
-<h4 id="梯度下降"><a href="#梯度下降" class="headerlink" title="梯度下降"></a>梯度下降</h4><p>那要解這個最小化問題，在這邊會使用的方法就是梯度下降（gradient descent）。</p>
-<p>這名字聽起來好像很可怕，<del>用手算確實可怕，回想我大學在資管系修作業研究的辛酸血淚史（一抹淚）</del>，簡單來說，梯度下降法是一種找出最小化最佳解的一種演算法，意味著找出在函數空間中，斜率（slope）往上升程度最大的方向，並往這個方向的<strong>反方向</strong>前進。是不是不知道我在講什麼？我們馬上來看看一維簡化圖。</p>
-<p><img src="https://i.imgur.com/kW3hAki.png"></p>
-<p>首先我們可以先對 w1 微分（這就是為什麼可微分很重要），找出在w1這個點的切線斜率是正亦或是負。若是正（切線方向為<code>/</code>）則代表應該要往左前進。而圖中 w1 的斜率是負的（切線方向為<code>\</code>），所以方向則是往右，方能找到最佳最小值。</p>
-<p>但實務上不可能會有這種只有一維的資料吧！所以事實上函數圖形長得會像這樣：<br><img src="https://i.imgur.com/tb6k3ox.png"></p>
-<p>我自己是覺得很像螺仔餅啦，不覺得嗎？<del>我也是去查知道這餅乾的正式名稱</del></p>
-<p><img src="https://cc.tvbs.com.tw/img/program/upload/2021/05/27/20210527131604-6951a668.jpg"><br>圖片來源：<a target="_blank" rel="noopener" href="https://woman.tvbs.com.tw/lifestyle/24209">TVBS</a></p>
-<p>那因為 logistic regression 是一個凸函數（convex），而凸函數只會有一個最小值，所以 logistic regression 一定有解。但神經網路<em>不是凸函數（non-convex）</em>，所以在進行梯度下降時，就有可能困在同一個地方出不來，因此找不到最佳解。</p>
-<h2 id="問題與討論"><a href="#問題與討論" class="headerlink" title="問題與討論"></a>問題與討論</h2><p>最後來比較看看貝氏分類模型跟羅吉斯回歸模型。首先，<strong>貝氏分類模型過度強調事件的獨立性，而這代表每個輸入的特徵都是獨立的。</strong> 這會有什麼問題？假如我們輸入了兩次一模一樣的特徵，貝氏分類會將其視為兩個 <strong>完全不同</strong> 的特徵，並將這些特徵彼此相乘，最後結果導致模型過度側重這個特徵。但相對的，羅吉斯回歸就不會有這個問題，因為權重會依照特徵進行調整，將權重分配到高度相關的特徵。</p>
-<p>但這就代表貝氏分類一無是處嗎？倒也不然。貝氏分類在處理少量資料時，就可以有非常好的表現。且貝氏分類器簡單，訓練速度較快，因此貝氏分類器也是輸人不輸陣的喔！</p>
-<p>這裡就再次回應先前所說，沒有什麼最好的方法，只有最適合的方法。最重要的，是了解需求後，找出最適合任務的處理方式，才是最重要的！</p>
-<p>好，今天講到這裡，明天要進入深度學習的領域囉！</p>
-<p>資料與圖片來源：<br><a target="_blank" rel="noopener" href="https://web.stanford.edu/~jurafsky/slp3/5.pdf">Speech and Language Processing</a></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
 
     
 
@@ -1301,6 +1182,143 @@
 <h4 id="記得前面說的分組概念嗎？在這裡就可以派上用場了。"><a href="#記得前面說的分組概念嗎？在這裡就可以派上用場了。" class="headerlink" title="記得前面說的分組概念嗎？在這裡就可以派上用場了。"></a>記得前面說的分組概念嗎？在這裡就可以派上用場了。</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span>(example_re_obj.group(<span class="number">0</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 你也可以指派一個變數給他，如：</span></span><br><span class="line">example_re_obj = re.search(<span class="string">&quot;(\d&#123;4&#125;)-(\d&#123;3&#125;)-(\d&#123;3&#125;)&quot;</span>, <span class="string">&quot;0987-654-321&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 記得前面說的分組概念嗎？在這裡就可以派上用場了。</span></span><br><span class="line"><span class="built_in">print</span>(example_re_obj.group(<span class="number">0</span>))</span><br><span class="line"><span class="comment"># output: 0987-654-321</span></span><br><span class="line"><span class="built_in">print</span>(example_re_obj.group(<span class="number">1</span>))</span><br><span class="line"><span class="comment"># output: 0987</span></span><br><span class="line"><span class="built_in">print</span>(example_re_obj.group(<span class="number">2</span>))</span><br><span class="line"><span class="comment"># output: 654</span></span><br><span class="line"><span class="built_in">print</span>(example_re_obj.group(<span class="number">3</span>))</span><br><span class="line"><span class="comment"># output: 321</span></span><br></pre></td></tr></table></figure>
 
 <p>好的，大概就是這樣，完成了這步驟，接下來就可以往「替換」以及「抽取」的目的地前進了！我們明天見！</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://milanochuang.github.io/2022/09/03/%E3%80%90NLP%E3%80%91Day-2-%E5%B7%A5%E6%AC%B2%E5%96%84%E5%85%B6%E4%BA%8B%EF%BC%8C%E5%BF%85%E5%85%88%E5%88%A9%E5%85%B6%E5%99%A8%EF%BC%81Python%E5%9F%BA%E7%A4%8E%E4%BB%8B%E7%B4%B9%EF%BC%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Hao Yun Chuang (Milan)">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="米蘭牛角尖">
+      <meta itemprop="description" content="目前就讀於政大語言所，研究興趣為計算語言學<br/>">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 米蘭牛角尖">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/09/03/%E3%80%90NLP%E3%80%91Day-2-%E5%B7%A5%E6%AC%B2%E5%96%84%E5%85%B6%E4%BA%8B%EF%BC%8C%E5%BF%85%E5%85%88%E5%88%A9%E5%85%B6%E5%99%A8%EF%BC%81Python%E5%9F%BA%E7%A4%8E%E4%BB%8B%E7%B4%B9%EF%BC%81/" class="post-title-link" itemprop="url">【NLP】Day 2: 工欲善其事，必先利其器！Python基礎介紹！</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2022-09-03 09:45:00" itemprop="dateCreated datePublished" datetime="2022-09-03T09:45:00+08:00">2022-09-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2022-09-18 01:49:11" itemprop="dateModified" datetime="2022-09-18T01:49:11+08:00">2022-09-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/natural-language-processing/" itemprop="url" rel="index"><span itemprop="name">自然語言處理</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <blockquote>
+<p><em>萬事開頭難，難就難在初始階段。在此期間，必須窮盡心力，使諸方面保持均衡，以利於今後的發展。</em><br><strong>法蘭克・赫伯特《沙丘》</strong></p>
+</blockquote>
+<p>在一起踏上偉大的航道前，由於在這三十天會運用Python作為主要的程式語言，所謂工欲善其事，必先利其器，畢竟就連魯夫一開始出海前，也是需要一艘船嘛！所以免不了總是要稍微解釋一下在之後的文章會用到的簡單語法以及概念。</p>
+<p>但因為在我之前已經有許多大神以及前輩寫了許多Python的教學文章，Python開發者社群也有<a target="_blank" rel="noopener" href="https://docs.python.org/zh-tw/3/tutorial/index.html">翻譯官方文件</a>，而且翻譯得非常清楚，所以今天這篇文章只會解釋Python中最常用的語法，也就是基本的資料型態、for迴圈以及if條件敘述式，還有function，也會解釋一份Python的程式，大致上會有什麼架構，畢竟大學的計算機概論教授有云：「你只要會寫for迴圈以及會寫if，你會寫程式啦！」有點誇張了，但相信你可以的。</p>
+<p>不過如果之後的文章用到其他在這裡沒有解釋到的語法，也會在那篇文章特別介紹。</p>
+<h2 id="資料型態以及資料結構"><a href="#資料型態以及資料結構" class="headerlink" title="資料型態以及資料結構"></a>資料型態以及資料結構</h2><p>Python共有種的資料型態以及種的資料結構，不同的型態與結構，在不同的使用情境下有不同的用途，以下幫助你簡單理解：</p>
+<h3 id="字串-string"><a href="#字串-string" class="headerlink" title="字串 string"></a>字串 <code>string</code></h3><p>字串顧名思義就是單純字串，一般來說會以雙引號來表示，例如<code>&quot;偉大航道&quot;</code>就是一種字串，但單引號也可以，像是<code>&#39;偉大航道&#39;</code>，只是大部分都會用雙引號，而且字串也不能進行數學上的四則運算，在程式編寫上要特別留意。性質如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span>(<span class="string">&quot;1&quot;</span>+<span class="string">&quot;2&quot;</span>+<span class="string">&quot;3&quot;</span>) </span><br><span class="line"><span class="comment"># output: 123</span></span><br></pre></td></tr></table></figure>
+
+<p>你也可以將其他種資料型態透過<code>str()</code>轉換成字串：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">num = <span class="number">123</span></span><br><span class="line">num_string = <span class="built_in">str</span>(num)</span><br><span class="line"><span class="built_in">type</span>(num_string)</span><br><span class="line"><span class="comment"># output: str</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="整數-int-amp-浮點數-float"><a href="#整數-int-amp-浮點數-float" class="headerlink" title="整數 int &amp; 浮點數 float"></a>整數 <code>int</code> &amp; 浮點數 <code>float</code></h3><p>整數就是整數，這不需要特別說明。浮點數就是有小數點的數字，也就是小數！而這兩種資料型態分別可以透過<code>int()</code>以及<code>float()</code>來轉換。這兩種資料型態可以進行四則運算，讓我們來看看以下例子：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span>(<span class="number">1</span>+<span class="number">2</span>+<span class="number">3</span>)</span><br><span class="line"><span class="comment"># output: 6</span></span><br></pre></td></tr></table></figure>
+
+<p>前面已經了解到，資料型態也可以用對應的函式互相轉換，但要特別注意的是，不同資料型態不能混在一起運算。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span>(<span class="number">123</span>+<span class="string">&quot;123&quot;</span>)</span><br><span class="line"><span class="comment"># output: </span></span><br><span class="line">---------------------------------------------------------------------------</span><br><span class="line">TypeError                                 Traceback (most recent call last)</span><br><span class="line">&lt;ipython-<span class="built_in">input</span>-<span class="number">3</span>-a752e60be039&gt; <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">----&gt; <span class="number">1</span> <span class="number">123</span>+<span class="string">&quot;123&quot;</span></span><br><span class="line"></span><br><span class="line">TypeError: unsupported operand <span class="built_in">type</span>(s) <span class="keyword">for</span> +: <span class="string">&#x27;int&#x27;</span> <span class="keyword">and</span> <span class="string">&#x27;str&#x27;</span></span><br></pre></td></tr></table></figure>
+<p>但浮點數跟整數間可以進行四則運算嗎？我們來試試看：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span>(<span class="number">1.23</span>+<span class="number">123</span>)</span><br><span class="line"><span class="comment"># output: 124.23</span></span><br></pre></td></tr></table></figure>
+<p>這兩者之間由上可知是可以進行四則運算的喔！</p>
+<h3 id="串列-list"><a href="#串列-list" class="headerlink" title="串列 list"></a>串列 <code>list</code></h3><p><code>list</code>用中括號表示，可以將前述講到的資料，像火車一樣一個一個分別存在不同車廂裡面，並以逗號分隔。即使不同資料型態也可以一起放進去。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 建立新的空串列，並命名為example</span></span><br><span class="line">example = []</span><br><span class="line"><span class="comment"># 預設資料</span></span><br><span class="line">example = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]</span><br><span class="line"><span class="comment"># 將資料加入串列的最尾端</span></span><br><span class="line">example.append(<span class="number">123</span>)</span><br><span class="line"><span class="built_in">print</span>(example)</span><br><span class="line"><span class="comment"># output: [1, 2, 3, 123]</span></span><br><span class="line"><span class="comment"># 不同的資料型態也可以存在同一個串列中</span></span><br><span class="line">example.append(<span class="string">&quot;海賊王&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(example)</span><br><span class="line"><span class="comment"># output: [1, 2, 3, 123, &quot;海賊王&quot;]</span></span><br><span class="line"><span class="comment"># 轉換方式則可以透過list()，如：</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="字典-dictionary"><a href="#字典-dictionary" class="headerlink" title="字典 dictionary"></a>字典 <code>dictionary</code></h3><p><code>dictionary</code>則是用大括號表示，是python特有的資料型態，像是字典一樣，每個字都有其對應的意義。那麼當值與值之間互相對應的時候，就可以透過<code>dict()</code>來表示：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 建立新的空字典，並命名為example</span></span><br><span class="line">example = &#123;&#125;</span><br><span class="line"><span class="comment"># 字典形式分成key跟value，每個key有對應的value，並用冒號表示：</span></span><br><span class="line">example = &#123;</span><br><span class="line">    <span class="string">&quot;魯夫&quot;</span>: <span class="string">&quot;船長&quot;</span>,</span><br><span class="line">    <span class="string">&quot;索隆&quot;</span>: <span class="string">&quot;戰鬥員&quot;</span>,</span><br><span class="line">    <span class="string">&quot;娜美&quot;</span>: <span class="string">&quot;航海士&quot;</span>,</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment"># 並透過以下方式取出值（value）：</span></span><br><span class="line"><span class="built_in">print</span>(example[<span class="string">&#x27;魯夫&#x27;</span>])</span><br><span class="line"><span class="comment"># output: 船長</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Python語法"><a href="#Python語法" class="headerlink" title="Python語法"></a>Python語法</h2><p>那接下來就讓我們來看看可以透過哪些方式操作以上這些資料吧！</p>
+<h3 id="for迴圈"><a href="#for迴圈" class="headerlink" title="for迴圈"></a><code>for</code>迴圈</h3><p><code>for</code>迴圈，顧名思義，如果你需要重複做某件相同的事時，就可以透過<code>for</code>迴圈讓程式來幫你做，你可以指定迴圈運行的次數，或是讓迴圈「遍歷」串列或是字典的key或是value，但方式有點不一樣。常用的寫法如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">example = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">123</span>, <span class="string">&quot;海賊王&quot;</span>]</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> example:</span><br><span class="line">    <span class="built_in">print</span>(i)</span><br><span class="line"></span><br><span class="line"><span class="comment"># output: </span></span><br><span class="line"><span class="comment"># 1</span></span><br><span class="line"><span class="comment"># 2</span></span><br><span class="line"><span class="comment"># 3</span></span><br><span class="line"><span class="comment"># 123</span></span><br><span class="line"><span class="comment"># 海賊王</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 字典本身不能遍歷，但可以遍歷key或是value</span></span><br><span class="line">example = &#123;</span><br><span class="line">    <span class="string">&quot;魯夫&quot;</span>: <span class="string">&quot;船長&quot;</span>,</span><br><span class="line">    <span class="string">&quot;索隆&quot;</span>: <span class="string">&quot;戰鬥員&quot;</span>,</span><br><span class="line">    <span class="string">&quot;娜美&quot;</span>: <span class="string">&quot;航海士&quot;</span>,</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> example.keys():</span><br><span class="line">    <span class="built_in">print</span>(i)</span><br><span class="line"><span class="comment"># output: </span></span><br><span class="line"><span class="comment"># 魯夫</span></span><br><span class="line"><span class="comment"># 索隆</span></span><br><span class="line"><span class="comment"># 娜美</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> example.values(): <span class="comment"># 要加s</span></span><br><span class="line">    <span class="built_in">print</span>(i)</span><br><span class="line"><span class="comment"># output: </span></span><br><span class="line"><span class="comment"># 船長</span></span><br><span class="line"><span class="comment"># 戰鬥員</span></span><br><span class="line"><span class="comment"># 航海士</span></span><br></pre></td></tr></table></figure>
+
+<p><code>for</code>迴圈也有另外一種常見的寫法，我們來看看：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">example = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">123</span>, <span class="string">&quot;海賊王&quot;</span>]</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(example)):</span><br><span class="line">    <span class="built_in">print</span>(i)</span><br><span class="line"><span class="comment"># output: </span></span><br><span class="line"><span class="comment"># 1</span></span><br><span class="line"><span class="comment"># 2</span></span><br><span class="line"><span class="comment"># 3</span></span><br><span class="line"><span class="comment"># 123</span></span><br><span class="line"><span class="comment"># 海賊王</span></span><br></pre></td></tr></table></figure>
+<p>其中用到了兩個之前沒用過的函式，分別是<code>range()</code>以及<code>len()</code>，<code>range()</code>中的參數代表的就是讓<code>i</code>運行這個次數，<code>len()</code>則是串列的長度，那這行就是讓<code>for</code>迴圈運行串列長度的次數。</p>
+<h3 id="if條件敘述式"><a href="#if條件敘述式" class="headerlink" title="if條件敘述式"></a><code>if</code>條件敘述式</h3><p>當程式達到某特定條件時，可以透過<code>if</code>，指定程式執行其他動作，一般會在迴圈中使用。用法如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">example = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">123</span>, <span class="string">&quot;海賊王&quot;</span>]</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(example)):</span><br><span class="line">    <span class="keyword">if</span> i == <span class="string">&quot;海賊王&quot;</span>:</span><br><span class="line">        <span class="built_in">print</span>(i)</span><br><span class="line"><span class="comment"># output: 海賊王</span></span><br></pre></td></tr></table></figure>
+<p>若有不同條件，則可以透過<code>elif</code>來指定條件。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">example = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">123</span>, <span class="string">&quot;海賊王&quot;</span>]</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(example)):</span><br><span class="line">    <span class="keyword">if</span> i == <span class="string">&quot;海賊王&quot;</span>:</span><br><span class="line">        <span class="built_in">print</span>(i)</span><br><span class="line">    <span class="keyword">elif</span> i == <span class="number">1</span>:</span><br><span class="line">        <span class="built_in">print</span>(i)</span><br><span class="line"><span class="comment"># output: </span></span><br><span class="line"><span class="comment"># 海賊王</span></span><br><span class="line"><span class="comment"># 1</span></span><br></pre></td></tr></table></figure>
+
+<p>若執行了<code>if</code>就不會執行<code>elif</code>，若包含<code>elif</code>條件就只能擇一。但如果全部都寫<code>if</code>就所有條件都會檢驗一遍。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">example = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">123</span>, <span class="string">&quot;海賊王&quot;</span>]</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(example)):</span><br><span class="line">    <span class="keyword">if</span> i == <span class="string">&quot;海賊王&quot;</span>:</span><br><span class="line">        <span class="built_in">print</span>(i)</span><br><span class="line">    <span class="keyword">elif</span> i == <span class="number">1</span>:</span><br><span class="line">        <span class="built_in">print</span>(i)</span><br><span class="line">example = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">123</span>, <span class="string">&quot;海賊王&quot;</span>]</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(example)):</span><br><span class="line">    <span class="keyword">if</span> i == <span class="string">&quot;海賊王&quot;</span>:</span><br><span class="line">        <span class="built_in">print</span>(i)</span><br><span class="line">    <span class="keyword">if</span> i == <span class="number">1</span>:</span><br><span class="line">        <span class="built_in">print</span>(i)</span><br></pre></td></tr></table></figure>
+
+<p>最後前面的條件都不符合，但也要對其進行處理，則可以用<code>else</code>。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">example = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">123</span>, <span class="string">&quot;海賊王&quot;</span>]</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(example)):</span><br><span class="line">    <span class="keyword">if</span> i == <span class="string">&quot;海賊王&quot;</span>:</span><br><span class="line">        <span class="built_in">print</span>(i)</span><br><span class="line">    <span class="keyword">elif</span> i == <span class="number">1</span>:</span><br><span class="line">        <span class="built_in">print</span>(i)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;我是else&quot;</span>)</span><br><span class="line"><span class="comment"># or</span></span><br><span class="line">example = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">123</span>, <span class="string">&quot;海賊王&quot;</span>]</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(example)):</span><br><span class="line">    <span class="keyword">if</span> i == <span class="string">&quot;海賊王&quot;</span>:</span><br><span class="line">        <span class="built_in">print</span>(i)</span><br><span class="line">    <span class="keyword">if</span> i == <span class="number">1</span>:</span><br><span class="line">        <span class="built_in">print</span>(i)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;我是else&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p>跳出迴圈可以用<code>break</code>，繼續執行迴圈可以用<code>continue</code>。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">example = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">123</span>, <span class="string">&quot;海賊王&quot;</span>]</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(example)):</span><br><span class="line">    <span class="keyword">if</span> i == <span class="string">&quot;海賊王&quot;</span>:</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">    <span class="keyword">if</span> i == <span class="number">1</span>:</span><br><span class="line">        <span class="keyword">continue</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;我是else&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="def-函式"><a href="#def-函式" class="headerlink" title="def 函式"></a><code>def</code> 函式</h3><p>不知道大家還記不記得國高中的函數，給定一個x值，函數會計算出y值；同理，一樣是function，程式中也會有所謂的函式，括號中給定參數，函式則會回傳值，或是不回傳值只執行特定動作也可以。當你發現一直在重複相同動作又要寫很多次的時候，就是函式派上用場的時候了。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">example_func</span>(<span class="params">parameter_1</span>):</span><br><span class="line">	result = <span class="number">1</span> + parater_1</span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在這裡你可以回傳值，也可以將回傳值指配給變數，如：</span></span><br><span class="line"></span><br><span class="line">result_var = example_func(<span class="number">2</span>)</span><br><span class="line"><span class="built_in">print</span>(result_var)</span><br><span class="line"><span class="comment"># output: 3</span></span><br></pre></td></tr></table></figure>
+
+<p>好的！大致上會用到的基本語法就是這樣，若想知道更多可以去看<a target="_blank" rel="noopener" href="https://docs.python.org/zh-tw/3/tutorial/index.html">官方說明文件</a>，網路上也有很多的教學，明天就要進入偉大航道了，我們明天見。</p>
 
       
     </div>
