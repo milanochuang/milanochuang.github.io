@@ -36,11 +36,11 @@ https://milanochuang.github.io/lib/pace/README.html
 https://milanochuang.github.io/2022/08/30/%E3%80%90%E5%BD%B1%E8%A9%95%E3%80%91%E8%A6%AA%E6%84%9B%E7%9A%84%E6%88%BF%E5%AE%A2/
 https://milanochuang.github.io/
 https://milanochuang.github.io/tags/%E8%87%AA%E7%84%B6%E8%AA%9E%E8%A8%80%E8%99%95%E7%90%86/
-https://milanochuang.github.io/tags/%E7%A8%8B%E5%BC%8F%E5%B7%A5%E5%85%B7/
 https://milanochuang.github.io/tags/NLP/
+https://milanochuang.github.io/tags/%E7%A8%8B%E5%BC%8F%E5%B7%A5%E5%85%B7/
 https://milanochuang.github.io/tags/%E8%B3%87%E6%96%99%E5%BA%AB%E7%AE%A1%E7%90%86/
-https://milanochuang.github.io/categories/%E7%B6%B2%E8%B7%AF%E7%88%AC%E8%9F%B2/
 https://milanochuang.github.io/categories/natural-language-processing/
+https://milanochuang.github.io/categories/%E7%B6%B2%E8%B7%AF%E7%88%AC%E8%9F%B2/
 https://milanochuang.github.io/categories/%E7%B6%B2%E8%B7%AF%E7%88%AC%E8%9F%B2/natural-language-processing/
 https://milanochuang.github.io/categories/%E8%87%AA%E7%84%B6%E8%AA%9E%E8%A8%80%E7%AE%A1%E7%90%86/
 https://milanochuang.github.io/categories/movie-critics/
