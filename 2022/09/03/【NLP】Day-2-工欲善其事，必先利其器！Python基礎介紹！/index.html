@@ -1,26 +1,24 @@
+
+
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-TW" data-default-color-scheme=dark>
+
+
+
 <head>
   <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width">
-<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
 
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
 
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/icon.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/icon.png">
-  <link rel="mask-icon" href="/images/icon.png" color="#222">
-  <meta name="google-site-verification" content="DMyRve2tDXDJqmJpSS4BaBWT1R0ZCH9n_EsCnROTiM0">
-
-<link rel="stylesheet" href="/css/main.css">
-
-
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha256-xejo6yLi6vGtAjcMIsY8BHdKsLg7QynVlFMzdQgUuy8=" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
-
-<script class="next-config" data-name="main" type="application/json">{"hostname":"milanochuang.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.12.3","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"}}</script><script src="/js/config.js"></script>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#171c27">
+  <meta name="author" content="Hao Yun Chuang (Milan)">
+  <meta name="keywords" content="自然語言處理, 計算語言學, 機器學習, 人工智慧, 電影">
+  
     <meta name="description" content="萬事開頭難，難就難在初始階段。在此期間，必須窮盡心力，使諸方面保持均衡，以利於今後的發展。法蘭克・赫伯特《沙丘》  在一起踏上偉大的航道前，由於在這三十天會運用Python作為主要的程式語言，所謂工欲善其事，必先利其器，畢竟就連魯夫一開始出海前，也是需要一艘船嘛！所以免不了總是要稍微解釋一下在之後的文章會用到的簡單語法以及概念。 但因為在我之前已經有許多大神以及前輩寫了許多Python的教學文章">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【NLP】Day 2: 工欲善其事，必先利其器！Python基礎介紹！">
@@ -32,237 +30,388 @@
 <meta property="article:modified_time" content="2022-09-17T17:49:11.000Z">
 <meta property="article:author" content="Hao-Yun Chuang (Milan)">
 <meta property="article:tag" content="自然語言處理, 計算語言學, 機器學習, 人工智慧, 電影">
-<meta name="twitter:card" content="summary">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>【NLP】Day 2: 工欲善其事，必先利其器！Python基礎介紹！ - 米蘭牛角尖</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
 
-<link rel="canonical" href="https://milanochuang.github.io/2022/09/03/%E3%80%90NLP%E3%80%91Day-2-%E5%B7%A5%E6%AC%B2%E5%96%84%E5%85%B6%E4%BA%8B%EF%BC%8C%E5%BF%85%E5%85%88%E5%88%A9%E5%85%B6%E5%99%A8%EF%BC%81Python%E5%9F%BA%E7%A4%8E%E4%BB%8B%E7%B4%B9%EF%BC%81/">
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://milanochuang.github.io/2022/09/03/%E3%80%90NLP%E3%80%91Day-2-%E5%B7%A5%E6%AC%B2%E5%96%84%E5%85%B6%E4%BA%8B%EF%BC%8C%E5%BF%85%E5%85%88%E5%88%A9%E5%85%B6%E5%99%A8%EF%BC%81Python%E5%9F%BA%E7%A4%8E%E4%BB%8B%E7%B4%B9%EF%BC%81/","path":"2022/09/03/【NLP】Day-2-工欲善其事，必先利其器！Python基礎介紹！/","title":"【NLP】Day 2: 工欲善其事，必先利其器！Python基礎介紹！"}</script>
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
 
-<script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>【NLP】Day 2: 工欲善其事，必先利其器！Python基礎介紹！ | 米蘭牛角尖</title>
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
   
 
 
 
+  
+<link rel="stylesheet" href="/css/custom.css">
 
 
 
-  <noscript>
-    <link rel="stylesheet" href="/css/noscript.css">
-  </noscript>
-</head>
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"milanochuang.github.io","root":"/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
 
-<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
-  <div class="headband"></div>
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
 
-  <main class="main">
-    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-container">
-  <div class="site-nav-toggle">
-    <div class="toggle" aria-label="切換導航欄" role="button">
-        <span class="toggle-line"></span>
-        <span class="toggle-line"></span>
-        <span class="toggle-line"></span>
-    </div>
-  </div>
 
-  <div class="site-meta">
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
 
-    <a href="/" class="brand" rel="start">
-      <i class="logo-line"></i>
-      <p class="site-title">米蘭牛角尖</p>
-      <i class="logo-line"></i>
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Hao-Yun&#39;s Geekbase</strong>
     </a>
-      <p class="site-subtitle" itemprop="description">計算語言學的學習紀錄，偶爾可能會出現野生的電影評論？</p>
-  </div>
 
-  <div class="site-nav-right">
-    <div class="toggle popup-trigger">
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content (desktop) -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="fa-solid fa-house"></i>
+                <span>首頁</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="fa-solid fa-box-archive"></i>
+                <span>歸檔</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="fa-solid fa-folder"></i>
+                <span>分類</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="fa-solid fa-tags"></i>
+                <span>標籤</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="fa-solid fa-user"></i>
+                <span>關於</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/slides/" target="_self">
+                <i class="fa-brands fa-slideshare"></i>
+                <span>教學投影片</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
     </div>
   </div>
-</div>
-
-
-
-<nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>關於</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分類</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>所有文章</a></li><li class="menu-item menu-item-tutorial"><a href="https://milanochuang.github.io/slides" rel="section"><i class="fa fa-chalkboard-teacher fa-fw"></i>教學投影片</a></li>
-  </ul>
 </nav>
 
-
-
-
-</div>
+<!-- Mobile grid menu overlay -->
+<div id="mobile-grid-menu" class="d-lg-none">
+  <div class="mobile-grid-menu-inner">
+    <div class="container">
+      <div class="row">
         
-  
-  <div class="toggle sidebar-toggle" role="button">
-    <span class="toggle-line"></span>
-    <span class="toggle-line"></span>
-    <span class="toggle-line"></span>
-  </div>
-
-  <aside class="sidebar">
-
-    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
-      <ul class="sidebar-nav">
-        <li class="sidebar-nav-toc">
-          文章目錄
-        </li>
-        <li class="sidebar-nav-overview">
-          本站概要
-        </li>
-      </ul>
-
-      <div class="sidebar-panel-container">
-        <!--noindex-->
-        <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B3%87%E6%96%99%E5%9E%8B%E6%85%8B%E4%BB%A5%E5%8F%8A%E8%B3%87%E6%96%99%E7%B5%90%E6%A7%8B"><span class="nav-number">1.</span> <span class="nav-text">資料型態以及資料結構</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%97%E4%B8%B2-string"><span class="nav-number">1.1.</span> <span class="nav-text">字串 string</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B4%E6%95%B8-int-amp-%E6%B5%AE%E9%BB%9E%E6%95%B8-float"><span class="nav-number">1.2.</span> <span class="nav-text">整數 int &amp; 浮點數 float</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%B2%E5%88%97-list"><span class="nav-number">1.3.</span> <span class="nav-text">串列 list</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%97%E5%85%B8-dictionary"><span class="nav-number">1.4.</span> <span class="nav-text">字典 dictionary</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Python%E8%AA%9E%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">Python語法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#for%E8%BF%B4%E5%9C%88"><span class="nav-number">2.1.</span> <span class="nav-text">for迴圈</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#if%E6%A2%9D%E4%BB%B6%E6%95%98%E8%BF%B0%E5%BC%8F"><span class="nav-number">2.2.</span> <span class="nav-text">if條件敘述式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#def-%E5%87%BD%E5%BC%8F"><span class="nav-number">2.3.</span> <span class="nav-text">def 函式</span></a></li></ol></li></ol></div>
-        </div>
-        <!--/noindex-->
-
-        <div class="site-overview-wrap sidebar-panel">
-          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <img class="site-author-image" itemprop="image" alt="Hao-Yun Chuang (Milan)"
-      src="/images/avatar.jpg">
-  <p class="site-author-name" itemprop="name">Hao-Yun Chuang (Milan)</p>
-  <div class="site-description" itemprop="description">畢業於成大工資管學系＆外文系以及政大語言所，研究興趣為計算語言學<br/></div>
-</div>
-<div class="site-state-wrap site-overview-item animated">
-  <nav class="site-state">
-      <div class="site-state-item site-state-posts">
-        <a href="/archives/">
-          <span class="site-state-item-count">32</span>
-          <span class="site-state-item-name">文章</span>
-        </a>
-      </div>
-      <div class="site-state-item site-state-categories">
-          <a href="/categories/">
-        <span class="site-state-item-count">6</span>
-        <span class="site-state-item-name">分類</span></a>
-      </div>
-      <div class="site-state-item site-state-tags">
-          <a href="/tags/">
-        <span class="site-state-item-count">4</span>
-        <span class="site-state-item-name">標籤</span></a>
-      </div>
-  </nav>
-</div>
-  <div class="links-of-author site-overview-item animated">
-      <span class="links-of-author-item">
-        <a href="https://github.com/milanochuang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;milanochuang" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
-      </span>
-      <span class="links-of-author-item">
-        <a href="mailto:milanochuang@gmail.com" title="E-Mail → mailto:milanochuang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
-      </span>
-      <span class="links-of-author-item">
-        <a href="https://twitter.com/milanochuang" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;milanochuang" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i></a>
-      </span>
-      <span class="links-of-author-item">
-        <a href="https://www.facebook.com/milanochuang" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;milanochuang" rel="noopener" target="_blank"><i class="fab fa-facebook fa-fw"></i></a>
-      </span>
-      <span class="links-of-author-item">
-        <a href="https://instagram.com/milanochuang" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;milanochuang" rel="noopener" target="_blank"><i class="fab fa-instagram fa-fw"></i></a>
-      </span>
-  </div>
-
-
-
-        </div>
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="fa-solid fa-house"></i>
+                  <span>首頁</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/archives/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="fa-solid fa-box-archive"></i>
+                  <span>歸檔</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/categories/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="fa-solid fa-folder"></i>
+                  <span>分類</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/tags/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="fa-solid fa-tags"></i>
+                  <span>標籤</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/about/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="fa-solid fa-user"></i>
+                  <span>關於</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/slides/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="fa-brands fa-slideshare"></i>
+                  <span>教學投影片</span>
+                </div>
+              </a>
+            </div>
+          
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-search-btn">
+            <a href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-search"></i>
+                <span>搜尋</span>
+              </div>
+            </a>
+          </div>
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-color-toggle-btn"
+               data-label-light="開燈"
+               data-label-dark="關燈">
+            <a href="javascript:;" aria-label="Color Toggle">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-dark" id="mobile-color-toggle-icon"></i>
+                <span id="mobile-color-toggle-label">關燈</span>
+              </div>
+            </a>
+          </div>
+        
       </div>
     </div>
-  </aside>
-  <div class="sidebar-dimmer"></div>
-
-
-    </header>
-
-    
-  <div class="back-to-top" role="button" aria-label="回到頂端">
-    <i class="fa fa-arrow-up"></i>
-    <span>0%</span>
   </div>
-  <div class="reading-progress-bar"></div>
-
-  <a href="https://github.com/milanochuang" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
-
-<noscript>
-  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
-</noscript>
-
-
-    <div class="main-inner post posts-expand">
-
-
-  
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
-    <link itemprop="mainEntityOfPage" href="https://milanochuang.github.io/2022/09/03/%E3%80%90NLP%E3%80%91Day-2-%E5%B7%A5%E6%AC%B2%E5%96%84%E5%85%B6%E4%BA%8B%EF%BC%8C%E5%BF%85%E5%85%88%E5%88%A9%E5%85%B6%E5%99%A8%EF%BC%81Python%E5%9F%BA%E7%A4%8E%E4%BB%8B%E7%B4%B9%EF%BC%81/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="Hao-Yun Chuang (Milan)">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="米蘭牛角尖">
-      <meta itemprop="description" content="畢業於成大工資管學系＆外文系以及政大語言所，研究興趣為計算語言學<br/>">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="【NLP】Day 2: 工欲善其事，必先利其器！Python基礎介紹！ | 米蘭牛角尖">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          【NLP】Day 2: 工欲善其事，必先利其器！Python基礎介紹！
-        </h1>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">發表於</span>
-
-      <time title="創建時間：2022-09-03 09:45:00" itemprop="dateCreated datePublished" datetime="2022-09-03T09:45:00+08:00">2022-09-03</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新於</span>
-      <time title="修改時間：2022-09-18 01:49:11" itemprop="dateModified" datetime="2022-09-18T01:49:11+08:00">2022-09-18</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分類於</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/natural-language-processing/" itemprop="url" rel="index"><span itemprop="name">自然語言處理</span></a>
-        </span>
-    </span>
-
-  
 </div>
 
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/images/cover.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.8)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="【NLP】Day 2: 工欲善其事，必先利其器！Python基礎介紹！"></span>
+          
         </div>
-      </header>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-09-03 09:45" pubdate>
+          2022年9月3日 上午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          35 分鐘
+        
+      </span>
+    
 
     
     
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+
+
+</div>
+
+  </header>
+
+  <main>
     
-    <div class="post-body" itemprop="articleBody">
-        <blockquote>
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">【NLP】Day 2: 工欲善其事，必先利其器！Python基礎介紹！</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <blockquote>
 <p><em>萬事開頭難，難就難在初始階段。在此期間，必須窮盡心力，使諸方面保持均衡，以利於今後的發展。</em><br><strong>法蘭克・赫伯特《沙丘》</strong></p>
 </blockquote>
 <p>在一起踏上偉大的航道前，由於在這三十天會運用Python作為主要的程式語言，所謂工欲善其事，必先利其器，畢竟就連魯夫一開始出海前，也是需要一艘船嘛！所以免不了總是要稍微解釋一下在之後的文章會用到的簡單語法以及概念。</p>
@@ -270,117 +419,474 @@
 <p>不過如果之後的文章用到其他在這裡沒有解釋到的語法，也會在那篇文章特別介紹。</p>
 <h2 id="資料型態以及資料結構"><a href="#資料型態以及資料結構" class="headerlink" title="資料型態以及資料結構"></a>資料型態以及資料結構</h2><p>Python共有種的資料型態以及種的資料結構，不同的型態與結構，在不同的使用情境下有不同的用途，以下幫助你簡單理解：</p>
 <h3 id="字串-string"><a href="#字串-string" class="headerlink" title="字串 string"></a>字串 <code>string</code></h3><p>字串顧名思義就是單純字串，一般來說會以雙引號來表示，例如<code>&quot;偉大航道&quot;</code>就是一種字串，但單引號也可以，像是<code>&#39;偉大航道&#39;</code>，只是大部分都會用雙引號，而且字串也不能進行數學上的四則運算，在程式編寫上要特別留意。性質如下：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span>(<span class="string">&quot;1&quot;</span>+<span class="string">&quot;2&quot;</span>+<span class="string">&quot;3&quot;</span>) </span><br><span class="line"><span class="comment"># output: 123</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;1&quot;</span>+<span class="hljs-string">&quot;2&quot;</span>+<span class="hljs-string">&quot;3&quot;</span>) <br><span class="hljs-comment"># output: 123</span><br></code></pre></td></tr></table></figure>
 
 <p>你也可以將其他種資料型態透過<code>str()</code>轉換成字串：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">num = <span class="number">123</span></span><br><span class="line">num_string = <span class="built_in">str</span>(num)</span><br><span class="line"><span class="built_in">type</span>(num_string)</span><br><span class="line"><span class="comment"># output: str</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python">num = <span class="hljs-number">123</span><br>num_string = <span class="hljs-built_in">str</span>(num)<br><span class="hljs-built_in">type</span>(num_string)<br><span class="hljs-comment"># output: str</span><br></code></pre></td></tr></table></figure>
 
 <h3 id="整數-int-amp-浮點數-float"><a href="#整數-int-amp-浮點數-float" class="headerlink" title="整數 int &amp; 浮點數 float"></a>整數 <code>int</code> &amp; 浮點數 <code>float</code></h3><p>整數就是整數，這不需要特別說明。浮點數就是有小數點的數字，也就是小數！而這兩種資料型態分別可以透過<code>int()</code>以及<code>float()</code>來轉換。這兩種資料型態可以進行四則運算，讓我們來看看以下例子：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span>(<span class="number">1</span>+<span class="number">2</span>+<span class="number">3</span>)</span><br><span class="line"><span class="comment"># output: 6</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-built_in">print</span>(<span class="hljs-number">1</span>+<span class="hljs-number">2</span>+<span class="hljs-number">3</span>)<br><span class="hljs-comment"># output: 6</span><br></code></pre></td></tr></table></figure>
 
 <p>前面已經了解到，資料型態也可以用對應的函式互相轉換，但要特別注意的是，不同資料型態不能混在一起運算。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span>(<span class="number">123</span>+<span class="string">&quot;123&quot;</span>)</span><br><span class="line"><span class="comment"># output: </span></span><br><span class="line">---------------------------------------------------------------------------</span><br><span class="line">TypeError                                 Traceback (most recent call last)</span><br><span class="line">&lt;ipython-<span class="built_in">input</span>-<span class="number">3</span>-a752e60be039&gt; <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">----&gt; <span class="number">1</span> <span class="number">123</span>+<span class="string">&quot;123&quot;</span></span><br><span class="line"></span><br><span class="line">TypeError: unsupported operand <span class="built_in">type</span>(s) <span class="keyword">for</span> +: <span class="string">&#x27;int&#x27;</span> <span class="keyword">and</span> <span class="string">&#x27;str&#x27;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-built_in">print</span>(<span class="hljs-number">123</span>+<span class="hljs-string">&quot;123&quot;</span>)<br><span class="hljs-comment"># output: </span><br>---------------------------------------------------------------------------<br>TypeError                                 Traceback (most recent call last)<br>&lt;ipython-<span class="hljs-built_in">input</span>-<span class="hljs-number">3</span>-a752e60be039&gt; <span class="hljs-keyword">in</span> &lt;module&gt;<br>----&gt; <span class="hljs-number">1</span> <span class="hljs-number">123</span>+<span class="hljs-string">&quot;123&quot;</span><br><br>TypeError: unsupported operand <span class="hljs-built_in">type</span>(s) <span class="hljs-keyword">for</span> +: <span class="hljs-string">&#x27;int&#x27;</span> <span class="hljs-keyword">and</span> <span class="hljs-string">&#x27;str&#x27;</span><br></code></pre></td></tr></table></figure>
 <p>但浮點數跟整數間可以進行四則運算嗎？我們來試試看：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span>(<span class="number">1.23</span>+<span class="number">123</span>)</span><br><span class="line"><span class="comment"># output: 124.23</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-built_in">print</span>(<span class="hljs-number">1.23</span>+<span class="hljs-number">123</span>)<br><span class="hljs-comment"># output: 124.23</span><br></code></pre></td></tr></table></figure>
 <p>這兩者之間由上可知是可以進行四則運算的喔！</p>
 <h3 id="串列-list"><a href="#串列-list" class="headerlink" title="串列 list"></a>串列 <code>list</code></h3><p><code>list</code>用中括號表示，可以將前述講到的資料，像火車一樣一個一個分別存在不同車廂裡面，並以逗號分隔。即使不同資料型態也可以一起放進去。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 建立新的空串列，並命名為example</span></span><br><span class="line">example = []</span><br><span class="line"><span class="comment"># 預設資料</span></span><br><span class="line">example = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]</span><br><span class="line"><span class="comment"># 將資料加入串列的最尾端</span></span><br><span class="line">example.append(<span class="number">123</span>)</span><br><span class="line"><span class="built_in">print</span>(example)</span><br><span class="line"><span class="comment"># output: [1, 2, 3, 123]</span></span><br><span class="line"><span class="comment"># 不同的資料型態也可以存在同一個串列中</span></span><br><span class="line">example.append(<span class="string">&quot;海賊王&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(example)</span><br><span class="line"><span class="comment"># output: [1, 2, 3, 123, &quot;海賊王&quot;]</span></span><br><span class="line"><span class="comment"># 轉換方式則可以透過list()，如：</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 建立新的空串列，並命名為example</span><br>example = []<br><span class="hljs-comment"># 預設資料</span><br>example = [<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>]<br><span class="hljs-comment"># 將資料加入串列的最尾端</span><br>example.append(<span class="hljs-number">123</span>)<br><span class="hljs-built_in">print</span>(example)<br><span class="hljs-comment"># output: [1, 2, 3, 123]</span><br><span class="hljs-comment"># 不同的資料型態也可以存在同一個串列中</span><br>example.append(<span class="hljs-string">&quot;海賊王&quot;</span>)<br><span class="hljs-built_in">print</span>(example)<br><span class="hljs-comment"># output: [1, 2, 3, 123, &quot;海賊王&quot;]</span><br><span class="hljs-comment"># 轉換方式則可以透過list()，如：</span><br></code></pre></td></tr></table></figure>
 
 <h3 id="字典-dictionary"><a href="#字典-dictionary" class="headerlink" title="字典 dictionary"></a>字典 <code>dictionary</code></h3><p><code>dictionary</code>則是用大括號表示，是python特有的資料型態，像是字典一樣，每個字都有其對應的意義。那麼當值與值之間互相對應的時候，就可以透過<code>dict()</code>來表示：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 建立新的空字典，並命名為example</span></span><br><span class="line">example = &#123;&#125;</span><br><span class="line"><span class="comment"># 字典形式分成key跟value，每個key有對應的value，並用冒號表示：</span></span><br><span class="line">example = &#123;</span><br><span class="line">    <span class="string">&quot;魯夫&quot;</span>: <span class="string">&quot;船長&quot;</span>,</span><br><span class="line">    <span class="string">&quot;索隆&quot;</span>: <span class="string">&quot;戰鬥員&quot;</span>,</span><br><span class="line">    <span class="string">&quot;娜美&quot;</span>: <span class="string">&quot;航海士&quot;</span>,</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment"># 並透過以下方式取出值（value）：</span></span><br><span class="line"><span class="built_in">print</span>(example[<span class="string">&#x27;魯夫&#x27;</span>])</span><br><span class="line"><span class="comment"># output: 船長</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 建立新的空字典，並命名為example</span><br>example = &#123;&#125;<br><span class="hljs-comment"># 字典形式分成key跟value，每個key有對應的value，並用冒號表示：</span><br>example = &#123;<br>    <span class="hljs-string">&quot;魯夫&quot;</span>: <span class="hljs-string">&quot;船長&quot;</span>,<br>    <span class="hljs-string">&quot;索隆&quot;</span>: <span class="hljs-string">&quot;戰鬥員&quot;</span>,<br>    <span class="hljs-string">&quot;娜美&quot;</span>: <span class="hljs-string">&quot;航海士&quot;</span>,<br>&#125;<br><span class="hljs-comment"># 並透過以下方式取出值（value）：</span><br><span class="hljs-built_in">print</span>(example[<span class="hljs-string">&#x27;魯夫&#x27;</span>])<br><span class="hljs-comment"># output: 船長</span><br></code></pre></td></tr></table></figure>
 
 <h2 id="Python語法"><a href="#Python語法" class="headerlink" title="Python語法"></a>Python語法</h2><p>那接下來就讓我們來看看可以透過哪些方式操作以上這些資料吧！</p>
 <h3 id="for迴圈"><a href="#for迴圈" class="headerlink" title="for迴圈"></a><code>for</code>迴圈</h3><p><code>for</code>迴圈，顧名思義，如果你需要重複做某件相同的事時，就可以透過<code>for</code>迴圈讓程式來幫你做，你可以指定迴圈運行的次數，或是讓迴圈「遍歷」串列或是字典的key或是value，但方式有點不一樣。常用的寫法如下：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">example = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">123</span>, <span class="string">&quot;海賊王&quot;</span>]</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> example:</span><br><span class="line">    <span class="built_in">print</span>(i)</span><br><span class="line"></span><br><span class="line"><span class="comment"># output: </span></span><br><span class="line"><span class="comment"># 1</span></span><br><span class="line"><span class="comment"># 2</span></span><br><span class="line"><span class="comment"># 3</span></span><br><span class="line"><span class="comment"># 123</span></span><br><span class="line"><span class="comment"># 海賊王</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs python">example = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">123</span>, <span class="hljs-string">&quot;海賊王&quot;</span>]<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> example:<br>    <span class="hljs-built_in">print</span>(i)<br><br><span class="hljs-comment"># output: </span><br><span class="hljs-comment"># 1</span><br><span class="hljs-comment"># 2</span><br><span class="hljs-comment"># 3</span><br><span class="hljs-comment"># 123</span><br><span class="hljs-comment"># 海賊王</span><br></code></pre></td></tr></table></figure>
 
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 字典本身不能遍歷，但可以遍歷key或是value</span></span><br><span class="line">example = &#123;</span><br><span class="line">    <span class="string">&quot;魯夫&quot;</span>: <span class="string">&quot;船長&quot;</span>,</span><br><span class="line">    <span class="string">&quot;索隆&quot;</span>: <span class="string">&quot;戰鬥員&quot;</span>,</span><br><span class="line">    <span class="string">&quot;娜美&quot;</span>: <span class="string">&quot;航海士&quot;</span>,</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> example.keys():</span><br><span class="line">    <span class="built_in">print</span>(i)</span><br><span class="line"><span class="comment"># output: </span></span><br><span class="line"><span class="comment"># 魯夫</span></span><br><span class="line"><span class="comment"># 索隆</span></span><br><span class="line"><span class="comment"># 娜美</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> example.values(): <span class="comment"># 要加s</span></span><br><span class="line">    <span class="built_in">print</span>(i)</span><br><span class="line"><span class="comment"># output: </span></span><br><span class="line"><span class="comment"># 船長</span></span><br><span class="line"><span class="comment"># 戰鬥員</span></span><br><span class="line"><span class="comment"># 航海士</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 字典本身不能遍歷，但可以遍歷key或是value</span><br>example = &#123;<br>    <span class="hljs-string">&quot;魯夫&quot;</span>: <span class="hljs-string">&quot;船長&quot;</span>,<br>    <span class="hljs-string">&quot;索隆&quot;</span>: <span class="hljs-string">&quot;戰鬥員&quot;</span>,<br>    <span class="hljs-string">&quot;娜美&quot;</span>: <span class="hljs-string">&quot;航海士&quot;</span>,<br>&#125;<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> example.keys():<br>    <span class="hljs-built_in">print</span>(i)<br><span class="hljs-comment"># output: </span><br><span class="hljs-comment"># 魯夫</span><br><span class="hljs-comment"># 索隆</span><br><span class="hljs-comment"># 娜美</span><br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> example.values(): <span class="hljs-comment"># 要加s</span><br>    <span class="hljs-built_in">print</span>(i)<br><span class="hljs-comment"># output: </span><br><span class="hljs-comment"># 船長</span><br><span class="hljs-comment"># 戰鬥員</span><br><span class="hljs-comment"># 航海士</span><br></code></pre></td></tr></table></figure>
 
 <p><code>for</code>迴圈也有另外一種常見的寫法，我們來看看：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">example = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">123</span>, <span class="string">&quot;海賊王&quot;</span>]</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(example)):</span><br><span class="line">    <span class="built_in">print</span>(i)</span><br><span class="line"><span class="comment"># output: </span></span><br><span class="line"><span class="comment"># 1</span></span><br><span class="line"><span class="comment"># 2</span></span><br><span class="line"><span class="comment"># 3</span></span><br><span class="line"><span class="comment"># 123</span></span><br><span class="line"><span class="comment"># 海賊王</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs python">example = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">123</span>, <span class="hljs-string">&quot;海賊王&quot;</span>]<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-built_in">len</span>(example)):<br>    <span class="hljs-built_in">print</span>(i)<br><span class="hljs-comment"># output: </span><br><span class="hljs-comment"># 1</span><br><span class="hljs-comment"># 2</span><br><span class="hljs-comment"># 3</span><br><span class="hljs-comment"># 123</span><br><span class="hljs-comment"># 海賊王</span><br></code></pre></td></tr></table></figure>
 <p>其中用到了兩個之前沒用過的函式，分別是<code>range()</code>以及<code>len()</code>，<code>range()</code>中的參數代表的就是讓<code>i</code>運行這個次數，<code>len()</code>則是串列的長度，那這行就是讓<code>for</code>迴圈運行串列長度的次數。</p>
 <h3 id="if條件敘述式"><a href="#if條件敘述式" class="headerlink" title="if條件敘述式"></a><code>if</code>條件敘述式</h3><p>當程式達到某特定條件時，可以透過<code>if</code>，指定程式執行其他動作，一般會在迴圈中使用。用法如下：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">example = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">123</span>, <span class="string">&quot;海賊王&quot;</span>]</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(example)):</span><br><span class="line">    <span class="keyword">if</span> i == <span class="string">&quot;海賊王&quot;</span>:</span><br><span class="line">        <span class="built_in">print</span>(i)</span><br><span class="line"><span class="comment"># output: 海賊王</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python">example = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">123</span>, <span class="hljs-string">&quot;海賊王&quot;</span>]<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-built_in">len</span>(example)):<br>    <span class="hljs-keyword">if</span> i == <span class="hljs-string">&quot;海賊王&quot;</span>:<br>        <span class="hljs-built_in">print</span>(i)<br><span class="hljs-comment"># output: 海賊王</span><br></code></pre></td></tr></table></figure>
 <p>若有不同條件，則可以透過<code>elif</code>來指定條件。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">example = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">123</span>, <span class="string">&quot;海賊王&quot;</span>]</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(example)):</span><br><span class="line">    <span class="keyword">if</span> i == <span class="string">&quot;海賊王&quot;</span>:</span><br><span class="line">        <span class="built_in">print</span>(i)</span><br><span class="line">    <span class="keyword">elif</span> i == <span class="number">1</span>:</span><br><span class="line">        <span class="built_in">print</span>(i)</span><br><span class="line"><span class="comment"># output: </span></span><br><span class="line"><span class="comment"># 海賊王</span></span><br><span class="line"><span class="comment"># 1</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs python">example = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">123</span>, <span class="hljs-string">&quot;海賊王&quot;</span>]<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-built_in">len</span>(example)):<br>    <span class="hljs-keyword">if</span> i == <span class="hljs-string">&quot;海賊王&quot;</span>:<br>        <span class="hljs-built_in">print</span>(i)<br>    <span class="hljs-keyword">elif</span> i == <span class="hljs-number">1</span>:<br>        <span class="hljs-built_in">print</span>(i)<br><span class="hljs-comment"># output: </span><br><span class="hljs-comment"># 海賊王</span><br><span class="hljs-comment"># 1</span><br></code></pre></td></tr></table></figure>
 
 <p>若執行了<code>if</code>就不會執行<code>elif</code>，若包含<code>elif</code>條件就只能擇一。但如果全部都寫<code>if</code>就所有條件都會檢驗一遍。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">example = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">123</span>, <span class="string">&quot;海賊王&quot;</span>]</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(example)):</span><br><span class="line">    <span class="keyword">if</span> i == <span class="string">&quot;海賊王&quot;</span>:</span><br><span class="line">        <span class="built_in">print</span>(i)</span><br><span class="line">    <span class="keyword">elif</span> i == <span class="number">1</span>:</span><br><span class="line">        <span class="built_in">print</span>(i)</span><br><span class="line">example = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">123</span>, <span class="string">&quot;海賊王&quot;</span>]</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(example)):</span><br><span class="line">    <span class="keyword">if</span> i == <span class="string">&quot;海賊王&quot;</span>:</span><br><span class="line">        <span class="built_in">print</span>(i)</span><br><span class="line">    <span class="keyword">if</span> i == <span class="number">1</span>:</span><br><span class="line">        <span class="built_in">print</span>(i)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs python">example = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">123</span>, <span class="hljs-string">&quot;海賊王&quot;</span>]<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-built_in">len</span>(example)):<br>    <span class="hljs-keyword">if</span> i == <span class="hljs-string">&quot;海賊王&quot;</span>:<br>        <span class="hljs-built_in">print</span>(i)<br>    <span class="hljs-keyword">elif</span> i == <span class="hljs-number">1</span>:<br>        <span class="hljs-built_in">print</span>(i)<br>example = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">123</span>, <span class="hljs-string">&quot;海賊王&quot;</span>]<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-built_in">len</span>(example)):<br>    <span class="hljs-keyword">if</span> i == <span class="hljs-string">&quot;海賊王&quot;</span>:<br>        <span class="hljs-built_in">print</span>(i)<br>    <span class="hljs-keyword">if</span> i == <span class="hljs-number">1</span>:<br>        <span class="hljs-built_in">print</span>(i)<br></code></pre></td></tr></table></figure>
 
 <p>最後前面的條件都不符合，但也要對其進行處理，則可以用<code>else</code>。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">example = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">123</span>, <span class="string">&quot;海賊王&quot;</span>]</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(example)):</span><br><span class="line">    <span class="keyword">if</span> i == <span class="string">&quot;海賊王&quot;</span>:</span><br><span class="line">        <span class="built_in">print</span>(i)</span><br><span class="line">    <span class="keyword">elif</span> i == <span class="number">1</span>:</span><br><span class="line">        <span class="built_in">print</span>(i)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;我是else&quot;</span>)</span><br><span class="line"><span class="comment"># or</span></span><br><span class="line">example = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">123</span>, <span class="string">&quot;海賊王&quot;</span>]</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(example)):</span><br><span class="line">    <span class="keyword">if</span> i == <span class="string">&quot;海賊王&quot;</span>:</span><br><span class="line">        <span class="built_in">print</span>(i)</span><br><span class="line">    <span class="keyword">if</span> i == <span class="number">1</span>:</span><br><span class="line">        <span class="built_in">print</span>(i)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;我是else&quot;</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs python">example = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">123</span>, <span class="hljs-string">&quot;海賊王&quot;</span>]<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-built_in">len</span>(example)):<br>    <span class="hljs-keyword">if</span> i == <span class="hljs-string">&quot;海賊王&quot;</span>:<br>        <span class="hljs-built_in">print</span>(i)<br>    <span class="hljs-keyword">elif</span> i == <span class="hljs-number">1</span>:<br>        <span class="hljs-built_in">print</span>(i)<br>    <span class="hljs-keyword">else</span>:<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;我是else&quot;</span>)<br><span class="hljs-comment"># or</span><br>example = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">123</span>, <span class="hljs-string">&quot;海賊王&quot;</span>]<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-built_in">len</span>(example)):<br>    <span class="hljs-keyword">if</span> i == <span class="hljs-string">&quot;海賊王&quot;</span>:<br>        <span class="hljs-built_in">print</span>(i)<br>    <span class="hljs-keyword">if</span> i == <span class="hljs-number">1</span>:<br>        <span class="hljs-built_in">print</span>(i)<br>    <span class="hljs-keyword">else</span>:<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;我是else&quot;</span>)<br></code></pre></td></tr></table></figure>
 <p>跳出迴圈可以用<code>break</code>，繼續執行迴圈可以用<code>continue</code>。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">example = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">123</span>, <span class="string">&quot;海賊王&quot;</span>]</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(example)):</span><br><span class="line">    <span class="keyword">if</span> i == <span class="string">&quot;海賊王&quot;</span>:</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">    <span class="keyword">if</span> i == <span class="number">1</span>:</span><br><span class="line">        <span class="keyword">continue</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;我是else&quot;</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs python">example = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">123</span>, <span class="hljs-string">&quot;海賊王&quot;</span>]<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-built_in">len</span>(example)):<br>    <span class="hljs-keyword">if</span> i == <span class="hljs-string">&quot;海賊王&quot;</span>:<br>        <span class="hljs-keyword">break</span><br>    <span class="hljs-keyword">if</span> i == <span class="hljs-number">1</span>:<br>        <span class="hljs-keyword">continue</span><br>    <span class="hljs-keyword">else</span>:<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;我是else&quot;</span>)<br></code></pre></td></tr></table></figure>
 
 <h3 id="def-函式"><a href="#def-函式" class="headerlink" title="def 函式"></a><code>def</code> 函式</h3><p>不知道大家還記不記得國高中的函數，給定一個x值，函數會計算出y值；同理，一樣是function，程式中也會有所謂的函式，括號中給定參數，函式則會回傳值，或是不回傳值只執行特定動作也可以。當你發現一直在重複相同動作又要寫很多次的時候，就是函式派上用場的時候了。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">example_func</span>(<span class="params">parameter_1</span>):</span><br><span class="line">	result = <span class="number">1</span> + parater_1</span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在這裡你可以回傳值，也可以將回傳值指配給變數，如：</span></span><br><span class="line"></span><br><span class="line">result_var = example_func(<span class="number">2</span>)</span><br><span class="line"><span class="built_in">print</span>(result_var)</span><br><span class="line"><span class="comment"># output: 3</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">example_func</span>(<span class="hljs-params">parameter_1</span>):<br>	result = <span class="hljs-number">1</span> + parater_1<br>    <span class="hljs-keyword">return</span> result<br><br><span class="hljs-comment"># 在這裡你可以回傳值，也可以將回傳值指配給變數，如：</span><br><br>result_var = example_func(<span class="hljs-number">2</span>)<br><span class="hljs-built_in">print</span>(result_var)<br><span class="hljs-comment"># output: 3</span><br></code></pre></td></tr></table></figure>
 
 <p>好的！大致上會用到的基本語法就是這樣，若想知道更多可以去看<a target="_blank" rel="noopener" href="https://docs.python.org/zh-tw/3/tutorial/index.html">官方說明文件</a>，網路上也有很多的教學，明天就要進入偉大航道了，我們明天見。</p>
 
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/natural-language-processing/" class="category-chain-item">自然語言處理</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>【NLP】Day 2: 工欲善其事，必先利其器！Python基礎介紹！</div>
+      <div>https://milanochuang.github.io/2022/09/03/【NLP】Day-2-工欲善其事，必先利其器！Python基礎介紹！/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Hao Yun Chuang (Milan)</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>發布於</div>
+          <div>2022年9月3日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>許可協議</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 姓名標示">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/09/14/%E3%80%90NLP%E3%80%91Day-3-%E8%87%AA%E7%84%B6%E8%AA%9E%E8%A8%80%E8%99%95%E7%90%86%E7%9A%84%E5%85%A7%E5%8A%9B%EF%BC%8C%E4%B8%80%E5%88%87%E7%9A%84%E5%9F%BA%E7%A4%8E%EF%BC%81%E6%AD%A3%E8%A6%8F%E8%A1%A8%E9%81%94%E5%BC%8F-1-%E6%90%9C%E5%B0%8B/" title="【NLP】Day 3: 自然語言處理的內力，一切的基礎！正規表達式 (1) 搜尋">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">【NLP】Day 3: 自然語言處理的內力，一切的基礎！正規表達式 (1) 搜尋</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/09/01/%E3%80%90NLP%E3%80%91%E6%88%91%E6%89%80%E7%9F%A5%E9%81%93%E7%9A%84%E8%87%AA%E7%84%B6%E8%AA%9E%E8%A8%80%E8%99%95%E7%90%86/" title="【NLP】Day 1: 前往NLP的偉大航道！一起成為我的夥伴吧！">
+                        <span class="hidden-mobile">【NLP】Day 1: 前往NLP的偉大航道！一起成為我的夥伴吧！</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
     </div>
 
-    
-    
-    
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目錄</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
 
-    <footer class="post-footer">
 
-        
 
-          <div class="post-nav">
-            <div class="post-nav-item">
-                <a href="/2022/09/01/%E3%80%90NLP%E3%80%91%E6%88%91%E6%89%80%E7%9F%A5%E9%81%93%E7%9A%84%E8%87%AA%E7%84%B6%E8%AA%9E%E8%A8%80%E8%99%95%E7%90%86/" rel="prev" title="【NLP】Day 1: 前往NLP的偉大航道！一起成為我的夥伴吧！">
-                  <i class="fa fa-chevron-left"></i> 【NLP】Day 1: 前往NLP的偉大航道！一起成為我的夥伴吧！
-                </a>
-            </div>
-            <div class="post-nav-item">
-                <a href="/2022/09/14/%E3%80%90NLP%E3%80%91Day-3-%E8%87%AA%E7%84%B6%E8%AA%9E%E8%A8%80%E8%99%95%E7%90%86%E7%9A%84%E5%85%A7%E5%8A%9B%EF%BC%8C%E4%B8%80%E5%88%87%E7%9A%84%E5%9F%BA%E7%A4%8E%EF%BC%81%E6%AD%A3%E8%A6%8F%E8%A1%A8%E9%81%94%E5%BC%8F-1-%E6%90%9C%E5%B0%8B/" rel="next" title="【NLP】Day 3: 自然語言處理的內力，一切的基礎！正規表達式 (1) 搜尋">
-                  【NLP】Day 3: 自然語言處理的內力，一切的基礎！正規表達式 (1) 搜尋 <i class="fa fa-chevron-right"></i>
-                </a>
-            </div>
-          </div>
-    </footer>
-  </article>
+  </aside>
+
+
+    </div>
+  </div>
 </div>
 
 
 
 
 
+  
 
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜尋</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">關鍵字</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
 </div>
+
+    
+
+    
   </main>
 
-  <footer class="footer">
+  <footer>
     <div class="footer-inner">
-
-
-<div class="copyright">
-  &copy; 
-  <span itemprop="copyrightYear">2026</span>
-  <span class="with-love">
-    <i class="fa-solid fa-code"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">Hao-Yun Chuang (Milan)</span>
+  
+    <div class="footer-content">
+       <i class="fa-brands fa-github"></i> <a href="https://github.com/milanochuang" target="_blank" rel="nofollow noopener"><span>milanochuang</span></a> 
+    </div>
+  
+  
+  
 </div>
 
-    </div>
   </footer>
 
+  <!-- Scripts -->
   
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
 
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
   
 
 
 
 
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    function isExpandAllEnabled() {
+      return CONFIG.toc && CONFIG.toc.expand_all === true;
+    }
+    function expandAllToc() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .tocbot-is-collapsed').removeClass('tocbot-is-collapsed');
+    }
+    function updateTocToggle($li, $childList) {
+      var $toggle = $li.children('.toc-toggle');
+      if ($toggle.length === 0) { return; }
+      var collapsed = $childList.hasClass('tocbot-is-collapsed');
+      $toggle
+        .toggleClass('toc-toggle-collapsed', collapsed)
+        .toggleClass('toc-toggle-expanded', !collapsed);
+    }
+    function bindTocToggle() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .toc-list-item').each(function() {
+        var $li = jQuery(this);
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) {
+          if ($li.children('.toc-toggle').length === 0) {
+            $li.prepend('<span class="toc-toggle toc-toggle-placeholder" aria-hidden="true">›</span>');
+          }
+          return;
+        }
+
+        if ($li.children('.toc-toggle').length === 0) {
+          $li.prepend('<span class="toc-toggle toc-toggle-expanded" aria-hidden="true">›</span>');
+        }
+        updateTocToggle($li, $childList);
+      });
+      jQuery('#toc-body').off('click.tocToggle').on('click.tocToggle', '.toc-toggle', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var $li = jQuery(this).parent('.toc-list-item');
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) { return; }
+        $childList.toggleClass('tocbot-is-collapsed');
+        updateTocToggle($li, $childList);
+      });
+      if (!window.__tocToggleObserver) {
+        window.__tocToggleObserver = new MutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+            if (mutation.type !== 'attributes' || mutation.attributeName !== 'class') { return; }
+            var $list = jQuery(mutation.target);
+            var $li = $list.parent('.toc-list-item');
+            if ($li.length === 0) { return; }
+            updateTocToggle($li, $list);
+          });
+        });
+        jQuery('#toc-body ol').each(function() {
+          window.__tocToggleObserver.observe(this, { attributes: true });
+        });
+      }
+    }
+    var tocConfig = Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc);
+    if (isExpandAllEnabled()) {
+      tocConfig.collapseDepth = 6;
+    }
+    window.tocbot.init(tocConfig);
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+    expandAllToc();
+    bindTocToggle();
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+        expandAllToc();
+        bindTocToggle();
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
 
   
 
-
-
-
-
-<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/assets/hijiki.model.json"},"display":{"superSample":2,"width":250,"height":500,"position":"right","hOffset":-30,"vOffset":-130},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"log":false});</script></body>
+  <noscript>
+    <div class="noscript-warning">部落格在允許 JavaScript 執行的環境下瀏覽效果更佳</div>
+  </noscript>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/assets/tororo.model.json"},"display":{"superSample":2,"width":250,"height":500,"position":"right","hOffset":-30,"vOffset":-130},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"log":false});</script></body>
 </html>

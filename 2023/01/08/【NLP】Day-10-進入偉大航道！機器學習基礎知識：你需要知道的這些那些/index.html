@@ -1,26 +1,24 @@
+
+
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-TW" data-default-color-scheme=dark>
+
+
+
 <head>
   <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width">
-<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
 
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
 
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/icon.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/icon.png">
-  <link rel="mask-icon" href="/images/icon.png" color="#222">
-  <meta name="google-site-verification" content="DMyRve2tDXDJqmJpSS4BaBWT1R0ZCH9n_EsCnROTiM0">
-
-<link rel="stylesheet" href="/css/main.css">
-
-
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha256-xejo6yLi6vGtAjcMIsY8BHdKsLg7QynVlFMzdQgUuy8=" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
-
-<script class="next-config" data-name="main" type="application/json">{"hostname":"milanochuang.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.12.3","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"}}</script><script src="/js/config.js"></script>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#171c27">
+  <meta name="author" content="Hao Yun Chuang (Milan)">
+  <meta name="keywords" content="自然語言處理, 計算語言學, 機器學習, 人工智慧, 電影">
+  
     <meta name="description" content="「孩兒，你看清楚了沒有？」「看清楚了」「都記得了沒有？」「已忘記了一小半。」「現下怎樣了？」「已忘記了一大半。」「好，我再使一遍。」「孩兒，怎樣啦？」「還有三招沒忘記。」「這我可全忘了，忘得乾乾淨淨的了。」張無忌、張三丰《倚天屠龍記》  前面講了這麼多，終於要講模型了嗎？我們這十天一起度過的旅程，目的只有一個，就是將文本資料轉化成數值資料。因為機器學習模型沒有辦法透過文字資料進行學習，唯有將其轉">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【NLP】Day 10: 進入偉大航道！機器學習基礎知識：你需要知道的這些那些">
@@ -37,236 +35,393 @@
 <meta property="article:author" content="Hao-Yun Chuang (Milan)">
 <meta property="article:tag" content="自然語言處理">
 <meta property="article:tag" content="NLP">
-<meta name="twitter:card" content="summary">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://i.imgur.com/zOq0XjF.png">
+  
+  
+  
+  <title>【NLP】Day 10: 進入偉大航道！機器學習基礎知識：你需要知道的這些那些 - 米蘭牛角尖</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
 
-<link rel="canonical" href="https://milanochuang.github.io/2023/01/08/%E3%80%90NLP%E3%80%91Day-10-%E9%80%B2%E5%85%A5%E5%81%89%E5%A4%A7%E8%88%AA%E9%81%93%EF%BC%81%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92%E5%9F%BA%E7%A4%8E%E7%9F%A5%E8%AD%98%EF%BC%9A%E4%BD%A0%E9%9C%80%E8%A6%81%E7%9F%A5%E9%81%93%E7%9A%84%E9%80%99%E4%BA%9B%E9%82%A3%E4%BA%9B/">
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://milanochuang.github.io/2023/01/08/%E3%80%90NLP%E3%80%91Day-10-%E9%80%B2%E5%85%A5%E5%81%89%E5%A4%A7%E8%88%AA%E9%81%93%EF%BC%81%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92%E5%9F%BA%E7%A4%8E%E7%9F%A5%E8%AD%98%EF%BC%9A%E4%BD%A0%E9%9C%80%E8%A6%81%E7%9F%A5%E9%81%93%E7%9A%84%E9%80%99%E4%BA%9B%E9%82%A3%E4%BA%9B/","path":"2023/01/08/【NLP】Day-10-進入偉大航道！機器學習基礎知識：你需要知道的這些那些/","title":"【NLP】Day 10: 進入偉大航道！機器學習基礎知識：你需要知道的這些那些"}</script>
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
 
-<script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>【NLP】Day 10: 進入偉大航道！機器學習基礎知識：你需要知道的這些那些 | 米蘭牛角尖</title>
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
   
 
 
 
+  
+<link rel="stylesheet" href="/css/custom.css">
 
 
 
-  <noscript>
-    <link rel="stylesheet" href="/css/noscript.css">
-  </noscript>
-</head>
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"milanochuang.github.io","root":"/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
 
-<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
-  <div class="headband"></div>
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
 
-  <main class="main">
-    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-container">
-  <div class="site-nav-toggle">
-    <div class="toggle" aria-label="切換導航欄" role="button">
-        <span class="toggle-line"></span>
-        <span class="toggle-line"></span>
-        <span class="toggle-line"></span>
-    </div>
-  </div>
 
-  <div class="site-meta">
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
 
-    <a href="/" class="brand" rel="start">
-      <i class="logo-line"></i>
-      <p class="site-title">米蘭牛角尖</p>
-      <i class="logo-line"></i>
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Hao-Yun&#39;s Geekbase</strong>
     </a>
-      <p class="site-subtitle" itemprop="description">計算語言學的學習紀錄，偶爾可能會出現野生的電影評論？</p>
-  </div>
 
-  <div class="site-nav-right">
-    <div class="toggle popup-trigger">
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content (desktop) -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="fa-solid fa-house"></i>
+                <span>首頁</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="fa-solid fa-box-archive"></i>
+                <span>歸檔</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="fa-solid fa-folder"></i>
+                <span>分類</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="fa-solid fa-tags"></i>
+                <span>標籤</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="fa-solid fa-user"></i>
+                <span>關於</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/slides/" target="_self">
+                <i class="fa-brands fa-slideshare"></i>
+                <span>教學投影片</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
     </div>
   </div>
-</div>
-
-
-
-<nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>關於</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分類</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>所有文章</a></li><li class="menu-item menu-item-tutorial"><a href="https://milanochuang.github.io/slides" rel="section"><i class="fa fa-chalkboard-teacher fa-fw"></i>教學投影片</a></li>
-  </ul>
 </nav>
 
-
-
-
-</div>
+<!-- Mobile grid menu overlay -->
+<div id="mobile-grid-menu" class="d-lg-none">
+  <div class="mobile-grid-menu-inner">
+    <div class="container">
+      <div class="row">
         
-  
-  <div class="toggle sidebar-toggle" role="button">
-    <span class="toggle-line"></span>
-    <span class="toggle-line"></span>
-    <span class="toggle-line"></span>
-  </div>
-
-  <aside class="sidebar">
-
-    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
-      <ul class="sidebar-nav">
-        <li class="sidebar-nav-toc">
-          文章目錄
-        </li>
-        <li class="sidebar-nav-overview">
-          本站概要
-        </li>
-      </ul>
-
-      <div class="sidebar-panel-container">
-        <!--noindex-->
-        <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B3%87%E6%96%99%E9%9B%86%EF%BC%86%E4%BA%A4%E5%8F%89%E9%A9%97%E8%AD%89"><span class="nav-number">1.</span> <span class="nav-text">資料集＆交叉驗證</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%A4%E5%8F%89%E9%A9%97%E8%AD%89"><span class="nav-number">1.1.</span> <span class="nav-text">交叉驗證</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E9%A1%9E%E6%8C%87%E6%A8%99"><span class="nav-number">2.</span> <span class="nav-text">分類指標</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%A3%E7%9D%A3%E5%BC%8F%E5%AD%B8%E7%BF%92-vs-%E9%9D%9E%E7%9B%A3%E7%9D%A3%E5%BC%8F%E5%AD%B8%E7%BF%92"><span class="nav-number">3.</span> <span class="nav-text">監督式學習 vs 非監督式學習</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E6%A8%A1%E5%9E%8B-vs-%E5%88%A4%E5%88%A5%E6%A8%A1%E5%9E%8B"><span class="nav-number">4.</span> <span class="nav-text">生成模型 vs 判別模型</span></a></li></ol></div>
-        </div>
-        <!--/noindex-->
-
-        <div class="site-overview-wrap sidebar-panel">
-          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <img class="site-author-image" itemprop="image" alt="Hao-Yun Chuang (Milan)"
-      src="/images/avatar.jpg">
-  <p class="site-author-name" itemprop="name">Hao-Yun Chuang (Milan)</p>
-  <div class="site-description" itemprop="description">畢業於成大工資管學系＆外文系以及政大語言所，研究興趣為計算語言學<br/></div>
-</div>
-<div class="site-state-wrap site-overview-item animated">
-  <nav class="site-state">
-      <div class="site-state-item site-state-posts">
-        <a href="/archives/">
-          <span class="site-state-item-count">32</span>
-          <span class="site-state-item-name">文章</span>
-        </a>
-      </div>
-      <div class="site-state-item site-state-categories">
-          <a href="/categories/">
-        <span class="site-state-item-count">6</span>
-        <span class="site-state-item-name">分類</span></a>
-      </div>
-      <div class="site-state-item site-state-tags">
-          <a href="/tags/">
-        <span class="site-state-item-count">4</span>
-        <span class="site-state-item-name">標籤</span></a>
-      </div>
-  </nav>
-</div>
-  <div class="links-of-author site-overview-item animated">
-      <span class="links-of-author-item">
-        <a href="https://github.com/milanochuang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;milanochuang" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
-      </span>
-      <span class="links-of-author-item">
-        <a href="mailto:milanochuang@gmail.com" title="E-Mail → mailto:milanochuang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
-      </span>
-      <span class="links-of-author-item">
-        <a href="https://twitter.com/milanochuang" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;milanochuang" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i></a>
-      </span>
-      <span class="links-of-author-item">
-        <a href="https://www.facebook.com/milanochuang" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;milanochuang" rel="noopener" target="_blank"><i class="fab fa-facebook fa-fw"></i></a>
-      </span>
-      <span class="links-of-author-item">
-        <a href="https://instagram.com/milanochuang" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;milanochuang" rel="noopener" target="_blank"><i class="fab fa-instagram fa-fw"></i></a>
-      </span>
-  </div>
-
-
-
-        </div>
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="fa-solid fa-house"></i>
+                  <span>首頁</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/archives/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="fa-solid fa-box-archive"></i>
+                  <span>歸檔</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/categories/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="fa-solid fa-folder"></i>
+                  <span>分類</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/tags/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="fa-solid fa-tags"></i>
+                  <span>標籤</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/about/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="fa-solid fa-user"></i>
+                  <span>關於</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/slides/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="fa-brands fa-slideshare"></i>
+                  <span>教學投影片</span>
+                </div>
+              </a>
+            </div>
+          
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-search-btn">
+            <a href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-search"></i>
+                <span>搜尋</span>
+              </div>
+            </a>
+          </div>
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-color-toggle-btn"
+               data-label-light="開燈"
+               data-label-dark="關燈">
+            <a href="javascript:;" aria-label="Color Toggle">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-dark" id="mobile-color-toggle-icon"></i>
+                <span id="mobile-color-toggle-label">關燈</span>
+              </div>
+            </a>
+          </div>
+        
       </div>
     </div>
-  </aside>
-  <div class="sidebar-dimmer"></div>
-
-
-    </header>
-
-    
-  <div class="back-to-top" role="button" aria-label="回到頂端">
-    <i class="fa fa-arrow-up"></i>
-    <span>0%</span>
   </div>
-  <div class="reading-progress-bar"></div>
-
-  <a href="https://github.com/milanochuang" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
-
-<noscript>
-  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
-</noscript>
-
-
-    <div class="main-inner post posts-expand">
-
-
-  
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
-    <link itemprop="mainEntityOfPage" href="https://milanochuang.github.io/2023/01/08/%E3%80%90NLP%E3%80%91Day-10-%E9%80%B2%E5%85%A5%E5%81%89%E5%A4%A7%E8%88%AA%E9%81%93%EF%BC%81%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92%E5%9F%BA%E7%A4%8E%E7%9F%A5%E8%AD%98%EF%BC%9A%E4%BD%A0%E9%9C%80%E8%A6%81%E7%9F%A5%E9%81%93%E7%9A%84%E9%80%99%E4%BA%9B%E9%82%A3%E4%BA%9B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="Hao-Yun Chuang (Milan)">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="米蘭牛角尖">
-      <meta itemprop="description" content="畢業於成大工資管學系＆外文系以及政大語言所，研究興趣為計算語言學<br/>">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="【NLP】Day 10: 進入偉大航道！機器學習基礎知識：你需要知道的這些那些 | 米蘭牛角尖">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          【NLP】Day 10: 進入偉大航道！機器學習基礎知識：你需要知道的這些那些
-        </h1>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">發表於</span>
-      
-
-      <time title="創建時間：2023-01-08 19:42:00 / 修改時間：19:43:30" itemprop="dateCreated datePublished" datetime="2023-01-08T19:42:00+08:00">2023-01-08</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分類於</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/natural-language-processing/" itemprop="url" rel="index"><span itemprop="name">自然語言處理</span></a>
-        </span>
-    </span>
-
-  
 </div>
 
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/images/cover.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.8)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="【NLP】Day 10: 進入偉大航道！機器學習基礎知識：你需要知道的這些那些"></span>
+          
         </div>
-      </header>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-01-08 19:42" pubdate>
+          2023年1月8日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          19 分鐘
+        
+      </span>
+    
 
     
     
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+
+
+</div>
+
+  </header>
+
+  <main>
     
-    <div class="post-body" itemprop="articleBody">
-        <blockquote>
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">【NLP】Day 10: 進入偉大航道！機器學習基礎知識：你需要知道的這些那些</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <blockquote>
 <p>「孩兒，你看清楚了沒有？」「看清楚了」<br>「都記得了沒有？」「已忘記了一小半。」<br>「現下怎樣了？」「已忘記了一大半。」<br>「好，我再使一遍。」<br>「孩兒，怎樣啦？」「還有三招沒忘記。」<br>「這我可全忘了，忘得乾乾淨淨的了。」<br><strong>張無忌、張三丰《倚天屠龍記》</strong></p>
 </blockquote>
 <p>前面講了這麼多，終於要講模型了嗎？我們這十天一起度過的旅程，目的只有一個，就是將文本資料轉化成數值資料。因為機器學習模型沒有辦法透過文字資料進行學習，唯有將其轉成數值資料，模型才有辦法從這些數字中學習洞見。前面所學都是非常重要的基礎，我認為要打好這些基礎，再來學習後面的機器學習的模型才有意義。就像是武俠小說中，渾厚內力才能帶來強大武功，若沒有強大的內力，即便你會九陽神功、九陰真經、降龍十八掌，也只是空有華麗的外殼、空虛的內在；像是死神中，強大的個體都帶有很強的靈壓，若靈壓不夠強，即便你所擁有的是規則殺的能力，在強大的靈壓面前都是毫無用處的。</p>
-<p><img src="https://i.imgur.com/zOq0XjF.png"></p>
+<p><img src="https://i.imgur.com/zOq0XjF.png" srcset="/img/loading.gif" lazyload></p>
 <p>今天的文章，你可以帶走這些機器學習的基本知識：</p>
 <ul>
 <li><strong>資料集＆交叉驗證（Dataset &amp; cross validation）</strong></li>
@@ -276,12 +431,12 @@
 </ul>
 <h2 id="資料集＆交叉驗證"><a href="#資料集＆交叉驗證" class="headerlink" title="資料集＆交叉驗證"></a>資料集＆交叉驗證</h2><p>想像今天你有一份已經經過完善的前處理、以及正常的正規化，也就是可以直接丟進去模型的完整資料集。一般來說，我們會將資料集依照比例分成兩份：一份訓練資料集（training set）、一份測試資料集（test set），而這個比例有時候是8:2，有時候是7:3，依照個人配置會有所不同，沒有絕對的正確答案。首先，先給予機器學習模型訓練資料集，讓模型學習資料中的特徵，接著再給訓練好的模型進行考試，以模型預測測試資料集的目標資料（例如正負面評論），並將這些答案與原始資料的「正確答案」（Golden label）進行比對。</p>
 <h3 id="交叉驗證"><a href="#交叉驗證" class="headerlink" title="交叉驗證"></a>交叉驗證</h3><p>若是碰到資料量較小的狀況，抑或是你的資料極度不平衡的情況，就要對資料進行交叉驗證。所謂的交叉驗證就是，除了前面所提到的訓練資料集、測試資料集、還會再多分出新的一部分的開發測試資料集。首先會將資料集分成k個，然後選其中一部分做為剛剛多分出來的開發測試資料集，並以另外k-1份的資料集作為訓練資料集，並計算準確率，接著再從那k份資料中選擇下一份資料作為開發測試資料集，直到所有的資料集都已經輪過後，再以這份模型去測試測試資料集。</p>
-<p><img src="https://i.imgur.com/YwOunUQ.png"></p>
+<p><img src="https://i.imgur.com/YwOunUQ.png" srcset="/img/loading.gif" lazyload></p>
 <h2 id="分類指標"><a href="#分類指標" class="headerlink" title="分類指標"></a>分類指標</h2><p>我們剛剛說到，模型預測之後，要與正確答案（Golden Label）進行比對。那麼該怎麼呈現這個比對結果，來決定一個模型的表現好壞呢？我們可以先來看以下這張圖：</p>
-<p><img src="https://miro.medium.com/max/1302/1*WEpnGSHzAPnqAl1kAOxhcQ.png"></p>
+<p><img src="https://miro.medium.com/max/1302/1*WEpnGSHzAPnqAl1kAOxhcQ.png" srcset="/img/loading.gif" lazyload></p>
 <p>假如模型預測A文本是正面評價，與正確答案相符，那麼我們就會將其納入true positive；假如模型預測B文本是負面評價，正確答案也標記為負面評價，那麼就屬於true negative；假如模型預測C文本是正面評價，但正確答案卻是負面評價，那麼就屬於false positive；若模型判斷D文本是負面評價，但事實上卻是正面評價時，就屬於false negative。</p>
 <p>接著就會產生了以下四種衡量的方式：</p>
-<p><img src="https://i.imgur.com/IpBW9uf.png"></p>
+<p><img src="https://i.imgur.com/IpBW9uf.png" srcset="/img/loading.gif" lazyload></p>
 <p>在做二元分類時，可以透過以上的表格來衡量模型，這矩陣也稱為confusion matrix。而我們可以這麼理解這些指標：</p>
 <ul>
 <li><strong>準確率（accuracy）</strong>：整體預測的正確率</li>
@@ -313,75 +468,437 @@
 </ol>
 <p>好，大致上就是這樣，我們接下來就可以進入機器學習的領域啦！剩下二十天，一起加油！</p>
 
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/natural-language-processing/" class="category-chain-item">自然語言處理</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E8%87%AA%E7%84%B6%E8%AA%9E%E8%A8%80%E8%99%95%E7%90%86/" class="print-no-link">#自然語言處理</a>
+      
+        <a href="/tags/NLP/" class="print-no-link">#NLP</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>【NLP】Day 10: 進入偉大航道！機器學習基礎知識：你需要知道的這些那些</div>
+      <div>https://milanochuang.github.io/2023/01/08/【NLP】Day-10-進入偉大航道！機器學習基礎知識：你需要知道的這些那些/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Hao Yun Chuang (Milan)</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>發布於</div>
+          <div>2023年1月8日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>許可協議</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 姓名標示">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/01/08/%E3%80%90NLP%E3%80%91Day-11-%E4%BB%80%E9%BA%BC%EF%BC%9F%E5%A6%B3%E7%94%B7%E5%8F%8B%E6%9C%89%E4%B9%BE%E5%A6%B9%E5%A6%B9%EF%BC%9F%E9%82%A3%E4%BD%A0%E5%BE%88%E5%A4%A7%E6%A9%9F%E7%8E%87%E8%A2%AB%E7%B6%A0%E4%BA%86%EF%BC%81%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92%EF%BC%9A%E8%B2%9D%E6%B0%8F%E5%88%86%E9%A1%9E%E5%99%A8/" title="【NLP】Day 11: 什麼？妳男友有乾妹妹？那你很大機率被綠了！機器學習：貝氏分類器">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">【NLP】Day 11: 什麼？妳男友有乾妹妹？那你很大機率被綠了！機器學習：貝氏分類器</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/01/08/%E3%80%90NLP%E3%80%91Day-9-%E5%8F%88%E6%98%AF%E5%9C%8B%E7%8E%8B%E7%9A%87%E5%90%8E%E7%9A%84%E4%BE%8B%E5%AD%90%E5%95%A6%EF%BC%81Word2Vec%E3%80%81N-Gram/" title="【NLP】Day 9: 又是國王皇后的例子啦！Word2Vec、N-Gram">
+                        <span class="hidden-mobile">【NLP】Day 9: 又是國王皇后的例子啦！Word2Vec、N-Gram</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
     </div>
 
-    
-    
-    
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目錄</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
 
-    <footer class="post-footer">
-          <div class="post-tags">
-              <a href="/tags/%E8%87%AA%E7%84%B6%E8%AA%9E%E8%A8%80%E8%99%95%E7%90%86/" rel="tag"># 自然語言處理</a>
-              <a href="/tags/NLP/" rel="tag"># NLP</a>
-          </div>
 
-        
 
-          <div class="post-nav">
-            <div class="post-nav-item">
-                <a href="/2023/01/08/%E3%80%90NLP%E3%80%91Day-9-%E5%8F%88%E6%98%AF%E5%9C%8B%E7%8E%8B%E7%9A%87%E5%90%8E%E7%9A%84%E4%BE%8B%E5%AD%90%E5%95%A6%EF%BC%81Word2Vec%E3%80%81N-Gram/" rel="prev" title="【NLP】Day 9: 又是國王皇后的例子啦！Word2Vec、N-Gram">
-                  <i class="fa fa-chevron-left"></i> 【NLP】Day 9: 又是國王皇后的例子啦！Word2Vec、N-Gram
-                </a>
-            </div>
-            <div class="post-nav-item">
-                <a href="/2023/01/08/%E3%80%90NLP%E3%80%91Day-11-%E4%BB%80%E9%BA%BC%EF%BC%9F%E5%A6%B3%E7%94%B7%E5%8F%8B%E6%9C%89%E4%B9%BE%E5%A6%B9%E5%A6%B9%EF%BC%9F%E9%82%A3%E4%BD%A0%E5%BE%88%E5%A4%A7%E6%A9%9F%E7%8E%87%E8%A2%AB%E7%B6%A0%E4%BA%86%EF%BC%81%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92%EF%BC%9A%E8%B2%9D%E6%B0%8F%E5%88%86%E9%A1%9E%E5%99%A8/" rel="next" title="【NLP】Day 11: 什麼？妳男友有乾妹妹？那你很大機率被綠了！機器學習：貝氏分類器">
-                  【NLP】Day 11: 什麼？妳男友有乾妹妹？那你很大機率被綠了！機器學習：貝氏分類器 <i class="fa fa-chevron-right"></i>
-                </a>
-            </div>
-          </div>
-    </footer>
-  </article>
+  </aside>
+
+
+    </div>
+  </div>
 </div>
 
 
 
 
 
+  
 
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜尋</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">關鍵字</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
 </div>
+
+    
+
+    
   </main>
 
-  <footer class="footer">
+  <footer>
     <div class="footer-inner">
-
-
-<div class="copyright">
-  &copy; 
-  <span itemprop="copyrightYear">2026</span>
-  <span class="with-love">
-    <i class="fa-solid fa-code"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">Hao-Yun Chuang (Milan)</span>
+  
+    <div class="footer-content">
+       <i class="fa-brands fa-github"></i> <a href="https://github.com/milanochuang" target="_blank" rel="nofollow noopener"><span>milanochuang</span></a> 
+    </div>
+  
+  
+  
 </div>
 
-    </div>
   </footer>
 
+  <!-- Scripts -->
   
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
 
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
   
 
 
 
 
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    function isExpandAllEnabled() {
+      return CONFIG.toc && CONFIG.toc.expand_all === true;
+    }
+    function expandAllToc() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .tocbot-is-collapsed').removeClass('tocbot-is-collapsed');
+    }
+    function updateTocToggle($li, $childList) {
+      var $toggle = $li.children('.toc-toggle');
+      if ($toggle.length === 0) { return; }
+      var collapsed = $childList.hasClass('tocbot-is-collapsed');
+      $toggle
+        .toggleClass('toc-toggle-collapsed', collapsed)
+        .toggleClass('toc-toggle-expanded', !collapsed);
+    }
+    function bindTocToggle() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .toc-list-item').each(function() {
+        var $li = jQuery(this);
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) {
+          if ($li.children('.toc-toggle').length === 0) {
+            $li.prepend('<span class="toc-toggle toc-toggle-placeholder" aria-hidden="true">›</span>');
+          }
+          return;
+        }
+
+        if ($li.children('.toc-toggle').length === 0) {
+          $li.prepend('<span class="toc-toggle toc-toggle-expanded" aria-hidden="true">›</span>');
+        }
+        updateTocToggle($li, $childList);
+      });
+      jQuery('#toc-body').off('click.tocToggle').on('click.tocToggle', '.toc-toggle', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var $li = jQuery(this).parent('.toc-list-item');
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) { return; }
+        $childList.toggleClass('tocbot-is-collapsed');
+        updateTocToggle($li, $childList);
+      });
+      if (!window.__tocToggleObserver) {
+        window.__tocToggleObserver = new MutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+            if (mutation.type !== 'attributes' || mutation.attributeName !== 'class') { return; }
+            var $list = jQuery(mutation.target);
+            var $li = $list.parent('.toc-list-item');
+            if ($li.length === 0) { return; }
+            updateTocToggle($li, $list);
+          });
+        });
+        jQuery('#toc-body ol').each(function() {
+          window.__tocToggleObserver.observe(this, { attributes: true });
+        });
+      }
+    }
+    var tocConfig = Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc);
+    if (isExpandAllEnabled()) {
+      tocConfig.collapseDepth = 6;
+    }
+    window.tocbot.init(tocConfig);
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+    expandAllToc();
+    bindTocToggle();
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+        expandAllToc();
+        bindTocToggle();
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
 
   
 
-
-
-
-
-<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/assets/hijiki.model.json"},"display":{"superSample":2,"width":250,"height":500,"position":"right","hOffset":-30,"vOffset":-130},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"log":false});</script></body>
+  <noscript>
+    <div class="noscript-warning">部落格在允許 JavaScript 執行的環境下瀏覽效果更佳</div>
+  </noscript>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/assets/tororo.model.json"},"display":{"superSample":2,"width":250,"height":500,"position":"right","hOffset":-30,"vOffset":-130},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"log":false});</script></body>
 </html>
