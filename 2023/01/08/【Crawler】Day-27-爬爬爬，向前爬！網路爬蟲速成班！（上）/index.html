@@ -1,7 +1,7 @@
 
 
 <!DOCTYPE html>
-<html lang="zh-TW" >
+<html lang="zh-TW" data-default-color-scheme=auto>
 
 
 
@@ -23,7 +23,7 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="【Crawler】Day 27: 爬爬爬，向前爬！網路爬蟲速成班！（上）">
 <meta property="og:url" content="https://milanochuang.github.io/2023/01/08/%E3%80%90Crawler%E3%80%91Day-27-%E7%88%AC%E7%88%AC%E7%88%AC%EF%BC%8C%E5%90%91%E5%89%8D%E7%88%AC%EF%BC%81%E7%B6%B2%E8%B7%AF%E7%88%AC%E8%9F%B2%E9%80%9F%E6%88%90%E7%8F%AD%EF%BC%81%EF%BC%88%E4%B8%8A%EF%BC%89/index.html">
-<meta property="og:site_name" content="米蘭牛角尖">
+<meta property="og:site_name" content="Hao-Yun&#39;s Geekbase">
 <meta property="og:description" content="在我們過去一起經歷的旅程中，我們從一開始的正規表達式、詞頻、N-Gram，一直到機器學習，像是貝氏分類器、羅吉斯迴歸等等，接著又講到了深度學習，利用神經網路來進行自然語言處理，比如說像是循環神經網路、長短期記憶等等，後來又發展出了自注意機制，有了 Transformer 以及 BERT 還有他的芝麻街小夥伴，又學到了以語言學基礎的工具 Articut 以及 Loki。 我們一起學習了好多好多的語言">
 <meta property="og:locale" content="zh_TW">
 <meta property="og:image" content="https://i.imgur.com/T8PGH8F.jpg">
@@ -36,7 +36,7 @@
   
   
   
-  <title>【Crawler】Day 27: 爬爬爬，向前爬！網路爬蟲速成班！（上） - 米蘭牛角尖</title>
+  <title>【Crawler】Day 27: 爬爬爬，向前爬！網路爬蟲速成班！（上） - Hao-Yun&#39;s Geekbase</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -64,6 +64,8 @@
 
 
   <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
   
 
 
@@ -196,6 +198,12 @@
           
         
         
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
       </ul>
     </div>
   </div>
@@ -302,6 +310,17 @@
           </div>
         
         
+          <div class="col-4 mobile-grid-cell" id="mobile-color-toggle-btn"
+               data-label-light="開燈"
+               data-label-dark="關燈">
+            <a href="javascript:;" aria-label="Color Toggle">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-dark" id="mobile-color-toggle-icon"></i>
+                <span id="mobile-color-toggle-label">關燈</span>
+              </div>
+            </a>
+          </div>
+        
       </div>
     </div>
   </div>
@@ -310,7 +329,7 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('/images/cover.png') no-repeat center center; background-size: cover;">
+     style="background: url('/images/cover_me.jpeg') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.8)">
       <div class="banner-text text-center fade-in-up">

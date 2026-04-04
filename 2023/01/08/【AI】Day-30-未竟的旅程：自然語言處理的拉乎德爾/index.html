@@ -1,7 +1,7 @@
 
 
 <!DOCTYPE html>
-<html lang="zh-TW" >
+<html lang="zh-TW" data-default-color-scheme=auto>
 
 
 
@@ -23,7 +23,7 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="【AI】Day 30: 未竟的旅程：自然語言處理的拉乎德爾">
 <meta property="og:url" content="https://milanochuang.github.io/2023/01/08/%E3%80%90AI%E3%80%91Day-30-%E6%9C%AA%E7%AB%9F%E7%9A%84%E6%97%85%E7%A8%8B%EF%BC%9A%E8%87%AA%E7%84%B6%E8%AA%9E%E8%A8%80%E8%99%95%E7%90%86%E7%9A%84%E6%8B%89%E4%B9%8E%E5%BE%B7%E7%88%BE/index.html">
-<meta property="og:site_name" content="米蘭牛角尖">
+<meta property="og:site_name" content="Hao-Yun&#39;s Geekbase">
 <meta property="og:description" content="「終點，是旅程的一部分。」東尼・史塔克《復仇者聯盟4：終局之戰》  最後一天，我想來談談 「人工智慧」。 在過去的旅程中，我們花了將近一半的篇幅在討論機器學習模型。從一開始的 N-Gram、BoW、樸素貝氏分類模型、羅吉斯迴歸，一直到深度學習的神經網路模型，像是循環神經網路、長短期記憶，還有利用自注意力機制的 Transformer，還有踩在巨人肩膀上，使用預訓練模型完成任何任務的 BERT，是">
 <meta property="og:locale" content="zh_TW">
 <meta property="og:image" content="https://i.imgur.com/oFjjuoW.jpg">
@@ -37,7 +37,7 @@
   
   
   
-  <title>【AI】Day 30: 未竟的旅程：自然語言處理的拉乎德爾 - 米蘭牛角尖</title>
+  <title>【AI】Day 30: 未竟的旅程：自然語言處理的拉乎德爾 - Hao-Yun&#39;s Geekbase</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -65,6 +65,8 @@
 
 
   <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
   
 
 
@@ -197,6 +199,12 @@
           
         
         
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
       </ul>
     </div>
   </div>
@@ -303,6 +311,17 @@
           </div>
         
         
+          <div class="col-4 mobile-grid-cell" id="mobile-color-toggle-btn"
+               data-label-light="開燈"
+               data-label-dark="關燈">
+            <a href="javascript:;" aria-label="Color Toggle">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-dark" id="mobile-color-toggle-icon"></i>
+                <span id="mobile-color-toggle-label">關燈</span>
+              </div>
+            </a>
+          </div>
+        
       </div>
     </div>
   </div>
@@ -311,7 +330,7 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('/images/cover.png') no-repeat center center; background-size: cover;">
+     style="background: url('/images/cover_me.jpeg') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.8)">
       <div class="banner-text text-center fade-in-up">
@@ -489,9 +508,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/01/08/%E3%80%90%E8%80%81%E5%BD%B1%E8%A9%95%E3%80%91%E3%80%8AA-I-%E4%BA%BA%E5%B7%A5%E6%99%BA%E6%85%A7%E3%80%8B-%E3%80%8A%E6%A8%A1%E4%BB%BF%E9%81%8A%E6%88%B2%E3%80%8B%EF%BC%9A%E4%BD%95%E8%AC%82%E8%87%AA%E6%88%91%EF%BC%9F%E4%BD%95%E8%AC%82%E7%9C%9F%E5%AF%A6%EF%BC%9F/" title="【影評】《A.I.人工智慧》&amp;《模仿遊戲》：何謂自我？何謂真實？">
+                      <a href="/2026/04/04/Vibe%20coding%20%E5%8D%A1%E9%97%9C%E4%BA%86%EF%BC%9F%E6%95%99%E4%BD%A0%E7%94%A8%20Request%20API%20%E7%9B%B4%E6%8E%A5%E6%8A%93%E7%B6%B2%E9%A0%81%E8%B3%87%E6%96%99/" title="Vibe coding 卡關了？教你用 Request API 直接抓網頁資料">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">【影評】《A.I.人工智慧》&amp;《模仿遊戲》：何謂自我？何謂真實？</span>
+                        <span class="hidden-mobile">Vibe coding 卡關了？教你用 Request API 直接抓網頁資料</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     

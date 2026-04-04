@@ -1,0 +1,1094 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-TW" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/icon.png">
+  <link rel="icon" href="/images/icon.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#171c27">
+  <meta name="author" content="Hao-Yun Chuang (Milan)">
+  <meta name="keywords" content="自然語言處理, 計算語言學, 機器學習, 人工智慧, 電影">
+  
+    <meta name="description" content="Hao-Yun Chuang | Nov 4, 2022本文改寫自同名演講投影片，介紹如何使用 Scrapy 建立、優化並維護一個網頁爬蟲專案。  目錄 顯示目錄結構的 tree 指令 使用 Scrapy 建立爬蟲專案 核心詞彙定義 爬蟲流程 (一)：基本資料擷取 爬蟲流程 (二)：分類導覽與翻頁 優化爬蟲：定義 Item 解耦爬取與解析：Page Object Pattern 監控爬蟲：Spi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何維護爬蟲專案？用更有效率更方便的方法來寫爬蟲！">
+<meta property="og:url" content="https://milanochuang.github.io/2026/04/04/%E5%A6%82%E4%BD%95%E7%B6%AD%E8%AD%B7%E7%88%AC%E8%9F%B2%E5%B0%88%E6%A1%88%EF%BC%9F%E7%94%A8%E6%9B%B4%E6%9C%89%E6%95%88%E7%8E%87%E6%9B%B4%E6%96%B9%E4%BE%BF%E7%9A%84%E6%96%B9%E6%B3%95%E4%BE%86%E5%AF%AB%E7%88%AC%E8%9F%B2%EF%BC%81/index.html">
+<meta property="og:site_name" content="Hao-Yun&#39;s Geekbase">
+<meta property="og:description" content="Hao-Yun Chuang | Nov 4, 2022本文改寫自同名演講投影片，介紹如何使用 Scrapy 建立、優化並維護一個網頁爬蟲專案。  目錄 顯示目錄結構的 tree 指令 使用 Scrapy 建立爬蟲專案 核心詞彙定義 爬蟲流程 (一)：基本資料擷取 爬蟲流程 (二)：分類導覽與翻頁 優化爬蟲：定義 Item 解耦爬取與解析：Page Object Pattern 監控爬蟲：Spi">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://i.imgur.com/jlv69an.png">
+<meta property="og:image" content="https://i.imgur.com/jlv69an.png">
+<meta property="og:image" content="https://i.imgur.com/3JVwR2d.png">
+<meta property="og:image" content="https://i.imgur.com/4ifis1E.png">
+<meta property="og:image" content="https://i.imgur.com/L15u4ba.png">
+<meta property="og:image" content="https://i.imgur.com/V7p3JoS.png">
+<meta property="og:image" content="https://i.imgur.com/gJDSjxI.png">
+<meta property="article:published_time" content="2026-04-04T07:33:16.000Z">
+<meta property="article:modified_time" content="2026-04-04T07:42:31.662Z">
+<meta property="article:author" content="Hao-Yun Chuang (Milan)">
+<meta property="article:tag" content="scrapy, crawler">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://i.imgur.com/jlv69an.png">
+  
+  
+  
+  <title>如何維護爬蟲專案？用更有效率更方便的方法來寫爬蟲！ - Hao-Yun&#39;s Geekbase</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"milanochuang.github.io","root":"/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Hao-Yun&#39;s Geekbase</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content (desktop) -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="fa-solid fa-house"></i>
+                <span>首頁</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="fa-solid fa-box-archive"></i>
+                <span>歸檔</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="fa-solid fa-folder"></i>
+                <span>分類</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="fa-solid fa-tags"></i>
+                <span>標籤</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="fa-solid fa-user"></i>
+                <span>關於</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/slides/" target="_self">
+                <i class="fa-brands fa-slideshare"></i>
+                <span>教學投影片</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile grid menu overlay -->
+<div id="mobile-grid-menu" class="d-lg-none">
+  <div class="mobile-grid-menu-inner">
+    <div class="container">
+      <div class="row">
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="fa-solid fa-house"></i>
+                  <span>首頁</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/archives/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="fa-solid fa-box-archive"></i>
+                  <span>歸檔</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/categories/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="fa-solid fa-folder"></i>
+                  <span>分類</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/tags/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="fa-solid fa-tags"></i>
+                  <span>標籤</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/about/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="fa-solid fa-user"></i>
+                  <span>關於</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/slides/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="fa-brands fa-slideshare"></i>
+                  <span>教學投影片</span>
+                </div>
+              </a>
+            </div>
+          
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-search-btn">
+            <a href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-search"></i>
+                <span>搜尋</span>
+              </div>
+            </a>
+          </div>
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-color-toggle-btn"
+               data-label-light="開燈"
+               data-label-dark="關燈">
+            <a href="javascript:;" aria-label="Color Toggle">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-dark" id="mobile-color-toggle-icon"></i>
+                <span id="mobile-color-toggle-label">關燈</span>
+              </div>
+            </a>
+          </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/images/cover_me.jpeg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.8)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="如何維護爬蟲專案？用更有效率更方便的方法來寫爬蟲！"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-04-04 15:33" pubdate>
+          2026年4月4日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          15k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          125 分鐘
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">如何維護爬蟲專案？用更有效率更方便的方法來寫爬蟲！</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <blockquote>
+<p><strong>Hao-Yun Chuang</strong> | Nov 4, 2022<br>本文改寫自同名演講投影片，介紹如何使用 Scrapy 建立、優化並維護一個網頁爬蟲專案。</p>
+</blockquote>
+<h2 id="目錄"><a href="#目錄" class="headerlink" title="目錄"></a>目錄</h2><ol>
+<li><a href="#tree-%E6%8C%87%E4%BB%A4">顯示目錄結構的 <code>tree</code> 指令</a></li>
+<li><a href="#%E4%BD%BF%E7%94%A8-scrapy-%E5%BB%BA%E7%AB%8B%E7%88%AC%E8%9F%B2%E5%B0%88%E6%A1%88">使用 Scrapy 建立爬蟲專案</a></li>
+<li><a href="#%E6%A0%B8%E5%BF%83%E8%A9%9E%E5%BD%99%E5%AE%9A%E7%BE%A9">核心詞彙定義</a></li>
+<li><a href="#%E7%88%AC%E8%9F%B2%E6%B5%81%E7%A8%8B%E4%B8%80%E5%9F%BA%E6%9C%AC%E8%B3%87%E6%96%99%E6%93%B7%E5%8F%96">爬蟲流程 (一)：基本資料擷取</a></li>
+<li><a href="#%E7%88%AC%E8%9F%B2%E6%B5%81%E7%A8%8B%E4%BA%8C%E5%88%86%E9%A1%9E%E5%B0%8E%E8%A6%BD%E8%88%87%E7%BF%BB%E9%A0%81">爬蟲流程 (二)：分類導覽與翻頁</a></li>
+<li><a href="#%E5%84%AA%E5%8C%96%E7%88%AC%E8%9F%B2%E5%AE%9A%E7%BE%A9-item">優化爬蟲：定義 Item</a></li>
+<li><a href="#%E8%A7%A3%E8%80%A6%E7%88%AC%E5%8F%96%E8%88%87%E8%A7%A3%E6%9E%90page-object-pattern">解耦爬取與解析：Page Object Pattern</a></li>
+<li><a href="#%E7%9B%A3%E6%8E%A7%E7%88%AC%E8%9F%B2spidermon">監控爬蟲：Spidermon</a></li>
+<li><a href="#%E8%B3%87%E6%96%99%E9%A9%97%E8%AD%89json-schema">資料驗證：JSON Schema</a></li>
+<li><a href="#%E8%99%95%E7%90%86%E5%8B%95%E6%85%8B%E9%A0%81%E9%9D%A2scrapy-playwright">處理動態頁面：scrapy-playwright</a></li>
+<li><a href="#%E5%AF%A6%E7%94%A8%E8%BC%94%E5%8A%A9%E5%87%BD%E5%BC%8F%E5%BA%AB">實用輔助函式庫</a></li>
+<li><a href="#%E9%99%A4%E9%8C%AF%E7%AD%86%E8%A8%98">除錯筆記</a></li>
+</ol>
+<h2 id="Tree-指令"><a href="#Tree-指令" class="headerlink" title="Tree 指令"></a>Tree 指令</h2><p>在開始爬蟲專案之前，先介紹一個實用的小工具 — <code>tree</code>，它能以樹狀結構視覺化顯示目錄下所有的檔案與資料夾，讓你對專案架構一目了然。</p>
+<p><img src="https://i.imgur.com/jlv69an.png" srcset="/img/loading.gif" lazyload alt="Tree 指令輸出範例"></p>
+<h3 id="安裝方式"><a href="#安裝方式" class="headerlink" title="安裝方式"></a>安裝方式</h3><p><strong>macOS（使用 Homebrew）：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">brew install tree<br></code></pre></td></tr></table></figure>
+
+<p><strong>Windows：</strong><br>Windows 使用者可參考此教學將 <code>tree</code> 加入 Git Bash：<a target="_blank" rel="noopener" href="https://dev.to/flyingduck92/add-tree-to-git-bash-on-windows-10-1eb1">Add tree to Git Bash on Windows 10</a></p>
+<h3 id="使用方式"><a href="#使用方式" class="headerlink" title="使用方式"></a>使用方式</h3><p>安裝完成後，切換到任意目錄下執行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">tree<br></code></pre></td></tr></table></figure>
+
+<p>輸出範例（以 macOS 為例）：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dart">(<span class="hljs-keyword">base</span>) milanochuang<span class="hljs-meta">@zhuanghaoyundeMacBook</span>-Pro Documents % tree<br></code></pre></td></tr></table></figure>
+
+<h2 id="使用-Scrapy-建立爬蟲專案"><a href="#使用-Scrapy-建立爬蟲專案" class="headerlink" title="使用 Scrapy 建立爬蟲專案"></a>使用 Scrapy 建立爬蟲專案</h2><h3 id="為什麼選擇-Scrapy？"><a href="#為什麼選擇-Scrapy？" class="headerlink" title="為什麼選擇 Scrapy？"></a>為什麼選擇 Scrapy？</h3><p><a target="_blank" rel="noopener" href="https://scrapy.org/">Scrapy</a> 是 Python 生態系中最成熟的爬蟲框架之一，具有以下三大優點：</p>
+<ul>
+<li><strong>Fast &amp; Powerful（快速且強大）</strong>：只需定義提取規則，Scrapy 會自動處理請求、並發、重試等底層細節。</li>
+<li><strong>Easily Extensible（易於擴展）</strong>：採模組化設計，可以透過 middleware、pipeline、extension 輕鬆加入新功能，不需改動核心程式碼。</li>
+<li><strong>Portable, Python（跨平台）</strong>：以 Python 撰寫，可在 Linux、Windows、macOS 上執行。</li>
+</ul>
+<h3 id="建立虛擬環境"><a href="#建立虛擬環境" class="headerlink" title="建立虛擬環境"></a>建立虛擬環境</h3><p>為了保持專案的依賴套件乾淨獨立，建議使用虛擬環境：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 在任意目錄下執行</span><br>python3 -m venv scrapy-tutorial<br></code></pre></td></tr></table></figure>
+
+<p>啟動虛擬環境：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># macOS / Linux</span><br><span class="hljs-built_in">source</span> scrapy-tutorial/bin/activate<br><br><span class="hljs-comment"># Windows</span><br>scrapy-tutorial\Scripts\activate.bat<br></code></pre></td></tr></table></figure>
+
+<p>接著 clone 範例程式碼並安裝依賴：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">git <span class="hljs-built_in">clone</span> https://github.com/milanochuang/scrape_tutorial.git<br><span class="hljs-built_in">cd</span> spider_tutorial<br>pip install -r requirements.txt<br></code></pre></td></tr></table></figure>
+
+<h2 id="核心詞彙定義"><a href="#核心詞彙定義" class="headerlink" title="核心詞彙定義"></a>核心詞彙定義</h2><p>在正式撰寫爬蟲前，先釐清幾個關鍵概念：</p>
+<table>
+<thead>
+<tr>
+<th>詞彙</th>
+<th>說明</th>
+<th>比喻</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Seed URL</strong></td>
+<td>爬蟲的起點網址，Spider 從這裡出發</td>
+<td>入口</td>
+</tr>
+<tr>
+<td><strong>Crawling（爬取）</strong></td>
+<td>Spider 從頁面到頁面的導覽行為</td>
+<td>? 挑選聖誕樹</td>
+</tr>
+<tr>
+<td><strong>Extraction（擷取）</strong></td>
+<td>從頁面中解析出所需資料的行為</td>
+<td>? 挑選裝飾品</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>? <strong>一個好的爬蟲 &#x3D; 清楚的 Crawling 路徑 + 精準的 Extraction 規則</strong></p>
+</blockquote>
+<h2 id="爬蟲流程（一）：基本資料擷取"><a href="#爬蟲流程（一）：基本資料擷取" class="headerlink" title="爬蟲流程（一）：基本資料擷取"></a>爬蟲流程（一）：基本資料擷取</h2><h3 id="建立-Scrapy-專案"><a href="#建立-Scrapy-專案" class="headerlink" title="建立 Scrapy 專案"></a>建立 Scrapy 專案</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">scrapy startproject books_to_scrape<br></code></pre></td></tr></table></figure>
+
+<p>執行後，你會看到類似以下的輸出：</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs gradle"><span class="hljs-keyword">New</span> Scrapy <span class="hljs-keyword">project</span> <span class="hljs-string">&#x27;books_to_scrape&#x27;</span>, using template directory <span class="hljs-string">&#x27;...&#x27;</span>, created in:<br>    <span class="hljs-regexp">/Users/mi</span>lanochuang<span class="hljs-regexp">/Documents/</span>code<span class="hljs-regexp">/spider_tutorial/</span>books_to_scrape<br><br>You can start your first spider with:<br>    cd books_to_scrape<br>    scrapy genspider example example.com<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cd</span> books_to_scrape<br></code></pre></td></tr></table></figure>
+
+<p>Scrapy 預設的專案結構如下：</p>
+<p><img src="https://i.imgur.com/jlv69an.png" srcset="/img/loading.gif" lazyload alt="Scrapy 專案結構"></p>
+<h3 id="建立-Spider"><a href="#建立-Spider" class="headerlink" title="建立 Spider"></a>建立 Spider</h3><p>以 <a target="_blank" rel="noopener" href="http://books.toscrape.com/">books.toscrape.com</a> 為爬取目標，使用 <code>genspider</code> 指令建立 Spider：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">scrapy genspider books books.toscrape.com<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">Created spider <span class="hljs-string">&#x27;books&#x27;</span> <span class="hljs-keyword">using</span> <span class="hljs-keyword">template</span> <span class="hljs-string">&#x27;basic&#x27;</span><br></code></pre></td></tr></table></figure>
+
+<p>建立完成後，執行 <code>tree</code> 查看完整專案結構：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">tree<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://i.imgur.com/3JVwR2d.png" srcset="/img/loading.gif" lazyload alt="Scrapy 專案完整結構"></p>
+<p>此時可以用你喜歡的編輯器打開 <code>books_to_scrape</code> 目錄（外層），並在同一目錄下開啟終端機。</p>
+<h3 id="編寫第一個-Spider"><a href="#編寫第一個-Spider" class="headerlink" title="編寫第一個 Spider"></a>編寫第一個 Spider</h3><p>打開 <code>spiders/books.py</code>，預設內容如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># -*- coding: utf-8 -*-</span><br><span class="hljs-keyword">import</span> scrapy<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">BooksSpider</span>(scrapy.Spider):<br>    name = <span class="hljs-string">&quot;books&quot;</span><br>    allowed_domains = [<span class="hljs-string">&quot;books.toscrape.com&quot;</span>]<br>    start_urls = [<span class="hljs-string">&#x27;http://books.toscrape.com/&#x27;</span>]<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">parse</span>(<span class="hljs-params">self, response</span>):<br>        <span class="hljs-keyword">pass</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="使用-CSS-Selector-取得書籍連結"><a href="#使用-CSS-Selector-取得書籍連結" class="headerlink" title="使用 CSS Selector 取得書籍連結"></a>使用 CSS Selector 取得書籍連結</h3><p>觀察 books.toscrape.com 的 HTML 結構，每本書的連結對應的 CSS 路徑為 <code>.product_pod a ::attr(href)</code>。</p>
+<p>接下來讓 Spider 遍歷首頁所有書籍連結，並呼叫 <code>parse_book</code> 函式解析書籍詳情頁：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> scrapy<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">BooksSpider</span>(scrapy.Spider):<br>    name = <span class="hljs-string">&quot;books&quot;</span><br>    allowed_domains = [<span class="hljs-string">&quot;books.toscrape.com&quot;</span>]<br>    start_urls = [<span class="hljs-string">&#x27;http://books.toscrape.com/&#x27;</span>]<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">parse</span>(<span class="hljs-params">self, response</span>):<br>        <span class="hljs-keyword">for</span> url <span class="hljs-keyword">in</span> response.css(<span class="hljs-string">&quot;.product_pod a ::attr(href)&quot;</span>).getall():<br>            <span class="hljs-keyword">yield</span> response.follow(url, callback=<span class="hljs-variable language_">self</span>.parse_book)<br></code></pre></td></tr></table></figure>
+
+<p>這裡出現了幾個重要的新概念：</p>
+<h4 id="yield-與-Generator"><a href="#yield-與-Generator" class="headerlink" title="yield 與 Generator"></a><code>yield</code> 與 Generator</h4><p><code>yield</code> 是 Python 中建立 <strong>generator</strong>（生成器）的關鍵字。與 <code>return</code> 不同，<code>yield</code> 不會立刻結束函式，而是暫停執行並回傳一個值，等到下次被呼叫時再從上次暫停的地方繼續。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python">power = (i**<span class="hljs-number">2</span> <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">100000</span>))<br><span class="hljs-built_in">print</span>(power)       <span class="hljs-comment"># &lt;generator object &lt;genexpr&gt; at 0x7f8ddb35ec10&gt;</span><br><span class="hljs-built_in">print</span>(<span class="hljs-built_in">type</span>(power)) <span class="hljs-comment"># generator</span><br></code></pre></td></tr></table></figure>
+
+<p>在 Scrapy 中，<code>yield</code> 一個 Request 物件代表「請 Scrapy 接著去爬這個網址」，<code>yield</code> 一個 Item 代表「這是我解析出來的資料，請存起來」。</p>
+<h4 id="response-follow-與-callback"><a href="#response-follow-與-callback" class="headerlink" title="response.follow 與 callback"></a><code>response.follow</code> 與 <code>callback</code></h4><ul>
+<li><code>response.follow(url, callback=...)</code> 會建立一個新的請求，並在頁面載入後呼叫指定的 callback 函式。</li>
+<li><code>callback=self.parse_book</code> 表示爬完書籍詳情頁後，將 response 傳入 <code>parse_book</code> 方法處理。</li>
+</ul>
+<h3 id="解析書籍詳情頁"><a href="#解析書籍詳情頁" class="headerlink" title="解析書籍詳情頁"></a>解析書籍詳情頁</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">parse_book</span>(<span class="hljs-params">self, response</span>):<br>    item = &#123;<br>        <span class="hljs-string">&quot;title&quot;</span>: response.css(<span class="hljs-string">&quot;.product_main h1 ::text&quot;</span>).get(),<br>        <span class="hljs-string">&quot;price&quot;</span>: response.css(<span class="hljs-string">&quot;.product_main .price_color ::text&quot;</span>).get(),<br>        <span class="hljs-string">&quot;url&quot;</span>: response.url,<br>        <span class="hljs-string">&quot;availability&quot;</span>: response.css(<span class="hljs-string">&quot;.product_main .availability ::text&quot;</span>).getall()<br>    &#125;<br>    <span class="hljs-keyword">yield</span> item<br></code></pre></td></tr></table></figure>
+
+<h3 id="執行爬蟲並輸出資料"><a href="#執行爬蟲並輸出資料" class="headerlink" title="執行爬蟲並輸出資料"></a>執行爬蟲並輸出資料</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">scrapy crawl books -o data.json<br></code></pre></td></tr></table></figure>
+
+<h3 id="遇到問題了！"><a href="#遇到問題了！" class="headerlink" title="遇到問題了！"></a>遇到問題了！</h3><p>開啟 <code>data.json</code> 後，發現 <code>availability</code> 欄位的資料有問題：</p>
+<p><img src="https://i.imgur.com/4ifis1E.png" srcset="/img/loading.gif" lazyload alt="data.json 問題"></p>
+<p><code>.getall()</code> 回傳的是一個 list，其中包含了多餘的空白字元與換行。我們需要將它合併並清理：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">parse_book</span>(<span class="hljs-params">self, response</span>):<br>    item = &#123;<br>        <span class="hljs-string">&quot;title&quot;</span>: response.css(<span class="hljs-string">&quot;.product_main h1 ::text&quot;</span>).get(),<br>        <span class="hljs-string">&quot;price&quot;</span>: response.css(<span class="hljs-string">&quot;.product_main .price_color ::text&quot;</span>).get(),<br>        <span class="hljs-string">&quot;url&quot;</span>: response.url,<br>    &#125;<br>    availability = response.css(<span class="hljs-string">&quot;.product_main .availability ::text&quot;</span>).getall()<br>    item[<span class="hljs-string">&quot;availability&quot;</span>] = <span class="hljs-string">&quot;&quot;</span>.join(availability).strip()<br>    <span class="hljs-keyword">yield</span> item<br></code></pre></td></tr></table></figure>
+
+<p>再次執行，資料即可正確輸出：</p>
+<p><img src="https://i.imgur.com/L15u4ba.png" srcset="/img/loading.gif" lazyload alt="data.json 正確輸出"></p>
+<h2 id="爬蟲流程（二）：分類導覽與翻頁"><a href="#爬蟲流程（二）：分類導覽與翻頁" class="headerlink" title="爬蟲流程（二）：分類導覽與翻頁"></a>爬蟲流程（二）：分類導覽與翻頁</h2><p>第一個版本只爬取首頁上的書籍，但 books.toscrape.com 有許多分類，每個分類也可能有多頁。我們來升級爬蟲：</p>
+<p><strong>目標流程：</strong></p>
+<ol>
+<li>從 Seed URL 出發</li>
+<li>遍歷側邊欄的所有分類連結</li>
+<li>進入各分類頁面，爬取所有書籍</li>
+<li>處理分頁（Next Page）</li>
+<li>儲存資料至本地</li>
+</ol>
+<h3 id="修改-parse-函式以導覽分類"><a href="#修改-parse-函式以導覽分類" class="headerlink" title="修改 parse 函式以導覽分類"></a>修改 <code>parse</code> 函式以導覽分類</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">parse</span>(<span class="hljs-params">self, response</span>):<br>    <span class="hljs-keyword">for</span> url <span class="hljs-keyword">in</span> response.css(<span class="hljs-string">&quot;.nav-list ul li a ::attr(href)&quot;</span>).getall():<br>        <span class="hljs-keyword">yield</span> response.follow(url, callback=<span class="hljs-variable language_">self</span>.parse_category)<br></code></pre></td></tr></table></figure>
+
+<h3 id="新增-parse-category-函式"><a href="#新增-parse-category-函式" class="headerlink" title="新增 parse_category 函式"></a>新增 <code>parse_category</code> 函式</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">parse_category</span>(<span class="hljs-params">self, response</span>):<br>    <span class="hljs-keyword">for</span> url <span class="hljs-keyword">in</span> response.css(<span class="hljs-string">&quot;.product_pod a ::attr(href)&quot;</span>).getall():<br>        category_name = response.css(<span class="hljs-string">&quot;.page-header h1 ::text&quot;</span>).get()<br>        <span class="hljs-keyword">yield</span> response.follow(<br>            url,<br>            callback=<span class="hljs-variable language_">self</span>.parse_book,<br>            cb_kwargs=&#123;<span class="hljs-string">&quot;category_name&quot;</span>: category_name&#125;,<br>        )<br>    <span class="hljs-keyword">if</span> next_page_url := response.css(<span class="hljs-string">&quot;.pager .next a ::attr(href)&quot;</span>).get():<br>        <span class="hljs-keyword">yield</span> response.follow(<br>            next_page_url,<br>            callback=<span class="hljs-variable language_">self</span>.parse_category,<br>        )<br></code></pre></td></tr></table></figure>
+
+<p>這裡又出現了兩個新朋友：</p>
+<h4 id="Walrus-Operator-（Python-3-8-）"><a href="#Walrus-Operator-（Python-3-8-）" class="headerlink" title="Walrus Operator :=（Python 3.8+）"></a>Walrus Operator <code>:=</code>（Python 3.8+）</h4><p><code>:=</code> 稱為「海象運算子」（Walrus Operator），可以在運算式中同時賦值並使用該值，避免重複計算：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 傳統寫法</span><br>n = <span class="hljs-built_in">len</span>(a)<br><span class="hljs-keyword">if</span> n &gt; <span class="hljs-number">10</span>:<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;List is too long (<span class="hljs-subst">&#123;n&#125;</span> elements, expected &lt;= 10)&quot;</span>)<br><br><span class="hljs-comment"># 使用 Walrus Operator</span><br><span class="hljs-keyword">if</span> (n := <span class="hljs-built_in">len</span>(a)) &gt; <span class="hljs-number">10</span>:<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;List is too long (<span class="hljs-subst">&#123;n&#125;</span> elements, expected &lt;= 10)&quot;</span>)<br></code></pre></td></tr></table></figure>
+
+<p>在爬蟲中，<code>if next_page_url := response.css(...).get()</code> 的意思是：取得 next page 的 URL，若有值（非 None）才進入 if 區塊並繼續爬下一頁。</p>
+<h4 id="cb-kwargs"><a href="#cb-kwargs" class="headerlink" title="cb_kwargs"></a><code>cb_kwargs</code></h4><p><code>cb_kwargs</code> 允許在 <code>response.follow</code> 中傳遞額外的參數給 callback 函式。這裡我們將 <code>category_name</code> 傳給 <code>parse_book</code>，讓每一本書的 item 都帶有所屬分類資訊。</p>
+<h3 id="完整爬蟲程式碼"><a href="#完整爬蟲程式碼" class="headerlink" title="完整爬蟲程式碼"></a>完整爬蟲程式碼</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> scrapy<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">BooksSpider</span>(scrapy.Spider):<br>    name = <span class="hljs-string">&quot;books&quot;</span><br>    allowed_domains = [<span class="hljs-string">&quot;books.toscrape.com&quot;</span>]<br>    start_urls = [<span class="hljs-string">&#x27;http://books.toscrape.com/&#x27;</span>]<br><br>    <span class="hljs-comment"># 從首頁導覽所有分類（挑聖誕樹）</span><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">parse</span>(<span class="hljs-params">self, response</span>):<br>        <span class="hljs-keyword">for</span> url <span class="hljs-keyword">in</span> response.css(<span class="hljs-string">&quot;.nav-list ul li a ::attr(href)&quot;</span>).getall():<br>            <span class="hljs-keyword">yield</span> response.follow(url, callback=<span class="hljs-variable language_">self</span>.parse_category)<br><br>    <span class="hljs-comment"># 進入分類頁面，爬取書籍連結並處理翻頁</span><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">parse_category</span>(<span class="hljs-params">self, response</span>):<br>        <span class="hljs-keyword">for</span> url <span class="hljs-keyword">in</span> response.css(<span class="hljs-string">&quot;.product_pod a ::attr(href)&quot;</span>).getall():<br>            category_name = response.css(<span class="hljs-string">&quot;.page-header h1 ::text&quot;</span>).get()<br>            <span class="hljs-keyword">yield</span> response.follow(<br>                url,<br>                callback=<span class="hljs-variable language_">self</span>.parse_book,<br>                cb_kwargs=&#123;<span class="hljs-string">&quot;category_name&quot;</span>: category_name&#125;,<br>            )<br>        <span class="hljs-keyword">if</span> next_page_url := response.css(<span class="hljs-string">&quot;.pager .next a ::attr(href)&quot;</span>).get():<br>            <span class="hljs-keyword">yield</span> response.follow(<br>                next_page_url,<br>                callback=<span class="hljs-variable language_">self</span>.parse_category,<br>            )<br><br>    <span class="hljs-comment"># 解析書籍詳情頁，擷取所需資訊（挑裝飾品）</span><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">parse_book</span>(<span class="hljs-params">self, response, category_name</span>):<br>        item = &#123;<br>            <span class="hljs-string">&quot;title&quot;</span>: response.css(<span class="hljs-string">&quot;.product_main h1 ::text&quot;</span>).get(),<br>            <span class="hljs-string">&quot;price&quot;</span>: response.css(<span class="hljs-string">&quot;.product_main .price_color ::text&quot;</span>).get(),<br>            <span class="hljs-string">&quot;url&quot;</span>: response.url,<br>        &#125;<br>        availability = response.css(<span class="hljs-string">&quot;.product_main .availability ::text&quot;</span>).getall()<br>        item[<span class="hljs-string">&quot;availability&quot;</span>] = <span class="hljs-string">&quot;&quot;</span>.join(availability).strip()<br>        item[<span class="hljs-string">&quot;category_name&quot;</span>] = category_name<br>        <span class="hljs-keyword">yield</span> item<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">scrapy crawl books -o data.json<br></code></pre></td></tr></table></figure>
+
+<h2 id="優化爬蟲：定義-Item"><a href="#優化爬蟲：定義-Item" class="headerlink" title="優化爬蟲：定義 Item"></a>優化爬蟲：定義 Item</h2><p>Scrapy 的 Item 是一種結構化資料容器，定義了爬蟲所要擷取的欄位。正式專案中建議明確定義 Item，有以下優點：</p>
+<ul>
+<li>程式碼更清晰易讀</li>
+<li>避免拼字錯誤導致的欄位遺失</li>
+<li>與 Pipeline、schema 驗證工具整合更方便</li>
+</ul>
+<p>Scrapy 支援多種 Item 定義方式：</p>
+<ol>
+<li><code>scrapy.Item</code>（Scrapy 原生）</li>
+<li>Python <code>dataclass</code>（推薦）</li>
+<li><code>attrs</code> 函式庫</li>
+<li>…</li>
+</ol>
+<h3 id="使用-Python-dataclass-定義-Item"><a href="#使用-Python-dataclass-定義-Item" class="headerlink" title="使用 Python dataclass 定義 Item"></a>使用 Python <code>dataclass</code> 定義 Item</h3><p>打開 <code>items.py</code>，清除預設內容，改成以下定義：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> dataclasses <span class="hljs-keyword">import</span> dataclass<br><span class="hljs-keyword">from</span> typing <span class="hljs-keyword">import</span> <span class="hljs-type">Optional</span><br><br><span class="hljs-meta">@dataclass</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">BookItem</span>:<br>    url: <span class="hljs-built_in">str</span>                          <span class="hljs-comment"># 必填欄位</span><br>    category_name: <span class="hljs-type">Optional</span>[<span class="hljs-built_in">str</span>] = <span class="hljs-literal">None</span><br>    title: <span class="hljs-type">Optional</span>[<span class="hljs-built_in">str</span>] = <span class="hljs-literal">None</span><br>    price: <span class="hljs-type">Optional</span>[<span class="hljs-built_in">str</span>] = <span class="hljs-literal">None</span><br>    availability: <span class="hljs-type">Optional</span>[<span class="hljs-built_in">str</span>] = <span class="hljs-literal">None</span><br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p><code>url</code> 設為必填，其餘設為 <code>Optional</code>，即使某些欄位爬不到也不會導致整個 item 失敗。</p>
+</blockquote>
+<h3 id="在-Spider-中使用-BookItem"><a href="#在-Spider-中使用-BookItem" class="headerlink" title="在 Spider 中使用 BookItem"></a>在 Spider 中使用 BookItem</h3><p>回到 <code>books.py</code>，引入並使用 <code>BookItem</code>：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> books_to_scrape.items <span class="hljs-keyword">import</span> BookItem<br><br><span class="hljs-comment"># 將原本的</span><br><span class="hljs-keyword">yield</span> item<br><span class="hljs-comment"># 改為</span><br><span class="hljs-keyword">yield</span> BookItem(**item)<br></code></pre></td></tr></table></figure>
+
+<h3 id="使用-breakpoint-互動式除錯"><a href="#使用-breakpoint-互動式除錯" class="headerlink" title="使用 breakpoint() 互動式除錯"></a>使用 <code>breakpoint()</code> 互動式除錯</h3><p>Scrapy 支援 Python 內建的 <code>breakpoint()</code> 進行互動除錯：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-built_in">breakpoint</span>()<br><span class="hljs-keyword">yield</span> BookItem(**item)<br></code></pre></td></tr></table></figure>
+
+<p>在 breakpoint 暫停後，可以在終端機中直接測試：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python">BookItem(**item)<br>BookItem(**item, **&#123;<span class="hljs-string">&quot;unknown&quot;</span>: <span class="hljs-string">&quot;value&quot;</span>&#125;)  <span class="hljs-comment"># 加入未定義欄位會報錯</span><br>BookItem(title=<span class="hljs-string">&quot;Alice in wonderland&quot;</span>)     <span class="hljs-comment"># 測試只提供部分欄位</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="解耦爬取與解析：Page-Object-Pattern"><a href="#解耦爬取與解析：Page-Object-Pattern" class="headerlink" title="解耦爬取與解析：Page Object Pattern"></a>解耦爬取與解析：Page Object Pattern</h2><p>隨著專案規模變大，維護性成為關鍵問題。網頁結構可能隨時改變，若把 CSS selector 散落在各個 Spider 方法中，日後維護的成本會大幅提高。</p>
+<p><strong>Page Object Pattern</strong> 的核心概念是：</p>
+<ul>
+<li><strong>Spider</strong> 只負責<strong>爬取</strong>（導覽頁面、發出請求）</li>
+<li><strong>Page Object</strong> 只負責<strong>解析</strong>（定義 CSS selector、回傳結構化資料）</li>
+</ul>
+<p>這樣當頁面結構改變時，只需修改對應的 Page Object，不需動到 Spider 邏輯。</p>
+<h3 id="安裝-web-poet-與-scrapy-poet"><a href="#安裝-web-poet-與-scrapy-poet" class="headerlink" title="安裝 web-poet 與 scrapy-poet"></a>安裝 web-poet 與 scrapy-poet</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">pip install web-poet scrapy-poet<br></code></pre></td></tr></table></figure>
+
+<h3 id="建立-page-objects-py"><a href="#建立-page-objects-py" class="headerlink" title="建立 page_objects.py"></a>建立 <code>page_objects.py</code></h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> web_poet <span class="hljs-keyword">import</span> ItemWebPage, WebPage<br><span class="hljs-keyword">from</span> books_to_scrape.items <span class="hljs-keyword">import</span> BookItem<br><br><span class="hljs-comment"># 書籍詳情頁</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">BookPage</span>(<span class="hljs-title class_ inherited__">ItemWebPage</span>):<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">to_item</span>(<span class="hljs-params">self</span>):<br>        item = &#123;<br>            <span class="hljs-string">&quot;title&quot;</span>: <span class="hljs-variable language_">self</span>.css(<span class="hljs-string">&quot;.product_main h1 ::text&quot;</span>).get(),<br>            <span class="hljs-string">&quot;price&quot;</span>: <span class="hljs-variable language_">self</span>.css(<span class="hljs-string">&quot;.product_main .price_color ::text&quot;</span>).get(),<br>            <span class="hljs-string">&quot;url&quot;</span>: <span class="hljs-variable language_">self</span>.url,<br>        &#125;<br>        availability = <span class="hljs-variable language_">self</span>.css(<span class="hljs-string">&quot;.product_main .availability ::text&quot;</span>).getall()<br>        item[<span class="hljs-string">&quot;availability&quot;</span>] = <span class="hljs-string">&quot;&quot;</span>.join(availability).strip()<br>        <span class="hljs-keyword">return</span> BookItem(**item)<br><br><span class="hljs-comment"># 首頁</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">HomePage</span>(<span class="hljs-title class_ inherited__">WebPage</span>):<br><span class="hljs-meta">    @property</span><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">category_urls</span>(<span class="hljs-params">self</span>):<br>        <span class="hljs-keyword">return</span> <span class="hljs-variable language_">self</span>.css(<span class="hljs-string">&quot;.nav-list ul li a ::attr(href)&quot;</span>).getall()<br><br><span class="hljs-comment"># 分類頁面</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">BookCategoryPage</span>(<span class="hljs-title class_ inherited__">WebPage</span>):<br><span class="hljs-meta">    @property</span><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">book_urls</span>(<span class="hljs-params">self</span>):<br>        <span class="hljs-keyword">return</span> <span class="hljs-variable language_">self</span>.css(<span class="hljs-string">&quot;.product_pod a ::attr(href)&quot;</span>).getall()<br><br><span class="hljs-meta">    @property</span><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">category_name</span>(<span class="hljs-params">self</span>):<br>        <span class="hljs-keyword">return</span> <span class="hljs-variable language_">self</span>.css(<span class="hljs-string">&quot;.page-header h1 ::text&quot;</span>).get()<br><br><span class="hljs-meta">    @property</span><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">next_page_url</span>(<span class="hljs-params">self</span>):<br>        <span class="hljs-keyword">return</span> <span class="hljs-variable language_">self</span>.css(<span class="hljs-string">&quot;.pager .next a ::attr(href)&quot;</span>).get()<br></code></pre></td></tr></table></figure>
+
+<h3 id="設定-Middleware（settings-py）"><a href="#設定-Middleware（settings-py）" class="headerlink" title="設定 Middleware（settings.py）"></a>設定 Middleware（<code>settings.py</code>）</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python">DOWNLOADER_MIDDLEWARES = &#123;<br>    <span class="hljs-string">&#x27;scrapy_poet.InjectionMiddleware&#x27;</span>: <span class="hljs-number">543</span>,<br>&#125;<br>SPIDER_MIDDLEWARES = &#123;<br>    <span class="hljs-string">&quot;scrapy_poet.RetryMiddleware&quot;</span>: <span class="hljs-number">275</span>,<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><code>scrapy-poet</code> 會在看到 <code>page: BookPage</code> 這樣的型別標注時，自動將對應的 Page Object 注入進來。</p>
+<h3 id="重構後的-books-py"><a href="#重構後的-books-py" class="headerlink" title="重構後的 books.py"></a>重構後的 <code>books.py</code></h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> scrapy<br><span class="hljs-keyword">from</span> books_to_scrape.page_objects <span class="hljs-keyword">import</span> HomePage, BookCategoryPage, BookPage<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">BooksSpider</span>(scrapy.Spider):<br>    name = <span class="hljs-string">&quot;books&quot;</span><br>    allowed_domains = [<span class="hljs-string">&quot;books.toscrape.com&quot;</span>]<br>    start_urls = [<span class="hljs-string">&#x27;http://books.toscrape.com/&#x27;</span>]<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">parse</span>(<span class="hljs-params">self, response, page: HomePage</span>):<br>        <span class="hljs-keyword">for</span> url <span class="hljs-keyword">in</span> page.category_urls:<br>            <span class="hljs-keyword">yield</span> response.follow(url, callback=<span class="hljs-variable language_">self</span>.parse_category)<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">parse_category</span>(<span class="hljs-params">self, response, page: BookCategoryPage</span>):<br>        <span class="hljs-keyword">for</span> url <span class="hljs-keyword">in</span> page.book_urls:<br>            <span class="hljs-keyword">yield</span> response.follow(<br>                url,<br>                callback=<span class="hljs-variable language_">self</span>.parse_book,<br>                cb_kwargs=&#123;<span class="hljs-string">&quot;category_name&quot;</span>: page.category_name&#125;,<br>            )<br>        <span class="hljs-keyword">if</span> next_page_url := page.next_page_url:<br>            <span class="hljs-keyword">yield</span> response.follow(<br>                next_page_url,<br>                callback=<span class="hljs-variable language_">self</span>.parse_category,<br>            )<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">parse_book</span>(<span class="hljs-params">self, response, page: BookPage, category_name</span>):<br>        item = page.to_item()<br>        item.category_name = category_name<br>        <span class="hljs-keyword">yield</span> item<br></code></pre></td></tr></table></figure>
+
+<p>對比第一版，Spider 的每個方法變得非常乾淨：它只負責「去哪裡」，不再關心「怎麼解析」。</p>
+<h2 id="監控爬蟲：Spidermon"><a href="#監控爬蟲：Spidermon" class="headerlink" title="監控爬蟲：Spidermon"></a>監控爬蟲：Spidermon</h2><p>當專案規模成長到擁有多隻 Spider 時，你需要能夠：</p>
+<ul>
+<li>排程定期執行</li>
+<li>查看目前與歷史執行狀況</li>
+<li>搜尋擷取的 items、logs 與 stats</li>
+<li>方便除錯</li>
+<li>視覺化效能監控</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://spidermon.readthedocs.io/">Spidermon</a> 提供客製化監控設定，並支援透過 <strong>Slack、Telegram、Discord、Email</strong> 發送通知。</p>
+<h3 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">pip install spidermon<br></code></pre></td></tr></table></figure>
+
+<h3 id="設定-books-py"><a href="#設定-books-py" class="headerlink" title="設定 books.py"></a>設定 <code>books.py</code></h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">class</span> <span class="hljs-title class_">BooksSpider</span>(scrapy.Spider):<br>    name = <span class="hljs-string">&quot;books&quot;</span><br>    allowed_domains = [<span class="hljs-string">&quot;books.toscrape.com&quot;</span>]<br>    start_urls = [<span class="hljs-string">&#x27;http://books.toscrape.com/&#x27;</span>]<br>    custom_settings = &#123;<br>        <span class="hljs-string">&quot;SPIDERMON_ENABLED&quot;</span>: <span class="hljs-literal">True</span>,<br>        <span class="hljs-string">&quot;EXTENSIONS&quot;</span>: &#123;<br>            <span class="hljs-string">&quot;spidermon.contrib.scrapy.extensions.Spidermon&quot;</span>: <span class="hljs-number">500</span>,<br>        &#125;,<br>        <span class="hljs-string">&quot;SPIDERMON_SPIDER_CLOSE_MONITORS&quot;</span>: (<br>            <span class="hljs-string">&quot;spidermon.contrib.scrapy.monitors.SpiderCloseMonitorSuite&quot;</span><br>        ),<br>        <span class="hljs-string">&quot;SPIDERMON_MIN_ITEMS&quot;</span>: <span class="hljs-number">10</span>,<br>        <span class="hljs-string">&quot;SPIDERMON_MAX_ERRORS&quot;</span>: <span class="hljs-number">1</span>,<br>        <span class="hljs-string">&quot;SPIDERMON_MAX_WARNINGS&quot;</span>: <span class="hljs-number">1000</span>,<br>        <span class="hljs-string">&quot;SPIDERMON_ADD_FIELD_COVERAGE&quot;</span>: <span class="hljs-literal">True</span>,<br>    &#125;<br>    ...<br></code></pre></td></tr></table></figure>
+
+<h3 id="監控報告截圖"><a href="#監控報告截圖" class="headerlink" title="監控報告截圖"></a>監控報告截圖</h3><p><img src="https://i.imgur.com/V7p3JoS.png" srcset="/img/loading.gif" lazyload alt="Spidermon 監控報告 1"></p>
+<p><img src="https://i.imgur.com/gJDSjxI.png" srcset="/img/loading.gif" lazyload alt="Spidermon 監控報告 2"></p>
+<h2 id="資料驗證：JSON-Schema"><a href="#資料驗證：JSON-Schema" class="headerlink" title="資料驗證：JSON Schema"></a>資料驗證：JSON Schema</h2><p>為了確保爬取到的資料符合預期格式，可以使用 JSON Schema 進行驗證。</p>
+<p><strong>優點：</strong></p>
+<ul>
+<li>可為每個 Item 設定客製化驗證規則</li>
+<li>使用標準 JSON Schema 格式定義資料結構</li>
+</ul>
+<p><strong>缺點：</strong></p>
+<ul>
+<li>與 <code>dataclass</code> 或 <code>attrs</code> 函式庫不相容（需擇一使用）</li>
+</ul>
+<h3 id="安裝-1"><a href="#安裝-1" class="headerlink" title="安裝"></a>安裝</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">pip install jsonschema scrapy-jsonschema<br></code></pre></td></tr></table></figure>
+
+<h3 id="定義-BookSchemaItem（items-py）"><a href="#定義-BookSchemaItem（items-py）" class="headerlink" title="定義 BookSchemaItem（items.py）"></a>定義 <code>BookSchemaItem</code>（<code>items.py</code>）</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> scrapy_jsonschema.item <span class="hljs-keyword">import</span> JsonSchemaItem<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">BookSchemaItem</span>(<span class="hljs-title class_ inherited__">JsonSchemaItem</span>):<br>    jsonschema = &#123;<br>        <span class="hljs-string">&quot;$schema&quot;</span>: <span class="hljs-string">&quot;http://json-schema.org/draft-07/schema#&quot;</span>,<br>        <span class="hljs-string">&quot;title&quot;</span>: <span class="hljs-string">&quot;Book&quot;</span>,<br>        <span class="hljs-string">&quot;description&quot;</span>: <span class="hljs-string">&quot;A Book item extracted from books.toscrape.com&quot;</span>,<br>        <span class="hljs-string">&quot;type&quot;</span>: <span class="hljs-string">&quot;object&quot;</span>,<br>        <span class="hljs-string">&quot;properties&quot;</span>: &#123;<br>            <span class="hljs-string">&quot;url&quot;</span>: &#123;<br>                <span class="hljs-string">&quot;description&quot;</span>: <span class="hljs-string">&quot;Book&#x27;s URL&quot;</span>,<br>                <span class="hljs-string">&quot;type&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,<br>                <span class="hljs-string">&quot;pattern&quot;</span>: <span class="hljs-string">&quot;^https?://[\\S]+$&quot;</span><br>            &#125;,<br>            <span class="hljs-string">&quot;category_name&quot;</span>: &#123;<br>                <span class="hljs-string">&quot;description&quot;</span>: <span class="hljs-string">&quot;Name of the category which the book belongs to&quot;</span>,<br>                <span class="hljs-string">&quot;type&quot;</span>: <span class="hljs-string">&quot;string&quot;</span><br>            &#125;,<br>            <span class="hljs-string">&quot;title&quot;</span>: &#123;<br>                <span class="hljs-string">&quot;description&quot;</span>: <span class="hljs-string">&quot;Book&#x27;s title&quot;</span>,<br>                <span class="hljs-string">&quot;type&quot;</span>: <span class="hljs-string">&quot;string&quot;</span><br>            &#125;,<br>            <span class="hljs-string">&quot;price&quot;</span>: &#123;<br>                <span class="hljs-string">&quot;description&quot;</span>: <span class="hljs-string">&quot;Book&#x27;s price&quot;</span>,<br>                <span class="hljs-string">&quot;minimum&quot;</span>: <span class="hljs-number">0</span>,<br>                <span class="hljs-string">&quot;type&quot;</span>: <span class="hljs-string">&quot;number&quot;</span><br>            &#125;,<br>            <span class="hljs-string">&quot;availability&quot;</span>: &#123;<br>                <span class="hljs-string">&quot;description&quot;</span>: <span class="hljs-string">&quot;Book&#x27;s availability&quot;</span>,<br>                <span class="hljs-string">&quot;type&quot;</span>: <span class="hljs-string">&quot;string&quot;</span><br>            &#125;<br>        &#125;,<br>        <span class="hljs-string">&quot;required&quot;</span>: [<span class="hljs-string">&quot;url&quot;</span>]<br>    &#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="更新-page-objects-py"><a href="#更新-page-objects-py" class="headerlink" title="更新 page_objects.py"></a>更新 <code>page_objects.py</code></h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> books_to_scrape.items <span class="hljs-keyword">import</span> BookItem, BookSchemaItem<br><br><span class="hljs-comment"># 將</span><br><span class="hljs-keyword">return</span> BookItem(**item)<br><span class="hljs-comment"># 改為</span><br><span class="hljs-keyword">return</span> BookSchemaItem(**item)<br></code></pre></td></tr></table></figure>
+
+<h3 id="更新-books-py"><a href="#更新-books-py" class="headerlink" title="更新 books.py"></a>更新 <code>books.py</code></h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">parse_book</span>(<span class="hljs-params">self, response, page: BookPage, category_name</span>):<br>    item = page.to_item()<br>    item[<span class="hljs-string">&#x27;category_name&#x27;</span>] = category_name  <span class="hljs-comment"># 注意：需用 dict 方式存取</span><br>    <span class="hljs-keyword">yield</span> item<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>?? 因為 JSON Schema 的 Item 不支援 dataclass 的 attribute 方式存取，改用 <code>item[&#39;category_name&#39;]</code>。</p>
+</blockquote>
+<h2 id="處理動態頁面：scrapy-playwright"><a href="#處理動態頁面：scrapy-playwright" class="headerlink" title="處理動態頁面：scrapy-playwright"></a>處理動態頁面：scrapy-playwright</h2><p>Scrapy 預設使用 HTTP 請求爬取頁面，但有些網站的內容是透過 JavaScript 動態渲染的（如 SPA、使用 AJAX 載入的資料）。對於這類網站，需要整合瀏覽器自動化工具。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/scrapy-plugins/scrapy-playwright">scrapy-playwright</a> 讓 Scrapy 能驅動 Playwright 瀏覽器引擎來處理動態頁面。</p>
+<h3 id="安裝-2"><a href="#安裝-2" class="headerlink" title="安裝"></a>安裝</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">scrapy genspider quotes quotes.toscrape.com<br>pip install scrapy-playwright<br>playwright install<br><span class="hljs-built_in">sudo</span> playwright install-deps<br></code></pre></td></tr></table></figure>
+
+<h3 id="設定-Spider（quotes-py）"><a href="#設定-Spider（quotes-py）" class="headerlink" title="設定 Spider（quotes.py）"></a>設定 Spider（<code>quotes.py</code>）</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> scrapy<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">QuotesSpider</span>(scrapy.Spider):<br>    name = <span class="hljs-string">&#x27;quotes&#x27;</span><br>    allowed_domains = [<span class="hljs-string">&#x27;quotes.toscrape.com&#x27;</span>]<br><br>    custom_settings = &#123;<br>        <span class="hljs-string">&quot;DOWNLOAD_HANDLERS&quot;</span>: &#123;<br>            <span class="hljs-string">&quot;http&quot;</span>: <span class="hljs-string">&quot;scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler&quot;</span>,<br>            <span class="hljs-string">&quot;https&quot;</span>: <span class="hljs-string">&quot;scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler&quot;</span>,<br>        &#125;,<br>        <span class="hljs-string">&quot;TWISTED_REACTOR&quot;</span>: <span class="hljs-string">&quot;twisted.internet.asyncioreactor.AsyncioSelectorReactor&quot;</span>,<br>    &#125;<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">start_requests</span>(<span class="hljs-params">self</span>):<br>        <span class="hljs-keyword">yield</span> scrapy.Request(<br>            <span class="hljs-string">&quot;http://quotes.toscrape.com/js&quot;</span>,<br>            callback=<span class="hljs-variable language_">self</span>.parse,<br>            meta=&#123;<span class="hljs-string">&quot;playwright&quot;</span>: <span class="hljs-literal">True</span>&#125;,  <span class="hljs-comment"># 告訴 Scrapy 使用 Playwright 處理此請求</span><br>        )<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">parse</span>(<span class="hljs-params">self, response</span>):<br>        <span class="hljs-keyword">for</span> quote <span class="hljs-keyword">in</span> response.css(<span class="hljs-string">&quot;.quote .text ::text&quot;</span>).getall():<br>            <span class="hljs-keyword">yield</span> &#123;<span class="hljs-string">&quot;quote&quot;</span>: quote&#125;<br></code></pre></td></tr></table></figure>
+
+<p>透過在 <code>meta</code> 中加入 <code>&quot;playwright&quot;: True</code>，Scrapy 會改用 Playwright 瀏覽器載入頁面，等待 JavaScript 執行完畢後再進行解析。</p>
+<h2 id="實用輔助函式庫"><a href="#實用輔助函式庫" class="headerlink" title="實用輔助函式庫"></a>實用輔助函式庫</h2><p>以下幾個函式庫在解析爬取資料時非常方便：</p>
+<h3 id="number-parser：解析文字數字"><a href="#number-parser：解析文字數字" class="headerlink" title="number-parser：解析文字數字"></a><code>number-parser</code>：解析文字數字</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> number_parser <span class="hljs-keyword">import</span> parse<br><br><span class="hljs-built_in">print</span>(parse(<span class="hljs-string">&quot;One two three go!&quot;</span>))   <span class="hljs-comment"># &#x27;1 2 3 go!&#x27;</span><br><span class="hljs-built_in">print</span>(parse_number(<span class="hljs-string">&quot;twenty three&quot;</span>)) <span class="hljs-comment"># 23</span><br><span class="hljs-built_in">print</span>(parse_ordinal(<span class="hljs-string">&quot;seventy fifth&quot;</span>)) <span class="hljs-comment"># 75</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="price-parser：解析價格字串"><a href="#price-parser：解析價格字串" class="headerlink" title="price-parser：解析價格字串"></a><code>price-parser</code>：解析價格字串</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> price_parser <span class="hljs-keyword">import</span> Price<br><br><span class="hljs-built_in">print</span>(Price.fromstring(<span class="hljs-string">&quot;22,90 €&quot;</span>))<br><span class="hljs-comment"># Price(amount=Decimal(&#x27;22.90&#x27;), currency=&#x27;€&#x27;)</span><br></code></pre></td></tr></table></figure>
+
+<p>支援多種貨幣格式與千分位符號，是處理電商資料的利器。</p>
+<h3 id="dateparser：解析各種日期格式"><a href="#dateparser：解析各種日期格式" class="headerlink" title="dateparser：解析各種日期格式"></a><code>dateparser</code>：解析各種日期格式</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> dateparser<br><br>dateparser.parse(<span class="hljs-string">&quot;Fri, 12 Dec 2014 10:55:50&quot;</span>)<br><span class="hljs-comment"># datetime.datetime(2014, 12, 12, 10, 55, 50)</span><br></code></pre></td></tr></table></figure>
+
+<p><code>dateparser</code> 支援超過 200 種語言的日期格式，包含相對時間（如「3 days ago」）。</p>
+<h3 id="extruct：提取頁面結構化資料"><a href="#extruct：提取頁面結構化資料" class="headerlink" title="extruct：提取頁面結構化資料"></a><code>extruct</code>：提取頁面結構化資料</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> requests, extruct<br><br>page = requests.get(<span class="hljs-string">&quot;https://tw.pycon.org/2022/en-us&quot;</span>)<br><span class="hljs-built_in">print</span>(extruct.extract(page.text))<br></code></pre></td></tr></table></figure>
+
+<p><code>extruct</code> 可從網頁的 HTML 中提取嵌入的結構化資料，如 <strong>JSON-LD</strong>、<strong>Microdata</strong>、<strong>OpenGraph</strong>、<strong>RDFa</strong> 等標準格式。</p>
+<h2 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h2><p>本文從最基礎的專案建立出發，逐步介紹了如何擴展 Scrapy 爬蟲：</p>
+<ol>
+<li><strong>善用 <code>tree</code></strong> 掌握專案目錄結構</li>
+<li><strong>Scrapy 基本流程</strong>：Seed URL → Crawling → Extraction → 儲存</li>
+<li><strong><code>yield</code>、<code>follow</code>、<code>callback</code>、<code>cb_kwargs</code></strong> 等核心機制</li>
+<li><strong>Walrus Operator (<code>:=</code>)</strong> 簡化程式碼</li>
+<li><strong>Dataclass</strong> 定義結構化 Item</li>
+<li><strong>Page Object Pattern（scrapy-poet）</strong> 解耦爬取與解析，提升維護性</li>
+<li><strong>Spidermon</strong> 監控多隻 Spider 的執行狀態</li>
+<li><strong>JSON Schema</strong> 驗證資料格式</li>
+<li><strong>scrapy-playwright</strong> 處理 JavaScript 動態渲染頁面</li>
+<li><strong>輔助函式庫</strong> 快速處理數字、價格、日期等特殊格式</li>
+</ol>
+<p>完整程式碼：<a target="_blank" rel="noopener" href="https://github.com/milanochuang/scrape_tutorial">GitHub - milanochuang&#x2F;scrape_tutorial</a></p>
+<h2 id="除錯筆記"><a href="#除錯筆記" class="headerlink" title="除錯筆記"></a>除錯筆記</h2><h3 id="問題一：HTTPS-handler-錯誤"><a href="#問題一：HTTPS-handler-錯誤" class="headerlink" title="問題一：HTTPS handler 錯誤"></a>問題一：HTTPS handler 錯誤</h3><figure class="highlight subunit"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs subunit"><span class="hljs-keyword">ERROR: </span>Loading &quot;scrapy.core.downloader.handlers.http.HTTPDownloadHandler&quot; for scheme &quot;https&quot;<br></code></pre></td></tr></table></figure>
+
+<h3 id="問題二：缺少-attrs-模組"><a href="#問題二：缺少-attrs-模組" class="headerlink" title="問題二：缺少 attrs 模組"></a>問題二：缺少 <code>attrs</code> 模組</h3><figure class="highlight vbnet"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs vbnet"><span class="hljs-symbol">ModuleNotFoundError:</span> No <span class="hljs-keyword">module</span> named <span class="hljs-comment">&#x27;attrs&#x27;</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>解決方法：</strong> 安裝指定版本的 Twisted</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">pip install Twisted==21.7.0<br></code></pre></td></tr></table></figure>
+
+<h2 id="參考資料"><a href="#參考資料" class="headerlink" title="參考資料"></a>參考資料</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=pLucY2PoSts&list=PLqtzN042QpfdkQbkOlwtEJMBGZHHsvimo&index=20">Effective Ways to Scale-Up and Maintain Your Web Crawling Project｜Kevin Lloyd Bernal｜PyCon APAC 2022</a></li>
+<li><a target="_blank" rel="noopener" href="https://chriskang028.medium.com/python-%E8%A3%A1%E7%9A%84-yield-%E8%AE%93%E4%BD%A0%E7%B0%A1%E5%96%AE-%E5%BF%AB%E9%80%9F%E7%9E%AD%E8%A7%A3-yield-%E7%9A%84%E6%A6%82%E5%BF%B5-f660521f3aa7">Python 裡的 yield — 讓你簡單、快速瞭解 yield 的概念</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.scrapy.org/">Scrapy Documentation</a></li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/scrapy-crawler/" class="print-no-link">#scrapy, crawler</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>如何維護爬蟲專案？用更有效率更方便的方法來寫爬蟲！</div>
+      <div>https://milanochuang.github.io/2026/04/04/如何維護爬蟲專案？用更有效率更方便的方法來寫爬蟲！/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Hao-Yun Chuang (Milan)</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>發布於</div>
+          <div>2026年4月4日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>許可協議</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 姓名標示">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2026/04/04/Vibe%20coding%20%E5%8D%A1%E9%97%9C%E4%BA%86%EF%BC%9F%E6%95%99%E4%BD%A0%E7%94%A8%20Request%20API%20%E7%9B%B4%E6%8E%A5%E6%8A%93%E7%B6%B2%E9%A0%81%E8%B3%87%E6%96%99/" title="Vibe coding 卡關了？教你用 Request API 直接抓網頁資料">
+                        <span class="hidden-mobile">Vibe coding 卡關了？教你用 Request API 直接抓網頁資料</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目錄</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜尋</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">關鍵字</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <i class="fa-brands fa-github"></i> <a href="https://github.com/milanochuang" target="_blank" rel="nofollow noopener"><span>milanochuang</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    function isExpandAllEnabled() {
+      return CONFIG.toc && CONFIG.toc.expand_all === true;
+    }
+    function expandAllToc() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .tocbot-is-collapsed').removeClass('tocbot-is-collapsed');
+    }
+    function updateTocToggle($li, $childList) {
+      var $toggle = $li.children('.toc-toggle');
+      if ($toggle.length === 0) { return; }
+      var collapsed = $childList.hasClass('tocbot-is-collapsed');
+      $toggle
+        .toggleClass('toc-toggle-collapsed', collapsed)
+        .toggleClass('toc-toggle-expanded', !collapsed);
+    }
+    function bindTocToggle() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .toc-list-item').each(function() {
+        var $li = jQuery(this);
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) {
+          if ($li.children('.toc-toggle').length === 0) {
+            $li.prepend('<span class="toc-toggle toc-toggle-placeholder" aria-hidden="true">›</span>');
+          }
+          return;
+        }
+
+        if ($li.children('.toc-toggle').length === 0) {
+          $li.prepend('<span class="toc-toggle toc-toggle-expanded" aria-hidden="true">›</span>');
+        }
+        updateTocToggle($li, $childList);
+      });
+      jQuery('#toc-body').off('click.tocToggle').on('click.tocToggle', '.toc-toggle', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var $li = jQuery(this).parent('.toc-list-item');
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) { return; }
+        $childList.toggleClass('tocbot-is-collapsed');
+        updateTocToggle($li, $childList);
+      });
+      if (!window.__tocToggleObserver) {
+        window.__tocToggleObserver = new MutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+            if (mutation.type !== 'attributes' || mutation.attributeName !== 'class') { return; }
+            var $list = jQuery(mutation.target);
+            var $li = $list.parent('.toc-list-item');
+            if ($li.length === 0) { return; }
+            updateTocToggle($li, $list);
+          });
+        });
+        jQuery('#toc-body ol').each(function() {
+          window.__tocToggleObserver.observe(this, { attributes: true });
+        });
+      }
+    }
+    var tocConfig = Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc);
+    if (isExpandAllEnabled()) {
+      tocConfig.collapseDepth = 6;
+    }
+    window.tocbot.init(tocConfig);
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+    expandAllToc();
+    bindTocToggle();
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+        expandAllToc();
+        bindTocToggle();
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">部落格在允許 JavaScript 執行的環境下瀏覽效果更佳</div>
+  </noscript>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/assets/tororo.model.json"},"display":{"superSample":2,"width":500,"height":1000,"position":"right","hOffset":-100,"vOffset":-260},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"log":false});</script></body>
+</html>

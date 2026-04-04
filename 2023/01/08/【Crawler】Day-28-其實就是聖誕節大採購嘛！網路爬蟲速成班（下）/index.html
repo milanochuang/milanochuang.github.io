@@ -1,7 +1,7 @@
 
 
 <!DOCTYPE html>
-<html lang="zh-TW" >
+<html lang="zh-TW" data-default-color-scheme=auto>
 
 
 
@@ -23,7 +23,7 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="【Crawler】Day 28: 其實就是聖誕節大採購嘛！網路爬蟲速成班（下）">
 <meta property="og:url" content="https://milanochuang.github.io/2023/01/08/%E3%80%90Crawler%E3%80%91Day-28-%E5%85%B6%E5%AF%A6%E5%B0%B1%E6%98%AF%E8%81%96%E8%AA%95%E7%AF%80%E5%A4%A7%E6%8E%A1%E8%B3%BC%E5%98%9B%EF%BC%81%E7%B6%B2%E8%B7%AF%E7%88%AC%E8%9F%B2%E9%80%9F%E6%88%90%E7%8F%AD%EF%BC%88%E4%B8%8B%EF%BC%89/index.html">
-<meta property="og:site_name" content="米蘭牛角尖">
+<meta property="og:site_name" content="Hao-Yun&#39;s Geekbase">
 <meta property="og:description" content="聖誕快樂！你這骯髒的小畜生！《小鬼當家2》  昨天我們把所有寫爬蟲時可能會需要的先備知識都學起來了，今天就要直接進入爬蟲主題啦！以往我在教同學寫網路爬蟲的時候，我都會用一個我自己原創的比喻：聖誕節大採購！且聽我娓娓道來吧！ 爬蟲出動！過去從來沒有接觸過網路爬蟲的人，可能會覺得爬蟲是一個很難理解的技術，對初學者而言就更不用說了。但其實爬蟲的概念很簡單，就是：  把所有要爬網頁瀏覽一遍，把我們要的資">
 <meta property="og:locale" content="zh_TW">
 <meta property="og:image" content="https://media4.giphy.com/media/l2YWiHWiFHwmbwIso/giphy.gif">
@@ -38,7 +38,7 @@
   
   
   
-  <title>【Crawler】Day 28: 其實就是聖誕節大採購嘛！網路爬蟲速成班（下） - 米蘭牛角尖</title>
+  <title>【Crawler】Day 28: 其實就是聖誕節大採購嘛！網路爬蟲速成班（下） - Hao-Yun&#39;s Geekbase</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -66,6 +66,8 @@
 
 
   <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
   
 
 
@@ -198,6 +200,12 @@
           
         
         
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
       </ul>
     </div>
   </div>
@@ -304,6 +312,17 @@
           </div>
         
         
+          <div class="col-4 mobile-grid-cell" id="mobile-color-toggle-btn"
+               data-label-light="開燈"
+               data-label-dark="關燈">
+            <a href="javascript:;" aria-label="Color Toggle">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-dark" id="mobile-color-toggle-icon"></i>
+                <span id="mobile-color-toggle-label">關燈</span>
+              </div>
+            </a>
+          </div>
+        
       </div>
     </div>
   </div>
@@ -312,7 +331,7 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('/images/cover.png') no-repeat center center; background-size: cover;">
+     style="background: url('/images/cover_me.jpeg') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.8)">
       <div class="banner-text text-center fade-in-up">

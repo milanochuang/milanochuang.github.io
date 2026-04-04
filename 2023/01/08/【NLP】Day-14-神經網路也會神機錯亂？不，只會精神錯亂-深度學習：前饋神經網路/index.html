@@ -1,7 +1,7 @@
 
 
 <!DOCTYPE html>
-<html lang="zh-TW" >
+<html lang="zh-TW" data-default-color-scheme=auto>
 
 
 
@@ -23,7 +23,7 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="【NLP】Day 14: 神經網路也會神機錯亂？不，只會精神錯亂...深度學習：前饋神經網路">
 <meta property="og:url" content="https://milanochuang.github.io/2023/01/08/%E3%80%90NLP%E3%80%91Day-14-%E7%A5%9E%E7%B6%93%E7%B6%B2%E8%B7%AF%E4%B9%9F%E6%9C%83%E7%A5%9E%E6%A9%9F%E9%8C%AF%E4%BA%82%EF%BC%9F%E4%B8%8D%EF%BC%8C%E5%8F%AA%E6%9C%83%E7%B2%BE%E7%A5%9E%E9%8C%AF%E4%BA%82-%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92%EF%BC%9A%E5%89%8D%E9%A5%8B%E7%A5%9E%E7%B6%93%E7%B6%B2%E8%B7%AF/index.html">
-<meta property="og:site_name" content="米蘭牛角尖">
+<meta property="og:site_name" content="Hao-Yun&#39;s Geekbase">
 <meta property="og:description" content="在夜城，不要相信任何人，受到背叛也是自己的錯…琦薇《電馭叛客：邊緣行者》  我很喜歡賽博龐克風格的相關作品，像是銀翼殺手、攻殼機動隊，都是我很愛的作品。最近在看《電馭叛客：邊緣行者》（好看，推薦大家去看），在動畫中，或是說在賽博龐克風格作品中的人物，為了要達到更高更強大的身體能力，會用電子零件（像是電子手臂，或是增快移動速度的軍事武器植入物等）將身體的一部分改造。而在電馭叛客中有個名詞：神機錯亂">
 <meta property="og:locale" content="zh_TW">
 <meta property="og:image" content="https://cdn.oneesports.gg/cdn-data/2022/07/CyberpunkEdgerunners_hack.jpg">
@@ -41,7 +41,7 @@
   
   
   
-  <title>【NLP】Day 14: 神經網路也會神機錯亂？不，只會精神錯亂...深度學習：前饋神經網路 - 米蘭牛角尖</title>
+  <title>【NLP】Day 14: 神經網路也會神機錯亂？不，只會精神錯亂...深度學習：前饋神經網路 - Hao-Yun&#39;s Geekbase</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -69,6 +69,8 @@
 
 
   <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
   
 
 
@@ -201,6 +203,12 @@
           
         
         
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
       </ul>
     </div>
   </div>
@@ -307,6 +315,17 @@
           </div>
         
         
+          <div class="col-4 mobile-grid-cell" id="mobile-color-toggle-btn"
+               data-label-light="開燈"
+               data-label-dark="關燈">
+            <a href="javascript:;" aria-label="Color Toggle">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-dark" id="mobile-color-toggle-icon"></i>
+                <span id="mobile-color-toggle-label">關燈</span>
+              </div>
+            </a>
+          </div>
+        
       </div>
     </div>
   </div>
@@ -315,7 +334,7 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('/images/cover.png') no-repeat center center; background-size: cover;">
+     style="background: url('/images/cover_me.jpeg') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.8)">
       <div class="banner-text text-center fade-in-up">

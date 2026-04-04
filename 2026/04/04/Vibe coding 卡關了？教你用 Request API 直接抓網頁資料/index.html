@@ -1,7 +1,7 @@
 
 
 <!DOCTYPE html>
-<html lang="zh-TW" >
+<html lang="zh-TW" data-default-color-scheme=auto>
 
 
 
@@ -16,30 +16,35 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="theme-color" content="#171c27">
-  <meta name="author" content="Hao Yun Chuang (Milan)">
+  <meta name="author" content="Hao-Yun Chuang (Milan)">
   <meta name="keywords" content="自然語言處理, 計算語言學, 機器學習, 人工智慧, 電影">
   
-    <meta name="description" content="逐漸發展出成熟人工智慧的人類，藉由電影、小說、文本揮灑著人類的想像，描繪出在後人類時代，身為萬物之靈的我們，該如何自處的觀點與逐漸對未來失去控制的焦慮。在電影《A.I.人工智慧》中，為人類未來描繪出了後末日的想像，在全球暖化後的社會，海平面的上升淹沒了現今仍富有繁榮的曼哈頓，會生老病死的人類也開發出了有感情、同時也超越人類極限的機器人，以彌補內心無法逾越的匱乏，同時卻又害怕機器人影響人類在社會上">
+    <meta name="description" content="Vibe Coding 卡關了？教你用 Request API 直接抓網頁資料引言最近 vibe coding 的風潮席捲開發者社群，不少人開始靠著 AI 輔助，用自然語言描述需求、讓 AI 產生程式碼，整個開發流程行雲流水。但只要碰到「抓網頁資料」這個需求，很多人就會撞牆——你跟 AI 說「幫我爬這個網站的資料」，AI 卻回你：  「這個資料沒有顯示在 HTML 上，無法直接擷取。」  或是好不">
 <meta property="og:type" content="article">
-<meta property="og:title" content="【影評】《A.I.人工智慧》&amp;《模仿遊戲》：何謂自我？何謂真實？">
-<meta property="og:url" content="https://milanochuang.github.io/2023/01/08/%E3%80%90%E8%80%81%E5%BD%B1%E8%A9%95%E3%80%91%E3%80%8AA-I-%E4%BA%BA%E5%B7%A5%E6%99%BA%E6%85%A7%E3%80%8B-%E3%80%8A%E6%A8%A1%E4%BB%BF%E9%81%8A%E6%88%B2%E3%80%8B%EF%BC%9A%E4%BD%95%E8%AC%82%E8%87%AA%E6%88%91%EF%BC%9F%E4%BD%95%E8%AC%82%E7%9C%9F%E5%AF%A6%EF%BC%9F/index.html">
-<meta property="og:site_name" content="米蘭牛角尖">
-<meta property="og:description" content="逐漸發展出成熟人工智慧的人類，藉由電影、小說、文本揮灑著人類的想像，描繪出在後人類時代，身為萬物之靈的我們，該如何自處的觀點與逐漸對未來失去控制的焦慮。在電影《A.I.人工智慧》中，為人類未來描繪出了後末日的想像，在全球暖化後的社會，海平面的上升淹沒了現今仍富有繁榮的曼哈頓，會生老病死的人類也開發出了有感情、同時也超越人類極限的機器人，以彌補內心無法逾越的匱乏，同時卻又害怕機器人影響人類在社會上">
+<meta property="og:title" content="Vibe coding 卡關了？教你用 Request API 直接抓網頁資料">
+<meta property="og:url" content="https://milanochuang.github.io/2026/04/04/Vibe%20coding%20%E5%8D%A1%E9%97%9C%E4%BA%86%EF%BC%9F%E6%95%99%E4%BD%A0%E7%94%A8%20Request%20API%20%E7%9B%B4%E6%8E%A5%E6%8A%93%E7%B6%B2%E9%A0%81%E8%B3%87%E6%96%99/index.html">
+<meta property="og:site_name" content="Hao-Yun&#39;s Geekbase">
+<meta property="og:description" content="Vibe Coding 卡關了？教你用 Request API 直接抓網頁資料引言最近 vibe coding 的風潮席捲開發者社群，不少人開始靠著 AI 輔助，用自然語言描述需求、讓 AI 產生程式碼，整個開發流程行雲流水。但只要碰到「抓網頁資料」這個需求，很多人就會撞牆——你跟 AI 說「幫我爬這個網站的資料」，AI 卻回你：  「這個資料沒有顯示在 HTML 上，無法直接擷取。」  或是好不">
 <meta property="og:locale" content="zh_TW">
-<meta property="og:image" content="https://www.portablepress.com/wp-content/uploads/2016/06/Artificial-Intellegence.jpg">
-<meta property="og:image" content="https://api.time.com/wp-content/uploads/2014/11/imitation-game.jpg">
-<meta property="og:image" content="https://media.timeout.com/images/101619595/image.jpg">
-<meta property="og:image" content="https://dp9a3tyzxd5qs.cloudfront.net/a-i-artificial-intelligence-2001-1.jpg">
-<meta property="article:published_time" content="2023-01-08T12:09:39.000Z">
-<meta property="article:modified_time" content="2023-01-08T12:34:12.000Z">
+<meta property="og:image" content="https://images.stockcake.com/public/4/4/4/444179f4-f76d-4161-8055-6e00baaba264_large/frustrated-programmer-working-stockcake.jpg">
+<meta property="og:image" content="https://i.imgur.com/z0HVmWn.png">
+<meta property="og:image" content="https://i.imgur.com/iwWUBw2.png">
+<meta property="og:image" content="https://i.imgur.com/TPRnjyN.png">
+<meta property="og:image" content="https://i.imgur.com/wqGfEOp.png">
+<meta property="og:image" content="https://i.imgur.com/SDDY0mV.png">
+<meta property="og:image" content="https://i.imgur.com/qbhtrSK.png">
+<meta property="og:image" content="https://i.imgur.com/XkbqdhJ.png">
+<meta property="og:image" content="https://i.imgur.com/aDW4wmk.png">
+<meta property="article:published_time" content="2026-04-04T07:10:16.000Z">
+<meta property="article:modified_time" content="2026-04-04T07:29:17.498Z">
 <meta property="article:author" content="Hao-Yun Chuang (Milan)">
-<meta property="article:tag" content="自然語言處理, 計算語言學, 機器學習, 人工智慧, 電影">
+<meta property="article:tag" content="vibe-coding">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://www.portablepress.com/wp-content/uploads/2016/06/Artificial-Intellegence.jpg">
+<meta name="twitter:image" content="https://images.stockcake.com/public/4/4/4/444179f4-f76d-4161-8055-6e00baaba264_large/frustrated-programmer-working-stockcake.jpg">
   
   
   
-  <title>【影評】《A.I.人工智慧》&amp;《模仿遊戲》：何謂自我？何謂真實？ - 米蘭牛角尖</title>
+  <title>Vibe coding 卡關了？教你用 Request API 直接抓網頁資料 - Hao-Yun&#39;s Geekbase</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -67,6 +72,8 @@
 
 
   <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
   
 
 
@@ -199,6 +206,12 @@
           
         
         
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
       </ul>
     </div>
   </div>
@@ -305,6 +318,17 @@
           </div>
         
         
+          <div class="col-4 mobile-grid-cell" id="mobile-color-toggle-btn"
+               data-label-light="開燈"
+               data-label-dark="關燈">
+            <a href="javascript:;" aria-label="Color Toggle">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-dark" id="mobile-color-toggle-icon"></i>
+                <span id="mobile-color-toggle-label">關燈</span>
+              </div>
+            </a>
+          </div>
+        
       </div>
     </div>
   </div>
@@ -313,13 +337,13 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('/images/cover.png') no-repeat center center; background-size: cover;">
+     style="background: url('/images/cover_me.jpeg') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.8)">
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="【影評】《A.I.人工智慧》&amp;《模仿遊戲》：何謂自我？何謂真實？"></span>
+            <span id="subtitle" data-typed-text="Vibe coding 卡關了？教你用 Request API 直接抓網頁資料"></span>
           
         </div>
 
@@ -330,8 +354,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-01-08 20:09" pubdate>
-          2023年1月8日 晚上
+        <time datetime="2026-04-04 15:10" pubdate>
+          2026年4月4日 下午
         </time>
       </span>
     
@@ -342,7 +366,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3.7k 字
+          3.1k 字
         
       </span>
     
@@ -353,7 +377,7 @@
         
         
         
-          31 分鐘
+          26 分鐘
         
       </span>
     
@@ -392,27 +416,67 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">【影評】《A.I.人工智慧》&amp;《模仿遊戲》：何謂自我？何謂真實？</h1>
+            <h1 id="seo-header">Vibe coding 卡關了？教你用 Request API 直接抓網頁資料</h1>
             
             
               <div class="markdown-body">
                 
-                <p><img src="https://www.portablepress.com/wp-content/uploads/2016/06/Artificial-Intellegence.jpg" srcset="/img/loading.gif" lazyload></p>
-<p>逐漸發展出成熟人工智慧的人類，藉由電影、小說、文本揮灑著人類的想像，描繪出在後人類時代，身為萬物之靈的我們，該如何自處的觀點與逐漸對未來失去控制的焦慮。在電影《A.I.人工智慧》中，為人類未來描繪出了後末日的想像，在全球暖化後的社會，海平面的上升淹沒了現今仍富有繁榮的曼哈頓，會生老病死的人類也開發出了有感情、同時也超越人類極限的機器人，以彌補內心無法逾越的匱乏，同時卻又害怕機器人影響人類在社會上的生存地位，即秉持著造物主的傲慢，將機器人趕盡殺絕。在電影《模仿遊戲》中，則是回到人工智慧的發展剛伸出幼苗的二戰時期，藉由電腦之父圖靈的眼中，探討人工智慧是否有著思考的能力，以及為即將步入後人類時代的我們，了解人工智慧的起源。而兩部電影皆可以回溯到一個關於人工智慧最基本的核心命題：人工智慧是否會思考？何謂真實？何謂自我？</p>
-<p><img src="https://api.time.com/wp-content/uploads/2014/11/imitation-game.jpg" srcset="/img/loading.gif" lazyload></p>
-<p>在電影《模仿遊戲》中，藉由圖靈的引領，走進了名為人工智慧的世界。在電影的某一個片段，圖靈被警探問到的一個問題「機器能像人一樣思考嗎？」，圖靈回答：「不，機器不能思考。然而，就因為機器不能像人一樣思考，就證明機器不會思考嗎？」人類往往害怕自己無法掌控又無法理解的事物，例如會思考的機器，害怕機器有一天會反噬人類的存在以及在這社會的重要性。又例如「同性戀」。在當時的年代（甚至是現代），社會並無法接受同性戀的存在，或許是因為不了解，又或許是因為不願意不想去接納不同的存在，當人類害怕某件事物時，總是會想辦法去摧毀它，因為解決提出問題的人遠比解決問題本身還要容易且省時許多。因此圖靈問道「我們究竟是人？還是機器？」我們常常自詡是萬物之靈，擁有著智慧的我們可以統御世間一切事物，但是自古以來卻一直無情地自相殘殺，納粹希特勒仍然殺了無數猶太人以及同志族群，破壞了許多人的家庭，在這個由人類組成的社會，明明應充滿著仁慈的光輝與人性的溫暖，卻仍然如同機器一般無情地吞噬這世界上與大多數不同的人。究竟是人，還是機器，仍然那麼重要嗎；去探究兩者之間的界線，去釐清何謂真實，何謂虛構，仍然那麼重要嗎？<br>後現代觀點的哲學家布希亞所提出的「超真實」觀點，當原本生活型態被「仿真體」(simulation)遮蓋並被佔據時，「原真實」已經被「超真實」(hyperreality)給覆蓋過去，而布希亞則舉了迪士尼樂園作為例子，說明作為擬仿物的迪士尼樂園逐漸取代了美國與美國夢，使得大家逐漸誤認迪士尼樂園即為美國夢，擬仿物對原真實產生了反噬。同理，在電影《A.I.人工智慧》前半段，導演史蒂芬史匹柏透過莫妮卡、其親生兒子馬丁、人工智慧機器人大衛之間的三方對話，淋漓盡致地發揮了布希亞的「超真實」觀點。莫妮卡的親生兒子馬丁對仿真體與真實的斷裂做出了詮釋：當馬丁拿著資本主義下大量生產的直升機對大衛說：「這種玩具要把它打破才比較有意思。」這不正是一種對原形不再懷舊的表現嗎？正是因為不再懷舊，才使得無限的生產得以可能，正是因為圓形的大量複製與製造，才使得每件物品皆成為了彼此的等價物，打破的並不僅僅是直升機的形體，而是真實與擬仿物之間的界線。</p>
+                <h1 id="Vibe-Coding-卡關了？教你用-Request-API-直接抓網頁資料"><a href="#Vibe-Coding-卡關了？教你用-Request-API-直接抓網頁資料" class="headerlink" title="Vibe Coding 卡關了？教你用 Request API 直接抓網頁資料"></a>Vibe Coding 卡關了？教你用 Request API 直接抓網頁資料</h1><h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>最近 vibe coding 的風潮席捲開發者社群，不少人開始靠著 AI 輔助，用自然語言描述需求、讓 AI 產生程式碼，整個開發流程行雲流水。但只要碰到「抓網頁資料」這個需求，很多人就會撞牆——你跟 AI 說「幫我爬這個網站的資料」，AI 卻回你：</p>
 <blockquote>
-<p>You don’t look like a toy, you are like an ordinary person.</p>
+<p>「這個資料沒有顯示在 HTML 上，無法直接擷取。」</p>
 </blockquote>
-<p>大衛的媽媽莫妮卡則是一個誤認「超真實」為「真實」的案例。起初莫妮卡對於其丈夫亨利帶回具有感情與同理心的大衛回家藉此替代其瀕死的兒子馬丁的行為感到無法接受與理解，但隨著大衛的種種的行為，例如叫莫妮卡「媽咪」，以及種種渴望愛的行為，讓身為「仿真體」的大衛逐漸遮蓋並佔據了莫妮卡的「原真實」，使得「原真實」被「超真實」壓扁，對於本應是仿真的機器人產生了對人的感情，仿真體與真實間產生了斷裂，讓原本的真實更為真實，也因莫妮卡的同情心，使得馬丁得以脫離原本必須面臨機器人屠宰場命運。</p>
-<p><img src="https://media.timeout.com/images/101619595/image.jpg" srcset="/img/loading.gif" lazyload></p>
-<p>另外，該如何從哲學觀點去判斷誰是人類、誰是機器人呢？我們可以在電影中發現一個有趣的現象：每個機器人都知道自己的存在意義，而且完全不為外在環境所動。被製造出來就是要滿足莫妮卡愛與隸屬需求的大衛，對於母愛的渴求貫穿了整部電影；裘德洛飾演的性̷愛̷愛情機器人即使在被誣陷殺人後，還是保有著極欲求愛的積極性（這是堪入耳的說法）；在大衛準備要被抓到機器人屠宰場前碰到的保母機器人，無論受到什麼樣的威脅，還是告訴著大衛不要害怕，一切會好起來，仍善盡著自己身為保母機器人的職責。<br>這正說明了人類與機器人最關鍵的差異，也就是存在主義的基本命題：存在先於本質（Existence precedes essence）。沙特認為，人在一開始並沒有任何先天的本質，而關於我們自身的一切，例如地位、身份等皆是存在後才被賦予的，因此首先必須先肯定人的存在，再去賦予存在意義，並且甚至超越自己所創造的價值。對於一個人造物而言，在被製造之前，必定會先知道其用途所在。小學美勞課，我們必定都是在腦中對作品先有個雛形，接著再動手去創造。同理，這些機器人在被人類創造出來之前，必定是先有其目的與用途，接著才去製作這些機器人。<br>身為一個人，我們時時刻刻都在改變甚至超越著自我的本質，前一秒的你跟後一秒的你很可能就代表著截然不同的意義。但在電影《A.I.人工智慧》中的機器人卻始終無法在面對快速變化的世界隨時改變自我價值，還是不斷地重複著自我的使命，直到故障為止。相反地，在《銀翼殺手2049》中，殺手Ｋ卻是在劇情的推動之下，自己眼中的世界觀不斷地翻轉，甚至是對自我價值的挑戰，之後再寫一篇文章詳細介紹。<br>順帶一提，沙特也為「存在先於本質」一說做出結論，人會害怕在眼前的過多選擇中做出錯誤判斷，因而不願意為自己的選擇負責任。對此，沙特說，你是自由的（是不是聽起來很熟悉？），所以自己做出選擇吧，唯一要記得的就是要為自己的選擇負責。</p>
-<p><img src="https://dp9a3tyzxd5qs.cloudfront.net/a-i-artificial-intelligence-2001-1.jpg" srcset="/img/loading.gif" lazyload></p>
-<p>話說回來，故事在大衛找到自己的造物主後，發現自己只不過是許多被創造出來的「眾多大衛中的其中一個大衛」，另一個用來滿足造物主的內心缺乏 - - 已故兒子的替代品罷了，此時的大衛已經無法在自我異化中認出自我，自我衝突與矛盾的大衛最終選擇了跳下被海水淹沒的曼哈頓，卻又在彌留之際，在水中看見了自己不斷尋找的藍仙子的雕像，於是此時的大衛，從「滿足人類情感需求的眾多大衛中的大衛」意識到自己仍然是那個「渴求莫妮卡母愛的大衛」，再次地在行動中認出自己。只是事與願違，虛構的童話終究是虛構，大衛也將虛擬的童話誤認成為真實，一心祈禱了兩千年，希望藍仙子可以讓他變成真正的人類。<br>諷刺地，過了兩千年之後，高度進化的人工智慧是存留在世上的唯一「生命」物種，人類早已自取滅絕。而這些人工智慧物種找到大衛並了解他的故事之後，透過時空軌跡以及仍保留在泰迪身上的莫妮卡的頭髮，藉由DNA以及時空代碼重現莫妮卡的樣貌與記憶。此時導演彷彿也暗示了人類的存在本身也是如同機器人一般，是藉由並不代表任何意義的代碼（人類：ＡＴＣＧ、機器人：二進位）所模擬的真實，因此布希亞也指出，人類當代社會已經不再是先有真實，接著擬仿物掩蓋了真實，而是先有擬仿物，而這些擬仿物建構了我們的真實。當真實可以藉由擬仿物不斷建構並複製，那麼真實還是真實嗎？又或者，擬仿物即是真實？<br>這些對於未來科技的想像，以及回頭看向過去的反省，人類可以透過文本的建構、哲學的探討，百花齊放的結果提醒了我們必須做好準備去迎向未來將會更迅速變化的差異性，並且以更開放的胸襟去接受這些與我們的不同。正因二戰時期的人類不願理解同志族群的權益，而痛失了可能讓人類社會向前一大步的電腦巨擘；正因我們對於自己所認知的機器人的不真實感到不信任，而錯過了與機器人共同和平相處的可能未來。或許，圖靈想要的只是安靜地一頭埋進自己感興趣的事物，並供他自由揮灑才華的空間；或許，大衛想要的只是自然地被人類所看待，愛人以及被愛，並且能與莫妮卡永遠在一起。就是因為這些種種的故事與想像，才得以讓即將跨入後人類時代的我們一管窺天地看向未來，並為即將到來的世界做好一切的準備。</p>
-<p>後記：重弄了新的部落格，以及會有這篇文是因為這學期修了人工智慧導論，一開始老師就介紹了兩部他心目中最棒的人工智慧主題的電影，要我們回家寫心得。起初想說，還有什麼人工智慧相關的電影是我沒看過的，所以導致我一開始看A.I.人工智慧的時候還有點不耐煩，但看著看著卻想到了文學批評課上所學到的理論，就想說，不然來寫寫看好了！又討厭以前那個部落格，就弄了個新的，把舊的黑歷史刪掉。就這樣，也不知道會不會有下一篇，但應該不會再刪了哈哈哈。</p>
-<p><strong>2023&#x2F;01&#x2F;08 更新</strong></p>
-<p>這是大五上學期修的人工智慧導論的其中一份作業，有點掉書袋的影評，當時主要是想學超級歪那種文本分析的方法，很酷！結果被教授特別挑出來討論，說跨領域就是要這樣！</p>
-<p>這門課讓我印象很深刻的是當時老師 demo 了一個推薦系統，結果發現那個推薦系統要 XP 的 IE 才能跑（也就是最新的 IE 也不行跑，更別提當時 IE 也已經苟延殘喘了）沒想表達什麼，只是覺得很酷。最近在整合過去到現在寫過的長文到這個個人網站，想說這篇也跟人工智慧還有影評有關，也符合這個部落格的主題，這篇才又被我翻出來，現在碩班的我再看…啊，真是掉書袋呀！</p>
+<p>或是好不容易讓 AI 寫出了 BeautifulSoup 的爬蟲，跑起來卻一片空白；又或者叫 AI 去找 API 網址，它東猜西猜就是抓不到正確的端點。整個 vibe coding 的節奏就這樣被打斷，不知道下一步該怎麼辦。</p>
+<p>其實這個問題有一個非常乾淨的解法：<strong>直接找網站背後的 Request API，跳過 HTML，把資料原汁原味地拿回來。</strong> 本文就帶你搞懂這個思路，以及怎麼實際操作。</p>
+<h2 id="為什麼-BeautifulSoup-和-Selenium-會失敗？"><a href="#為什麼-BeautifulSoup-和-Selenium-會失敗？" class="headerlink" title="為什麼 BeautifulSoup 和 Selenium 會失敗？"></a>為什麼 BeautifulSoup 和 Selenium 會失敗？</h2><p>傳統爬蟲的做法大概分兩派：</p>
+<ol>
+<li><strong>BeautifulSoup4</strong>：解析靜態 HTML，適合資料直接寫在頁面原始碼裡的情況。</li>
+<li><strong>Selenium</strong>：模擬瀏覽器行為，可以等 JavaScript 執行完再擷取內容。</li>
+</ol>
+<p>這兩個方法都有一個共同的前提：<strong>資料最終會出現在 DOM 上</strong>。但現代網站越來越多是「前後端分離」的架構——頁面本身只是一個空殼，資料是瀏覽器在背景透過 API 呼叫取回來的。這種情況下，不管你用 BeautifulSoup 解析 HTML，還是用 Selenium 等頁面載入，你拿到的都不會是你要的資料。</p>
+<p>更麻煩的是，用這兩個方法還得額外花時間處理：</p>
+<ul>
+<li>💡 在頁面上定位元素的位置（CSS selector、XPath）</li>
+<li>💡 把抓下來的非結構化資料再整理成乾淨的格式</li>
+</ul>
+<p>繞了一大圈，還不一定成功。</p>
+<p><img src="https://images.stockcake.com/public/4/4/4/444179f4-f76d-4161-8055-6e00baaba264_large/frustrated-programmer-working-stockcake.jpg" srcset="/img/loading.gif" lazyload></p>
+<h2 id="更好的做法：直接打-API"><a href="#更好的做法：直接打-API" class="headerlink" title="更好的做法：直接打 API"></a>更好的做法：直接打 API</h2><p>既然資料是瀏覽器透過 API 拿回來的，我們何不直接走同一條路？</p>
+<p>瀏覽器的開發者工具（DevTools）裡的 <strong>Network 分頁</strong>，會完整記錄頁面和伺服器之間的所有請求。只要打開它，在網站上觸發你想要的操作（例如搜尋、換頁），就能看到背後實際發出的 API 請求，包括網址、參數、回傳的 JSON 資料，一覽無遺。</p>
+<p>找到之後，用 Python 的 <code>requests</code> 套件，幾行程式碼就能重現同樣的請求，直接拿到結構化的 JSON，完全不需要解析 HTML。</p>
+<h2 id="實作範例一：LINE-事實查核中心"><a href="#實作範例一：LINE-事實查核中心" class="headerlink" title="實作範例一：LINE 事實查核中心"></a>實作範例一：LINE 事實查核中心</h2><h3 id="找到目標網站"><a href="#找到目標網站" class="headerlink" title="找到目標網站"></a>找到目標網站</h3><p><a target="_blank" rel="noopener" href="https://fact-checker.line.me/">LINE 事實查核中心</a> 提供了大量的謠言查核文章，是一個很適合練習的目標。</p>
+<p><img src="https://i.imgur.com/z0HVmWn.png" srcset="/img/loading.gif" lazyload alt="LINE 事實查核中心首頁"></p>
+<h3 id="打開-DevTools，觀察-Network-請求"><a href="#打開-DevTools，觀察-Network-請求" class="headerlink" title="打開 DevTools，觀察 Network 請求"></a>打開 DevTools，觀察 Network 請求</h3><p>按下 F12 開啟開發者工具，切換到 <strong>Network</strong> 分頁，接著在頁面上觸發你想要的操作（例如滾動頁面或點選分類），就能看到瀏覽器在背景發出的所有請求。</p>
+<p><img src="https://i.imgur.com/iwWUBw2.png" srcset="/img/loading.gif" lazyload alt="Network 分頁概覽"></p>
+<p>篩選 XHR 或 Fetch 類型的請求，找到回傳文章資料的那一筆。</p>
+<p><img src="https://i.imgur.com/TPRnjyN.png" srcset="/img/loading.gif" lazyload alt="找到目標 API 請求"></p>
+<p>點進去可以看到完整的請求網址與參數。</p>
+<p><img src="https://i.imgur.com/wqGfEOp.png" srcset="/img/loading.gif" lazyload alt="請求詳細資訊"></p>
+<p>切換到 <strong>Response</strong> 分頁，確認回傳的就是你要的資料。</p>
+<p><img src="https://i.imgur.com/SDDY0mV.png" srcset="/img/loading.gif" lazyload alt="Response 內容"></p>
+<p>直接取得乾淨的 JSON 結構，所有文章資訊一目瞭然。</p>
+<p><img src="https://i.imgur.com/qbhtrSK.png" srcset="/img/loading.gif" lazyload alt="JSON 回傳結果"></p>
+<h3 id="用-requests-重現請求"><a href="#用-requests-重現請求" class="headerlink" title="用 requests 重現請求"></a>用 <code>requests</code> 重現請求</h3><p>找到 API 端點之後，呼叫方式非常簡單：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> requests<br><br><span class="hljs-comment"># 方法一：直接把參數夾在 URL 裡</span><br>full_url = <span class="hljs-string">&quot;https://api-fact-checker.line-apps.com/pub/v1/zhtw/articles/...&quot;</span><br>response = requests.get(full_url)<br><span class="hljs-built_in">print</span>(response.json())<br></code></pre></td></tr></table></figure>
+
+<p>或是更乾淨的寫法，把參數獨立出來：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 方法二：用 params 參數傳遞，requests 會自動組成 query string</span><br>base_url = <span class="hljs-string">&quot;https://api-fact-checker.line-apps.com/pub/v1/zhtw/articles/verified/&quot;</span><br>params = &#123;<br>    <span class="hljs-string">&quot;size&quot;</span>: <span class="hljs-number">9</span>,<br>    <span class="hljs-string">&quot;sort&quot;</span>: <span class="hljs-string">&quot;updatedAt&quot;</span>,<br>    <span class="hljs-string">&quot;loc&quot;</span>: <span class="hljs-string">&quot;home&quot;</span><br>&#125;<br>response = requests.get(base_url, params=params)<br><span class="hljs-built_in">print</span>(response.json())<br></code></pre></td></tr></table></figure>
+
+<p>回傳的直接是 JSON，不需要任何額外解析，可以直接取用你要的欄位。</p>
+<h2 id="實作範例二：台鐵列車時刻表"><a href="#實作範例二：台鐵列車時刻表" class="headerlink" title="實作範例二：台鐵列車時刻表"></a>實作範例二：台鐵列車時刻表</h2><h3 id="找到目標網站-1"><a href="#找到目標網站-1" class="headerlink" title="找到目標網站"></a>找到目標網站</h3><p><a target="_blank" rel="noopener" href="https://www.railway.gov.tw/tra-tip-web/tip/tip001/tip112/gobytime">台鐵列車時刻查詢</a> 的搜尋表單，背後同樣是透過 API 取得資料。</p>
+<p><img src="https://i.imgur.com/XkbqdhJ.png" srcset="/img/loading.gif" lazyload alt="台鐵時刻查詢頁面"></p>
+<h3 id="攔截-POST-請求"><a href="#攔截-POST-請求" class="headerlink" title="攔截 POST 請求"></a>攔截 POST 請求</h3><p>填入出發站、到達站、日期等資訊後按下查詢，在 Network 分頁就能看到一筆 POST 請求，裡面包含表單送出的所有 payload。</p>
+<p><img src="https://i.imgur.com/aDW4wmk.png" srcset="/img/loading.gif" lazyload alt="台鐵 API 請求 payload"></p>
+<h3 id="用-requests-重現請求-1"><a href="#用-requests-重現請求-1" class="headerlink" title="用 requests 重現請求"></a>用 <code>requests</code> 重現請求</h3><p>這個案例用的是 POST 方法，並且帶有 CSRF token（這是網站用來防止跨站請求偽造的安全機制）：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> requests<br><br>url = <span class="hljs-string">&#x27;https://www.railway.gov.tw/tra-tip-web/tip/tip001/tip112/querybytime&#x27;</span><br>payload = &#123;<br>    <span class="hljs-string">&quot;csrf&quot;</span>: <span class="hljs-string">&quot;2cad25fc-a9c1-4852-b57e-b720a4259ef3&quot;</span>,<br>    <span class="hljs-string">&quot;startStation&quot;</span>: <span class="hljs-string">&quot;0900-基隆&quot;</span>,<br>    <span class="hljs-string">&quot;endStation&quot;</span>: <span class="hljs-string">&quot;1010-萬華&quot;</span>,<br>    <span class="hljs-string">&quot;transfer&quot;</span>: <span class="hljs-string">&quot;ONE&quot;</span>,<br>    <span class="hljs-string">&quot;rideDate&quot;</span>: <span class="hljs-string">&quot;2024/05/01&quot;</span>,<br>    <span class="hljs-string">&quot;startOrEndTime&quot;</span>: <span class="hljs-string">&quot;true&quot;</span>,<br>    <span class="hljs-string">&quot;startTime&quot;</span>: <span class="hljs-string">&quot;00:00&quot;</span>,<br>    <span class="hljs-string">&quot;endTime&quot;</span>: <span class="hljs-string">&quot;23:59&quot;</span>,<br>    <span class="hljs-string">&quot;trainTypeList&quot;</span>: <span class="hljs-string">&quot;ALL&quot;</span>,<br>    <span class="hljs-string">&quot;queryClassification&quot;</span>: <span class="hljs-string">&quot;NORMAL&quot;</span>,<br>    <span class="hljs-string">&quot;query&quot;</span>: <span class="hljs-string">&quot;查詢&quot;</span><br>&#125;<br><br>response = requests.post(url, data=payload)<br><span class="hljs-built_in">print</span>(response.text)<br></code></pre></td></tr></table></figure>
+
+<p>注意這裡用的是 <code>requests.post()</code>，並透過 <code>data</code> 參數傳遞 form data，而不是 <code>json</code> 參數——因為這個 API 接受的是表單格式，不是 JSON body。</p>
+<h2 id="整個流程只需要三步"><a href="#整個流程只需要三步" class="headerlink" title="整個流程只需要三步"></a>整個流程只需要三步</h2><ol>
+<li><strong>打開瀏覽器 DevTools</strong>（F12），切換到 Network 分頁</li>
+<li><strong>在網站上操作</strong>你想抓的資料（搜尋、點選、換頁），觀察出現的請求，找到回傳目標資料的那一筆</li>
+<li><strong>複製 API 網址和參數</strong>，用 <code>requests</code> 重現請求</li>
+</ol>
+<p>這個流程跑順之後，你也可以直接把 DevTools 的 Network 請求資訊截圖，或是把 Request Headers、Payload、Response 貼給 AI，請它幫你把 <code>requests</code> 的程式碼寫出來——這樣才是真正讓 vibe coding 流起來的姿勢。</p>
+<h2 id="小結"><a href="#小結" class="headerlink" title="小結"></a>小結</h2><p>AI 說「資料不在 HTML 上」的時候，它說的沒錯，但其實有時候<strong>資料有可能也會藏在 API 裡，去 DevTools 找它。</strong> 學會用 Request API 的思路，你就多了一把鑰匙，能打開大多數現代網站的資料大門，也不會再讓爬蟲問題打斷你的 vibe coding 節奏。</p>
 
                 
               </div>
@@ -422,6 +486,13 @@
               <div class="post-metas my-3">
   
   
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/vibe-coding/" class="print-no-link">#vibe-coding</a>
+      
+    </div>
+  
 </div>
 
 
@@ -430,20 +501,20 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>【影評】《A.I.人工智慧》&amp;《模仿遊戲》：何謂自我？何謂真實？</div>
-      <div>https://milanochuang.github.io/2023/01/08/【老影評】《A-I-人工智慧》-《模仿遊戲》：何謂自我？何謂真實？/</div>
+      <div>Vibe coding 卡關了？教你用 Request API 直接抓網頁資料</div>
+      <div>https://milanochuang.github.io/2026/04/04/Vibe coding 卡關了？教你用 Request API 直接抓網頁資料/</div>
     </div>
     <div class="license-meta">
       
         <div class="license-meta-item">
           <div>作者</div>
-          <div>Hao Yun Chuang (Milan)</div>
+          <div>Hao-Yun Chuang (Milan)</div>
         </div>
       
       
         <div class="license-meta-item license-meta-date">
           <div>發布於</div>
-          <div>2023年1月8日</div>
+          <div>2026年4月4日</div>
         </div>
       
       
@@ -474,6 +545,12 @@
                 <div class="post-prevnext my-3">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2026/04/04/%E5%A6%82%E4%BD%95%E7%B6%AD%E8%AD%B7%E7%88%AC%E8%9F%B2%E5%B0%88%E6%A1%88%EF%BC%9F%E7%94%A8%E6%9B%B4%E6%9C%89%E6%95%88%E7%8E%87%E6%9B%B4%E6%96%B9%E4%BE%BF%E7%9A%84%E6%96%B9%E6%B3%95%E4%BE%86%E5%AF%AB%E7%88%AC%E8%9F%B2%EF%BC%81/" title="如何維護爬蟲專案？用更有效率更方便的方法來寫爬蟲！">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">如何維護爬蟲專案？用更有效率更方便的方法來寫爬蟲！</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">

@@ -1,7 +1,7 @@
 
 
 <!DOCTYPE html>
-<html lang="zh-TW" >
+<html lang="zh-TW" data-default-color-scheme=auto>
 
 
 
@@ -23,7 +23,7 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="【NLP】Day 24: 欸！BERT！你在幹嘛呀？BERT 模型實作＆程式碼解析">
 <meta property="og:url" content="https://milanochuang.github.io/2023/01/08/%E3%80%90NLP%E3%80%91Day-24-%E6%AC%B8%EF%BC%81BERT%EF%BC%81%E4%BD%A0%E5%9C%A8%E5%B9%B9%E5%98%9B%E5%91%80%EF%BC%9FBERT-%E6%A8%A1%E5%9E%8B%E5%AF%A6%E4%BD%9C%EF%BC%86%E7%A8%8B%E5%BC%8F%E7%A2%BC%E8%A7%A3%E6%9E%90/index.html">
-<meta property="og:site_name" content="米蘭牛角尖">
+<meta property="og:site_name" content="Hao-Yun&#39;s Geekbase">
 <meta property="og:description" content="別想太多，做就對了！《捍衛戰士：獨行俠》  前兩天我們已經了解 BERT 的內部運作，還有 BERT 在進行語言處理上的一些缺陷。今天不聊理論，我們來簡單一一解析 Tensorflow 的官方教學 沒錯，又是 Tensorflow 了喔，並結合前兩天所學到的知識，來對教學中程式碼進行剖析。由於 BERT 的應用實在太多了，所以今天只會提到最簡單的情緒文本分析，也就是先前所說的多對一文本分類，若各">
 <meta property="og:locale" content="zh_TW">
 <meta property="og:image" content="https://www.tensorflow.org/static/text/tutorials/classify_text_with_bert_files/output_0EmzyHZXKIpm_0.png">
@@ -36,7 +36,7 @@
   
   
   
-  <title>【NLP】Day 24: 欸！BERT！你在幹嘛呀？BERT 模型實作＆程式碼解析 - 米蘭牛角尖</title>
+  <title>【NLP】Day 24: 欸！BERT！你在幹嘛呀？BERT 模型實作＆程式碼解析 - Hao-Yun&#39;s Geekbase</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -64,6 +64,8 @@
 
 
   <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
   
 
 
@@ -196,6 +198,12 @@
           
         
         
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
       </ul>
     </div>
   </div>
@@ -302,6 +310,17 @@
           </div>
         
         
+          <div class="col-4 mobile-grid-cell" id="mobile-color-toggle-btn"
+               data-label-light="開燈"
+               data-label-dark="關燈">
+            <a href="javascript:;" aria-label="Color Toggle">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-dark" id="mobile-color-toggle-icon"></i>
+                <span id="mobile-color-toggle-label">關燈</span>
+              </div>
+            </a>
+          </div>
+        
       </div>
     </div>
   </div>
@@ -310,7 +329,7 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('/images/cover.png') no-repeat center center; background-size: cover;">
+     style="background: url('/images/cover_me.jpeg') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.8)">
       <div class="banner-text text-center fade-in-up">

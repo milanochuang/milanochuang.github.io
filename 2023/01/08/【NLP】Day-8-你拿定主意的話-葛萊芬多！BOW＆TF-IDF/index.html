@@ -1,7 +1,7 @@
 
 
 <!DOCTYPE html>
-<html lang="zh-TW" >
+<html lang="zh-TW" data-default-color-scheme=auto>
 
 
 
@@ -23,7 +23,7 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="【NLP】Day 8: 你拿定主意的話...葛萊芬多！BOW＆TF-IDF">
 <meta property="og:url" content="https://milanochuang.github.io/2023/01/08/%E3%80%90NLP%E3%80%91Day-8-%E4%BD%A0%E6%8B%BF%E5%AE%9A%E4%B8%BB%E6%84%8F%E7%9A%84%E8%A9%B1-%E8%91%9B%E8%90%8A%E8%8A%AC%E5%A4%9A%EF%BC%81BOW%EF%BC%86TF-IDF/index.html">
-<meta property="og:site_name" content="米蘭牛角尖">
+<meta property="og:site_name" content="Hao-Yun&#39;s Geekbase">
 <meta property="og:description" content="「拿定主意了嗎？你能成大器，你知道，在你一念之間，史萊哲林能幫助你走向輝煌，這毫無疑問——不樂意？那好，既然你已經拿定主意——那就最好去葛來芬多吧！」分類帽《哈利波特：神秘的魔法石》  這幾天下來我們學了正規表達式、斷詞等等，這些都是屬於資料前處理的範疇。是說，剛剛在寫稿前，還被我的隊友罵說，啊我的正規表達式怎麼寫那麼少！欸不是，在這邊跟各位解釋一下，我的規劃就是簡單介紹正規表達式的三個函式，然">
 <meta property="og:locale" content="zh_TW">
 <meta property="og:image" content="https://miro.medium.com/max/1400/1*ujkZ3JrQ6ubSuEpepHE4Aw.png">
@@ -49,7 +49,7 @@
   
   
   
-  <title>【NLP】Day 8: 你拿定主意的話...葛萊芬多！BOW＆TF-IDF - 米蘭牛角尖</title>
+  <title>【NLP】Day 8: 你拿定主意的話...葛萊芬多！BOW＆TF-IDF - Hao-Yun&#39;s Geekbase</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -77,6 +77,8 @@
 
 
   <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
   
 
 
@@ -209,6 +211,12 @@
           
         
         
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
       </ul>
     </div>
   </div>
@@ -315,6 +323,17 @@
           </div>
         
         
+          <div class="col-4 mobile-grid-cell" id="mobile-color-toggle-btn"
+               data-label-light="開燈"
+               data-label-dark="關燈">
+            <a href="javascript:;" aria-label="Color Toggle">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-dark" id="mobile-color-toggle-icon"></i>
+                <span id="mobile-color-toggle-label">關燈</span>
+              </div>
+            </a>
+          </div>
+        
       </div>
     </div>
   </div>
@@ -323,7 +342,7 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('/images/cover.png') no-repeat center center; background-size: cover;">
+     style="background: url('/images/cover_me.jpeg') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.8)">
       <div class="banner-text text-center fade-in-up">
@@ -561,7 +580,7 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/01/08/%E3%80%90NLP%E3%80%91Day%207-%E7%8F%BE%E5%87%BA%E4%BD%A0%E7%9A%84%E5%8E%9F%E5%BD%A2%EF%BC%81tokenization%E3%80%81lemmatization%E3%80%81stemming%20/" title="【NLP】Day 7: 現出你的原形！tokenization、lemmatization、stemming ">
+                      <a href="/2023/01/08/%E3%80%90NLP%E3%80%91Day-7-%E7%8F%BE%E5%87%BA%E4%BD%A0%E7%9A%84%E5%8E%9F%E5%BD%A2%EF%BC%81tokenization%E3%80%81lemmatization%E3%80%81stemming%20/" title="【NLP】Day 7: 現出你的原形！tokenization、lemmatization、stemming ">
                         <span class="hidden-mobile">【NLP】Day 7: 現出你的原形！tokenization、lemmatization、stemming </span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>

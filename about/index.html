@@ -1,7 +1,7 @@
 
 
 <!DOCTYPE html>
-<html lang="zh-TW" >
+<html lang="zh-TW" data-default-color-scheme=auto>
 
 
 
@@ -23,7 +23,7 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="Hao-Yun Chuang (Milan)">
 <meta property="og:url" content="https://milanochuang.github.io/about/index.html">
-<meta property="og:site_name" content="米蘭牛角尖">
+<meta property="og:site_name" content="Hao-Yun&#39;s Geekbase">
 <meta property="og:description" content="Hao-Yun (Milan) ChuangNLP 工程師 · LLM 開發者 · 計算語言學研究者  我是誰我是 Hao-Yun，一個從語言出發、走進 AI 工程的人。 大學念的是成功大學工業與資訊管理，同時雙主修外文。這個組合在當時看來有點奇怪，但事後想想，它早就在某種程度上預示了我後來的方向——在技術與語言之間游走，試著讓兩者對話。 研究所進入政治大學語言學研究所，主修計算語言學。這幾年，">
 <meta property="og:locale" content="zh_TW">
 <meta property="og:image" content="https://milanochuang.github.io/images/avatar.jpg">
@@ -37,7 +37,7 @@
   
   
   
-  <title>Hao-Yun Chuang (Milan) - 米蘭牛角尖</title>
+  <title>Hao-Yun Chuang (Milan) - Hao-Yun&#39;s Geekbase</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -59,6 +59,8 @@
 
 
   <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
   
 
 
@@ -191,6 +193,12 @@
           
         
         
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
       </ul>
     </div>
   </div>
@@ -297,6 +305,17 @@
           </div>
         
         
+          <div class="col-4 mobile-grid-cell" id="mobile-color-toggle-btn"
+               data-label-light="開燈"
+               data-label-dark="關燈">
+            <a href="javascript:;" aria-label="Color Toggle">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-dark" id="mobile-color-toggle-icon"></i>
+                <span id="mobile-color-toggle-label">關燈</span>
+              </div>
+            </a>
+          </div>
+        
       </div>
     </div>
   </div>
@@ -305,7 +324,7 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('/images/cover.png') no-repeat center center; background-size: cover;">
+     style="background: url('/images/cover_me.jpeg') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.8)">
       <div class="banner-text text-center fade-in-up">

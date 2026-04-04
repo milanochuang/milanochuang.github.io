@@ -1,7 +1,7 @@
 
 
 <!DOCTYPE html>
-<html lang="zh-TW" >
+<html lang="zh-TW" data-default-color-scheme=auto>
 
 
 
@@ -23,7 +23,7 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="【NLP】Day 13: 可不可以再深一點點就好？深度學習基礎知識：你需要知道的這些那些">
 <meta property="og:url" content="https://milanochuang.github.io/2023/01/08/%E3%80%90NLP%E3%80%91Day-13-%E5%8F%AF%E4%B8%8D%E5%8F%AF%E4%BB%A5%E5%86%8D%E6%B7%B1%E4%B8%80%E9%BB%9E%E9%BB%9E%E5%B0%B1%E5%A5%BD%EF%BC%9F%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92%E5%9F%BA%E7%A4%8E%E7%9F%A5%E8%AD%98%EF%BC%9A%E4%BD%A0%E9%9C%80%E8%A6%81%E7%9F%A5%E9%81%93%E7%9A%84%E9%80%99%E4%BA%9B%E9%82%A3%E4%BA%9B/index.html">
-<meta property="og:site_name" content="米蘭牛角尖">
+<meta property="og:site_name" content="Hao-Yun&#39;s Geekbase">
 <meta property="og:description" content="人類與動物的學習大都是非監督學習。所以說如果「智慧」是一塊蛋糕，那麼非監督學習才是蛋糕本體，監督學習則是那層糖霜，強化學習不過是上頭的櫻桃。Most of human and animal learning is unsupervised learning. If intelligence was a cake, unsupervised learning would be the cake,">
 <meta property="og:locale" content="zh_TW">
 <meta property="og:image" content="https://media.giphy.com/media/xT9DPpf0zTqRASyzTi/giphy.gif">
@@ -40,7 +40,7 @@
   
   
   
-  <title>【NLP】Day 13: 可不可以再深一點點就好？深度學習基礎知識：你需要知道的這些那些 - 米蘭牛角尖</title>
+  <title>【NLP】Day 13: 可不可以再深一點點就好？深度學習基礎知識：你需要知道的這些那些 - Hao-Yun&#39;s Geekbase</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -68,6 +68,8 @@
 
 
   <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
   
 
 
@@ -200,6 +202,12 @@
           
         
         
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
       </ul>
     </div>
   </div>
@@ -306,6 +314,17 @@
           </div>
         
         
+          <div class="col-4 mobile-grid-cell" id="mobile-color-toggle-btn"
+               data-label-light="開燈"
+               data-label-dark="關燈">
+            <a href="javascript:;" aria-label="Color Toggle">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-dark" id="mobile-color-toggle-icon"></i>
+                <span id="mobile-color-toggle-label">關燈</span>
+              </div>
+            </a>
+          </div>
+        
       </div>
     </div>
   </div>
@@ -314,7 +333,7 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('/images/cover.png') no-repeat center center; background-size: cover;">
+     style="background: url('/images/cover_me.jpeg') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.8)">
       <div class="banner-text text-center fade-in-up">
